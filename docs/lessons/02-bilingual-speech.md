@@ -1,28 +1,20 @@
 # Hear both languages
 
-**What:** make English playback work, then extend the **same route** to your
-saved translation. Also download a synthetic target-language WAV for the next
-lesson's microphone alternative.
+Add English playback, then reuse the route for the translation.
 
-**How and which components:** button -> browser `fetch("/speak")` -> Flask ->
-gateway `/speech/tts` -> MAI Voice -> real WAV bytes -> browser audio. Words
-leave your browser only when you press a speech button. Both the private gateway
-endpoint (`APIM_BASE_URL`) and key (`APIM_API_KEY`) stay in Python.
+**Flow:** button → `fetch("/speak")` → Flask → gateway `/speech/tts` →
+MAI Voice → WAV → browser playback.
 
-We send native SSML, not an invented JSON speech request. The gateway uses
-`api-key`; requesting `riff-16khz-16bit-mono-pcm` produces a WAV container with
-16 kHz, mono, 16-bit PCM audio. Sources:
-[MAI voices / SSML](https://learn.microsoft.com/azure/ai-services/speech-service/mai-voices),
-[pinned gateway examples](https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/app/catalog.py),
-and [gateway WAV acceptance request](https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/scripts/test_apim_live.py).
+[MAI Voice](https://learn.microsoft.com/azure/ai-services/speech-service/mai-voices)
+accepts SSML: text plus a voice selection. We request 16 kHz mono PCM WAV,
+which the next lesson can also upload. [Gateway contract](../reference.md#requests).
 
-## Build it and see it work
+## Build
 
-### 1. Add the small server-side boundary
+### 1. Configure requests and errors
 
-In **`starter/app.py`, replace only the first import line**
-(`from flask import Flask, render_template`) with this block. Keep `app =
-Flask(__name__)`, the language table, and the index route below it.
+In **`starter/app.py`, replace only**
+`from flask import Flask, render_template` with this block. Keep the rest.
 
 ```python title="starter/app.py"
 import io
@@ -40,21 +32,9 @@ from werkzeug.exceptions import HTTPException
 load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=False)
 ```
 
-**Insert the following block immediately before `@app.get("/")` in
-`starter/app.py`.** These are small, explicit guards, not an API framework:
-
-- `gateway_settings` reads both private configuration values server-side and
-  accepts an HTTPS **origin only**. Prefer two Codespaces secrets; existing
-  environment variables beat the ignored `.env` fallback. Neither value belongs
-  in tracked examples or published output.
-- Host/origin checks accept loopback or the **exact** private Codespaces hosts.
-  A same-origin browser POST supplies its `Origin` automatically; do not add
-  CORS, trust arbitrary forwarded headers, or put the gateway endpoint or key in
-  JavaScript.
-- Field and WAV checks reject malformed input/output. `MAX_CONTENT_LENGTH` is
-  our app's upload guardrail, not a claimed service limit.
-- Error handlers show safe recovery messages and log status/type only, not
-  private endpoint URLs, keys, response bodies, SSML, or recordings. Timeouts are bounded.
+**Insert before `@app.get("/")` in `starter/app.py`.** These helpers load
+connection settings, validate requests/WAV responses, and turn failures into
+UI messages. Later routes reuse them.
 
 ```python title="starter/app.py"
 app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024
@@ -183,9 +163,8 @@ def connection_error(error):
 
 ### 2. Make English playback work
 
-**Append this route at the end of `starter/app.py`.** `escape(text)` keeps
-participant text inside the SSML text node rather than treating it as markup.
-The output is checked before Flask labels it as WAV.
+**Append to `starter/app.py`.** `escape(text)` makes the word valid SSML text;
+the response contains audio bytes.
 
 ```python title="starter/app.py"
 @app.post("/speak")
@@ -212,7 +191,7 @@ def speak():
     return Response(response.content, mimetype="audio/wav")
 ```
 
-In **`starter/templates/index.html`, replace the single comment
+In **`starter/templates/index.html`, replace**
 `<!-- Add speech controls here. -->`** with:
 
 ```html title="starter/templates/index.html"
@@ -223,13 +202,10 @@ In **`starter/templates/index.html`, replace the single comment
 <audio id="speech-audio" controls hidden aria-label="Generated speech"></audio>
 ```
 
-In **`starter/static/app.js`, insert this block immediately before
-`// Start the page.`** The shared helpers handle browser-to-Flask requests and
-visible progress, not model selection. Controls are temporarily disabled during
-an action, so a late result cannot land on a different word. Stop and consent
-controls introduced next remain available. `actionVersion` identifies the
-current action: cancelling a recording in the next lesson invalidates its
-number, so late errors or cleanup cannot change a newer action's UI.
+In **`starter/static/app.js`, insert before `// Start the page.`**
+`runAction` manages progress and locks competing controls. Its attempt number
+prevents cancelled work from changing a newer action's UI. `speechBlob` caches
+audio by text/locale; `playSpeech` plays it.
 
 ```javascript title="starter/static/app.js"
 let busy = false;
@@ -343,18 +319,15 @@ $("#speech-audio").addEventListener("error", () => showError("The browser could 
 window.addEventListener("pagehide", stopPlayback);
 ```
 
-In the same JavaScript file, **insert these lines immediately after
-`function selectWord(id) {`**, before `selectedId = id;`:
+In the same file, **insert immediately after `function selectWord(id) {`**:
 
 ```javascript title="starter/static/app.js"
   if (busy) { showError("Wait for the current action to finish."); return; }
   stopPlayback();
 ```
 
-Save, restart Flask, reload, choose a word, and press **Hear English**.
-Network should show `POST /speak` with `{"text":"your English word"}` and an
-`audio/wav` response. Missing configuration or expired access must show an error,
-not a pretend recording. Do not proceed by disabling guards.
+**Run:** restart Flask, reload, and press **Hear English**.
+Network should show `POST /speak` with `text` and an `audio/wav` response.
 
 ### 3. Extend that route to the target language
 
@@ -366,8 +339,8 @@ In **`starter/app.py`**, inside `speak`, **replace only**
 ```
 
 In **`starter/static/app.js`**, inside `speechBlob`, **replace only**
-`jsonOptions({text})` with `jsonOptions({text, locale})`. Now English explicitly
-sends `en-US`, and the same function can send the selected target locale.
+`jsonOptions({text})` with `jsonOptions({text, locale})`. The browser now sends
+`en-US` or the saved target locale.
 
 In **`starter/templates/index.html`**, **replace**
 `<!-- Add target playback here. -->` with:
@@ -398,32 +371,19 @@ $("#download-sample").addEventListener("click", () => {
 });
 ```
 
-A **language** such as Spanish can have multiple **locales**, such as `es-ES`
-and `es-MX`. The table maps each locale to a documented **voice** identifier;
-the voice identifier selects the **MAI-Voice-2-Flash model**. The API does not
-translate: it reads exactly the text you supply.
+The locale maps to a voice, whose name selects MAI-Voice-2-Flash.
+The API reads supplied text; it does not translate it.
 
-**Run it end to end:** restart Flask and reload. Select a pair, play **Hear
-English** and **Hear translation**, and inspect their different `text` and
-`locale` request fields. Download a short synthetic target WAV and play it
-locally. Keep it for lesson 3; downloads contain synthetic audio, not your key.
-Successful speech is cached only in this page by text/locale, so hearing or
-downloading the same sample again need not make a new model call.
+**Run:** restart Flask and reload. Play both languages and compare their
+`text`/`locale` fields in Network. Download a short synthetic WAV and keep it
+for lesson 3.
 
-The [reference `/speak` route](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/app.py)
-uses the same contract. Your smaller learner UI locks selection during a request;
-the reference additionally cancels stale actions. Neither app calls a model on
-startup.
+## Try one
 
-## Experiment with your working feature
+- Add a short phrase and compare its playback with an isolated word.
+- Add `apple` / `manzana` for Spanish (Spain) and Spanish (Mexico). Compare
+  Marta and Valeria, selected by `es-ES` and `es-MX`.
 
-**Try one. Predict -> change -> run -> compare -> choose.** New text or a new
-locale makes a fresh request; a repeated text/locale may use the page cache.
-Reload to clear that cache after changing Python voice settings.
+Reload to clear cached audio after changing Python voice settings.
 
-| Choice | Exact change and interpreting component | Observe and restore |
-| --- | --- | --- |
-| Word versus phrase | Add a new sample pair with a short phrase in a language you know. The browser sends the phrase as `text`; the selected MAI voice reads it. | Play both the word and phrase, compare how context changes the sound, and choose which entry to keep. This is not automatic translation or a pronunciation verdict. |
-| Explicit locale variants | Add illustrative `apple` / `manzana` entries for **Spanish (Spain)** and **Spanish (Mexico)**. The table selects Marta versus Valeria, both documented Flash voices. | Play each target, inspect `es-ES` versus `es-MX`, and compare rather than assuming a quality winner. Keep either entry or remove both. Other documented target locales work through the same map. |
-
-Continue to [Speak and see what was heard](03-record-and-transcribe.md).
+[Next: record and transcribe](03-record-and-transcribe.md).

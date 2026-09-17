@@ -20,8 +20,6 @@ nav = [
     { "Optional mnemonics" = "extensions/mnemonics.md" },
   ] },
   { "Reference" = "reference.md" },
-  { "Instructor guide" = "instructor.md" },
-  { "Local setup" = "local-setup.md" },
 ]
 
 [project.theme]

@@ -14,9 +14,8 @@ is the fallback. Each application has four main source files.
 
 ## Users and purpose
 
-Developers familiar with basic Python and HTML build a vocabulary-learning app
-to understand MAI speech, transcription, and image APIs. The instructor provides
-individual, temporary APIM gateway access.
+Experienced developers build a vocabulary-learning app to try MAI speech,
+transcription, and image APIs. The instructor provides gateway access.
 
 ## Operating context
 
@@ -29,8 +28,11 @@ Participants start from the repository's default `main` branch. No development
 branch is part of the workshop instructions. `gh-pages` contains generated
 documentation only, not a participant workspace.
 
-Each concise lesson explains what, how, and which components participate, then
-delivers a working end-to-end feature followed by a participant experiment.
+Each lesson states the result, explains the relevant mechanism, gives exact
+edits, and ends with a run check and an experiment. Remove repeated workshop
+process, facilitator commentary, and privacy guidance from the written guide;
+the instructor handles that briefing. App controls and credential handling
+remain unchanged.
 
 ## Capabilities and constraints
 

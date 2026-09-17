@@ -1,23 +1,12 @@
-# After core: a mnemonic with MAI-Thinking
+# Add a mnemonic
 
-**Optional, after the guided core.** Add a short English memory suggestion to
-the same app. Do not replace the deterministic answer matcher with an LLM.
+Optional, after lessons 1–5. Ask MAI-Thinking for an English memory aid:
+button → Flask `/mnemonic` → chat completions → text on the card.
+[API details](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-thinking).
 
-**What, how, and which components:** a new button sends an English word to
-Flask `/mnemonic`; Flask calls the gateway's chat-completions route using the
-`mai-thinking` deployment; JavaScript displays the returned **plain text** in
-the card. The model may be wrong, verbose, or unhelpful. Preview status and model
-availability apply; there is no guaranteed JSON schema or verified multilingual
-mnemonic coverage.
+## Build
 
-Sources: [MAI Thinking API](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-thinking),
-[pinned deployment catalog](https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/config/models.yaml),
-and [gateway participant example](https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/app/catalog.py).
-
-## Build it and see it work
-
-Complete core lessons 1-5 first. **Append this route at the end of
-`starter/app.py`**; its helpers were added in the core:
+**Append to `starter/app.py`:**
 
 ```python title="starter/app.py"
 @app.post("/mnemonic")
@@ -47,10 +36,8 @@ def mnemonic():
     return jsonify(text=text.strip())
 ```
 
-The `messages` prompt requests a length and tone; it does not enforce them.
-`max_completion_tokens` bounds model output, including the reasoning budget.
-Do not parse `choices[0].message.content` as JSON or assume it contains exactly
-two sentences. The app reports an empty result instead of inventing a fallback.
+The prompt sets tone and length; `max_completion_tokens` caps output including
+reasoning. Read `choices[0].message.content` as text, not JSON.
 
 In **`starter/templates/index.html`, replace**
 `<!-- Add mnemonic controls here. -->` with:
@@ -81,26 +68,17 @@ $("#generate-mnemonic").addEventListener("click", () => {
 
 Finally, **inside `selectWord` in that same JavaScript file, insert**
 `$("#mnemonic-result").textContent = "";` **immediately after**
-`$("#answer-result").hidden = true;`. This keeps an old suggestion off a newly
-selected word.
+`$("#answer-result").hidden = true;`. This clears the suggestion when selecting
+another word.
 
-**Run it end to end:** restart Flask, reload, select an English word, expand
-**Try a mnemonic**, and press the button. Inspect `POST /mnemonic` and the text
-on the card. Mark any factual or language mistake. Text is displayed with
-`textContent`, never executed as HTML or accepted as a grading answer.
-The [reference `/mnemonic`](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/app.py)
-uses the same response shape.
+**Run:** restart Flask, reload, select a word, expand **Try a mnemonic**, and
+press **Suggest a mnemonic**. The suggestion should appear on its card.
 
-## Experiment with your working feature
+## Try one
 
-**Try one if you chose this extension. Predict -> change -> run -> compare ->
-choose.** Each click makes a fresh request.
+- In the Python prompt, replace `one short, imaginative English mnemonic`
+  with `one simple English example sentence`.
+- Replace `imaginative` with `practical and understated`.
 
-| Choice | Exact change and interpreting component | Observe and restore |
-| --- | --- | --- |
-| Example instead of mnemonic | In `starter/app.py`, change `one short, imaginative English mnemonic` in the `messages` prompt to `one simple English example sentence`. | Restart Flask and request the same word. Compare usefulness and accuracy, then choose or restore the prompt. MAI interprets the words, not an output schema. |
-| A quieter tone | Replace `imaginative` in that prompt with `practical and understated`. Keep the same word and length request. | Restart, generate, and compare tone without assuming factual correctness improves. Keep your preference or restore `imaginative`. |
-
-Larger additions such as explicitly approved answer variants or a practice
-schedule are also after-core work. They are not prerequisites for the workshop's
-completed core loop.
+Restart Flask, request the same word, compare results, and keep your preferred
+prompt. Answer matching stays deterministic.

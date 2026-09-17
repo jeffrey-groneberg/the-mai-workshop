@@ -1,24 +1,13 @@
 # Make a visual memory cue
 
-**What:** generate an image for the selected English word, keep the latest
-successful image on its card while this page is open, and complete the whole
-practice loop.
+Generate a picture that helps you remember a word.
 
-**How and which components:** button -> JavaScript sends the English word and
-scene -> Flask `/image` -> gateway `/mai/v1/images/generations` -> MAI Image ->
-base64 PNG -> validated bytes -> browser image. Nothing is generated on page
-load or merely selecting a word.
+**Flow:** button → Flask `/image` → MAI Image → base64 PNG → browser image.
+The request uses deployment `mai-image-flash`, an English prompt, and
+1024 × 1024 dimensions. Flask decodes `data[0].b64_json`.
+[API details](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-image).
 
-`mai-image-flash` is the gateway **deployment name**, not an SSML voice ID.
-The image offering is preview. Use an **English prompt**, request
-`width=1024, height=1024`, and read `data[0].b64_json`.
-The documented minimum dimension is 768 and the pixel budget is at most
-1,048,576; a small card thumbnail is **not** a tiny API image.
-Sources: [MAI image API](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-image),
-[pinned deployment catalog](https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/config/models.yaml),
-and [participant request](https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/app/catalog.py).
-
-## Build it and see it work
+## Build
 
 In **`starter/app.py`, insert these imports at the top**, keeping the existing
 imports:
@@ -29,10 +18,8 @@ import binascii
 import struct
 ```
 
-**Append this route at the end of `starter/app.py`.** It reuses your existing
-input, configuration, JSON, and error helpers. Base64 decoding alone would not
-establish that an output is a PNG, so check its signature, IHDR, and dimensions;
-the browser will also decode it before display.
+**Append to `starter/app.py`.** The route checks the returned PNG before
+serving its bytes.
 
 ```python title="starter/app.py"
 @app.post("/image")
@@ -136,57 +123,31 @@ window.addEventListener("pagehide", () => {
 
 Finally, in **`starter/static/app.js`, inside `selectWord`, insert**
 `renderMemory();` **immediately before that function's final `renderList();`.**
-Do not insert it in `renderList` itself. This restores an already generated
-image when selecting its word; selecting a word does not make a new request.
+This restores a word's cached image without another request.
 
-**Run it end to end:** restart Flask, reload, select a sample pair, and press
-**Make a memory image**. Network shows `POST /image` with `word` and `detail`,
-then an `image/png` response. A decoded image appears on the selected card.
-Switch to another word and back: the image returns without another model call.
-Reloading clears page-only media, but not saved vocabulary.
-
-Now use the complete loop in **Your app**: select a pair, hear both languages,
-record under approved guidance or choose a synthetic WAV, preview, explicitly
-send, inspect transcript/match feedback, and view its image. Your build is a
-small independent implementation of the core, not a wrapper around the
-[finished solution](https://github.com/jeffrey-groneberg/the-mai-workshop/tree/main/solution).
-It locks controls during work rather than implementing the reference's richer
-cancellation behavior; its image deployment is explicit here rather than an
-environment override. Errors remain visible in both.
+**Run:** restart Flask, reload, and press **Make a memory image**.
+Network shows `POST /image` and an `image/png` response. Switch words and back:
+the picture returns. Reloading clears images, not the word list.
 
 ### One word, two explicit scenes
 
-An explicit **English scene prompt** disambiguates the intended meaning of
-`bank`. Compare these two deliberately prompted teaching examples:
+The scene prompt distinguishes two meanings of `bank`:
 
 | **River bank**: the natural edge of a river | **Savings bank**: a financial institution |
 | --- | --- |
 | ![Generated teaching illustration of a river and its grassy bank](../assets/images/river-bank.webp){ width="280" height="280" loading="lazy" } | ![Generated teaching illustration of a savings-bank building with coins and a piggy bank](../assets/images/savings-bank.webp){ width="280" height="280" loading="lazy" } |
 
-These are **generated teaching examples**, made with MAI-Image-2.6 using different
-explicit scene prompts. They are **not evidence of the bare word `bank`'s default
-output**, or of acceptance by a participant's gateway. The
-[exact prompts and provenance](../assets/images/provenance.json) record how they
-were made. Use the ambiguity experiment below to explore your own requests.
+*MAI-generated examples with different prompts. [Exact prompts](../assets/images/provenance.json).*
 
-## Experiment with your working feature
+## Try one
 
-**Try one. Predict -> change -> run -> compare -> choose.** Every intentional
-**Generate a new image** click makes another potentially billable request,
-including repeated prompts. Shared quota, content policy, and capacity apply;
-there is no guaranteed latency or identical result.
+- For `apple`, compare an empty scene with
+  `A single apple on a picnic blanket, soft watercolor`.
+- For `bank`, compare `A river bank with reeds, no buildings` with
+  `A bank building on a city street`. Which matches your saved translation?
 
-| Choice | Exact change and interpreting component | Observe and restore |
-| --- | --- | --- |
-| Specify a scene | In the card's English scene field, compare an empty field with `A single apple on a picnic blanket, soft watercolor`. Flask appends this to the English prompt; MAI interprets it. | Generate each, compare how clearly it cues the intended meaning, and keep your preferred scene. Clear the field to restore the baseline. The tiny subject in a prompt is still a 1024 x 1024 API image. |
-| Resolve ambiguity | For an illustrative English word such as `bank`, compare `A river bank with reeds, no buildings` and `A bank building on a city street`. Keep the saved translation appropriate to your intended meaning. | Generate both and compare against that translation. Choose the prompt that communicates the meaning, or discard the entry. A plausible image is not proof that the word or translation is correct. |
+Generate both versions and keep the more useful prompt. Each Generate click
+makes a new request.
 
-**Core complete when your own app works and you have tried one choice on every
-core page.** The fixed two-hour target remains unvalidated until a
-representative learner-paced pilot includes these edits, experiments, and real
-service behavior. Do not count a fast fixture replay or reference demonstration
-as that pilot.
-
-[MAI-Thinking mnemonics](../extensions/mnemonics.md) are an **after-core,
-optional** addition. Troubleshooting and API details are in
-[Reference](../reference.md).
+**Finish:** use the full loop—select, listen, record or upload, check, and picture.
+Then try [optional mnemonics](../extensions/mnemonics.md).

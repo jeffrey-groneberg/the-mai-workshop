@@ -1,160 +1,53 @@
-# Readiness pre-work
+# Setup
 
-Have the environment ready **before** the guided two-hour target session.
-Pre-work installs tools and checks access; it does not implement the word list,
-recording, or any other app feature.
-
-The static guide's GitHub Pages deployment target is
-[jeffrey-groneberg.github.io/the-mai-workshop/](https://jeffrey-groneberg.github.io/the-mai-workshop/).
-Use the instructor-confirmed published guide, or the private **Workshop guide**
-preview on port 8000. Neither runs your app: **Your app** (5050) and **Finished
-solution** (5051) are separate Flask servers in Codespaces or on your laptop.
-Pages cannot run Flask or hold private gateway configuration; keep both the
-endpoint and key server-side, never in the published guide.
-
-## Check access with the instructor
-
-You need a GitHub account, access to this repository, permission to use
-Codespaces, and an agreed compute/storage billing arrangement. Codespaces
-availability and cost are separate from model quotas. A free Codespace is not
-guaranteed for every participant.
-
-Use a participant-owned fork for this workshop so your Codespace and secrets
-belong to a repository you can write. The instructor must confirm organizational
-browser/network policies and your billing arrangement. Read-only repository
-access can affect secret injection. Do not make ports public or relax
-organization policy to work around access trouble. See GitHub's
-[Codespaces security guidance](https://docs.github.com/en/codespaces/reference/security-in-github-codespaces)
-and [account-specific secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces).
-
-Obtain the approved portal details, private gateway origin, and individual
-participant key from the instructor through the approved private channel.
-Treat the gateway origin as sensitive, just like the key. The provider's key lifetime is **24 hours from initial
-issuance**, not from your first model request. Arrange issuance for the event;
-do not put either private configuration value in chat, screenshots, logs, Git,
-or this guide. Access can also be revoked or rotated. The
-[pinned provider README](https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/README.md)
-is the access-policy source.
+Use a GitHub account with Codespaces access and the gateway values supplied
+by the instructor. Python dependencies install automatically.
 
 ## Create the Codespace
 
-Use the default **`main`** branch. It contains the starter, solution, guide, and
-dev container. There is no separate workshop branch to find or copy.
+Use the default **`main`** branch.
 
-1. Open [**jeffrey-groneberg/the-mai-workshop**](https://github.com/jeffrey-groneberg/the-mai-workshop)
-   and choose **Fork**. Set **Owner** to your own GitHub account and
-   **Repository name** to `the-mai-workshop`. Keep **Copy the main branch only**
-   selected; that is all the source you need.
-2. In your fork, **`YOUR-HANDLE/the-mai-workshop`** (or your existing fork's name),
-   stay on **`main`**. If you already have an older fork, sync its `main` with
-   the source repository before starting. Ask the instructor for help with any
-   conflicting edits; do not delete your work or recreate missing workshop files.
-3. Choose **Code > Codespaces > New with options**. Confirm your fork and the
-   default `main` branch. Select a **2-core machine if offered**, otherwise the
-   smallest machine your policy permits. The models run remotely; no GPU is
-   needed in the Codespace. Confirm the billing arrangement before creating it.
+1. [Fork the repository](https://github.com/jeffrey-groneberg/the-mai-workshop).
+   Keep **Copy the main branch only** selected. For an existing fork, sync `main`.
+2. In your fork, choose **Code > Codespaces > New with options**.
+   Select `main` and a 2-core machine, or the smallest available.
+3. Set both recommended **Codespaces secrets**:
 
-Instructors with write access to the original repository can use
-[its Codespaces creation link](https://codespaces.new/jeffrey-groneberg/the-mai-workshop).
-That link targets the original repository, not a participant's fork.
+| Setting | Value |
+| --- | --- |
+| `APIM_BASE_URL` | The instructor's HTTPS gateway origin, without a path such as `/speech` or `/mai/v1`. |
+| `APIM_API_KEY` | Your participant key. |
 
-The dev container recommends **both
-`APIM_BASE_URL` and `APIM_API_KEY`** as Codespaces secrets, by name and description
-only; enter their private values in GitHub's secret fields. GitHub documents the
-[recommended-secret prompt on the options creation path](https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/configuring-dev-containers/specifying-recommended-secrets-for-a-repository);
-do not expect it on every quick-create path.
+If the creation page does not prompt for them, add
+[account-specific Codespaces secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces)
+and grant access to your fork. These are not Actions secrets. Restart an
+existing Codespace after changing them.
 
-If no prompt appears, create account-specific **Codespaces** secrets named
-`APIM_BASE_URL` and `APIM_API_KEY`, and grant both access to **your fork**, not just
-the source repository. These are not Actions secrets. Stop and restart an existing Codespace after changing
-injected secrets, then restart Flask. If your permissions prevent this, ask the
-instructor to resolve access or use the explicitly approved `.env` fallback
-below; do not paste either value into source.
+## Run the app
 
-Wait for container setup to finish. It installs Python, Flask, HTTPX,
-python-dotenv, and Zensical. Participants do not install runtime packages by
-hand. GitHub's
-[Python dev-container guide](https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/adding-a-dev-container-configuration/setting-up-your-python-project-for-codespaces)
-explains this setup mechanism. After creation, confirm that `starter/`,
-`solution/`, and `docs/` exist. If they are missing, check that your fork's `main`
-is up to date rather than trying to recreate missing workshop files.
+Wait for container setup, then run from the repository root:
 
-## Configure both private values server-side
+```sh
+python -m flask --app starter/app.py run --host 0.0.0.0 --port 5050
+```
 
-Prefer the two Codespaces secrets above. `APIM_BASE_URL` must contain the
-instructor's private HTTPS **origin only**, with no route, query, embedded
-credentials, or fragment. Do not include `/speech`, `/mai`, or `/v1`; the app
-adds each relative route itself. `APIM_API_KEY` contains your individual
-participant key.
+In **Ports**, open **Your app — 5050** with **Open in Browser**. Use the normal
+HTTPS browser tab for microphone support. Leave forwarding at its default
+settings; the Flask server itself uses HTTP.
 
-The gateway's [participant examples](https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/app/catalog.py)
-use a participant `api-key` for all REST endpoints, including Speech; this is
-not a direct Azure Speech resource key.
+Continue to [Open your app](lessons/00-open-your-app.md).
 
-**Fallback only:** if Codespaces secret injection is unavailable and the
-instructor approves, create a root `.env` in the editor using the **empty**
-`.env.example` as a guide:
+## Alternative configuration
+
+For local use or unavailable secret injection, copy `.env.example` to a root
+`.env` and fill in the two values:
 
 ```dotenv
 APIM_BASE_URL=
 APIM_API_KEY=
 ```
 
-Keep the tracked example empty. Enter actual values only in your ignored `.env`,
-after the ignore check below. Avoid shell commands containing either value.
-Do not paste them into code, documentation, screenshots, logs, or provenance,
-and never copy private environment files into `site/`. The local setup uses the
-same fallback.
+Existing environment variables override `.env`. Restart Flask after changing
+configuration.
 
-Check that `.env` is ignored without printing it:
-
-```sh
-git check-ignore .env
-```
-
-The command should print `.env`. If it does not, do not put either private value there. Both
-apps load the root `.env` with `override=False`: an already-set environment
-variable wins. An old injected endpoint or key therefore is **not** replaced by
-editing `.env`; fix the corresponding Codespaces secret and restart instead.
-
-Check the installed tools, without invoking a model:
-
-```sh
-python -c "import flask, httpx, dotenv; print('Python runtime is ready')"
-zensical --version
-```
-
-There is no model call on app startup. The initial starter needs no gateway
-configuration; missing or invalid settings produce a visible error when you
-later use a model feature.
-
-## Browser and data readiness
-
-Keep ports 5050, 5051, and 8000 **Private**. The container servers use internal
-HTTP; GitHub's forwarded URLs use browser-facing HTTPS. Do not configure local
-TLS or change the port protocol to HTTPS. Open forwarded links with **Open in
-Browser**, not an embedded preview. See
-[GitHub port forwarding](https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
-
-The microphone belongs to **your browser**, not the remote Codespace. It needs a
-secure context, browser permission, and permitted organizational policy
-([MDN `getUserMedia`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia)).
-The instructor must preflight the intended desktop browser and forwarded tab;
-a local test does not establish that this path works.
-
-The portal currently allows synthetic/sample data only. **Do not submit
-personal or confidential content.** A real voice can itself be personal data.
-Voluntary microphone use requires instructor-approved guidance and the app's
-explicit consent; a checked box alone does not override portal policy. Otherwise
-use the synthetic WAV path: the finished solution can generate and download a
-short target-language sample with MAI Voice, and you build that capability in
-lesson 2. No prepackaged `sample.wav` is assumed.
-
-**Ready means:** the environment starts, dependencies import, private forwarding
-is allowed, the instructor has checked gateway access/capacity and data guidance,
-and you have a usable browser or synthetic-audio alternative. No live access has
-been established merely by following these configuration checks.
-
-Continue to [Open your app](lessons/00-open-your-app.md).
-If Codespaces is unavailable, use [local setup](local-setup.md), not a different
-application.
+No Codespaces? Use [local setup](local-setup.md).

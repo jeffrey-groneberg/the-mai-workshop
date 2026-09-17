@@ -1,27 +1,15 @@
 # Speak and see what was heard
 
-**What:** implement browser recording and genuine WAV conversion, preview the
-result locally, then deliberately send it and display the recognized text.
-Recording code is part of this guided core, not a prebuilt dependency.
+Record an answer, convert it to WAV, and display what MAI heard.
 
-**How and which components:** your browser's microphone -> `MediaRecorder` ->
-Web Audio decode / mono resampling -> PCM WAV -> local preview -> explicit
-`fetch("/transcribe")` -> Flask -> gateway -> MAI-Transcribe-2 -> text in the card.
-Only the **Send for transcription** action uploads audio.
+**Flow:** microphone → `MediaRecorder` → WAV conversion → preview →
+Flask `/transcribe` → MAI-Transcribe-2 → text.
 
-**Data boundary:** the portal currently permits synthetic/sample data only. A
-real voice can be personal data. Use a microphone only under instructor-approved
-guidance and with explicit consent; the checkbox does not rewrite portal policy.
-Otherwise use **Download synthetic WAV** from lesson 2 or the finished solution.
-You still implement the capture/conversion code. Neither app includes an assumed
-prepackaged `sample.wav`.
-
-## Build it and see it work
+## Build
 
 ### 1. Receive and validate audio in Flask
 
-In **`starter/app.py`, insert `import json` at the top**, alongside the other
-imports. Then **append this whole block at the end of the file**:
+In **`starter/app.py`, add `import json` to the imports**, then **append**:
 
 ```python title="starter/app.py"
 def upstream_json(response):
@@ -66,16 +54,12 @@ def transcribe():
     return jsonify(text=text)
 ```
 
-The gateway expects **multipart `audio` and a JSON-encoded `definition` string**,
-not a JSON body containing the audio. `enhancedMode` explicitly selects
-MAI-Transcribe-2; `locales` takes the STT language code, such as `fr`, not a voice
-ID or a TTS locale such as `fr-FR`. Read `combinedPhrases[].text`.
-Sources: [MAI transcription](https://learn.microsoft.com/azure/ai-services/speech-service/mai-transcribe),
-[pinned participant request](https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/app/catalog.py),
-and [gateway routes / version contract](https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/infra/gateway.tf).
-We send **no saved answer or expected-answer phrase hints**.
+The [API](https://learn.microsoft.com/azure/ai-services/speech-service/mai-transcribe)
+expects multipart `audio` plus JSON-encoded `definition`.
+`enhancedMode` selects MAI-Transcribe-2; `locales` takes a language code such
+as `fr`, not `fr-FR`. The transcript is in `combinedPhrases[].text`.
 
-### 2. Add consent, local preview, and an explicit send button
+### 2. Add recording controls
 
 In **`starter/templates/index.html`, replace**
 `<!-- Add answer controls here. -->` with:
@@ -103,18 +87,13 @@ In **`starter/templates/index.html`, replace**
 
 ### 3. Implement capture, conversion, preview, and upload
 
-In **`starter/static/app.js`, insert this complete block immediately before
-`// Start the page.`** Keep it in this file; do not import it from `solution/`.
+In **`starter/static/app.js`, insert before `// Start the page.`**
 
-The browser chooses a supported recording format. Merely naming that blob
-`answer.wav` would **not** convert it. `decodeAudioData` decodes its contents;
-`OfflineAudioContext` mixes to one channel at 16 kHz; `encodeWav` writes the
-container and signed 16-bit PCM samples.
-
-Sources: [MDN `getUserMedia`](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia),
-[`MediaRecorder`](https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder),
-[`decodeAudioData`](https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData),
-and [`OfflineAudioContext`](https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext).
+[`MediaRecorder`](https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder)
+may not produce WAV. `decodeAudioData` decodes its output;
+[`OfflineAudioContext`](https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext)
+resamples it to mono at 16 kHz. `encodeWav` writes a 44-byte header and 16-bit
+PCM samples. Renaming the original blob would not convert it.
 
 ```javascript title="starter/static/app.js"
 const MAX_SECONDS = 12;
@@ -329,62 +308,24 @@ insert**:
   $("#record-status").textContent = "";
 ```
 
-Selecting another word discards the old local audio and transcript. Recording,
-decoding, and model requests temporarily lock vocabulary controls. Unchecking
-consent stops/discards local capture; it cannot recall an upload already sent.
-Tracks stop before conversion and also in cleanup on failure/cancel. Only words,
-never microphone audio, go into `localStorage`.
+Changing words clears the old recording. Cancelling advances the attempt number
+so a late microphone response cannot replace newer work.
 
-The attempt number belongs to one asynchronous action. Cancel advances it and
-unlocks the controls immediately, even if the browser has not answered the
-permission request. A late stream is stopped locally; its cleanup cannot unlock
-or overwrite a newer action. The synthetic-file picker therefore remains a
-usable alternative after canceling. The app cannot dismiss the browser's own
-permission prompt; dismiss or decline that prompt if it obstructs the tab.
+**Run:** restart Flask and reload the HTTPS app tab. Select a pair, tick the
+audio checkbox, record its translation, stop, and preview. Then press
+**Send for transcription**. Network shows multipart `audio`/`locale`; the card
+shows **I heard: ...**.
 
-<details>
-<summary>What the WAV header and limits mean</summary>
+**No microphone?** Choose the synthetic WAV downloaded in lesson 2 and use the
+same Send button. If a permission prompt hangs, **Stop recording** unlocks
+the file picker. Keep samples within the app's 12-second limit.
 
-The 44-byte header declares RIFF/WAVE, PCM format `1`, one channel, 16,000
-samples/second, and 16 bits/sample. Each sample occupies two bytes, so the byte
-rate is 32,000 and the data length is `samples.length * 2`. `true` makes numeric
-fields little-endian. Floating samples are clamped to [-1, 1] and scaled to the
-signed 16-bit range.
+## Try one
 
-Capture stops at 12 seconds; conversion clips timer overshoot to that app limit.
-Flask validates complete PCM frames and rejects uploads longer than 12 seconds,
-wrong rates/channels, and truncated files. Its 2 MiB request cap also includes
-multipart overhead. These are teaching-app guardrails, not advertised model
-limits. A WAV signature alone is insufficient; the server performs the complete
-format check. Use a short synthetic word/phrase for the alternative.
+- Remove `"locales": [language["stt"]],` from `definition` in `starter/app.py`.
+  Restart and send the same audio. Compare automatic detection with the hint,
+  then restore the line. Keep the expected answer out of recognition hints.
+- Compare an isolated word with a short phrase. Does the added context change
+  the transcript?
 
-</details>
-
-**Run it end to end:** restart Flask and reload the normal HTTPS app tab. Choose
-a sample pair. Under approved guidance, opt in, record its target translation,
-stop, and play the local preview. Verify the microphone indicator stops and
-Network shows **no `/transcribe` request yet**. Press **Send for transcription**:
-inspect multipart `audio` and `locale`, then read **I heard: ...** in the card.
-
-**Without a microphone:** choose the short synthetic WAV you generated in lesson
-2, preview it, opt in to sending sample audio, and press the same Send button.
-This exercises the same Flask route, not simulated recognition. An empty
-transcript or an HTTP failure must appear as an error, not a wrong-answer result.
-If microphone permission remains unanswered, press **Stop recording** or uncheck
-consent: the file picker unlocks immediately. Choose the synthetic WAV without
-waiting for permission to settle; any later stream is stopped without replacing
-your preview or interrupting a new upload.
-The [reference capture and conversion](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/static/app.js)
-is available for comparison.
-
-## Experiment with your working feature
-
-**Try one. Predict -> change -> run -> compare -> choose.** Each Send makes
-another transcription request. Reusing a local preview avoids recording again.
-
-| Choice | Exact change and interpreting component | Observe and restore |
-| --- | --- | --- |
-| Hint versus detection | In `starter/app.py`, remove only `"locales": [language["stt"]],` from `definition`. MAI transcription now detects language; keep `enhancedMode` unchanged. | Restart Flask and send the same approved sample. Compare the transcript with the hinted result, then choose or restore the line. Detection is not guaranteed to improve short words. Never add the expected answer as a phrase hint. |
-| Word versus phrase | Add a new sample pair with a short target phrase, then record it under approved guidance or generate/download its synthetic WAV. The audio content changes; the route and locale stay the same. | Send each and compare the full recognized text. Keep the useful entry or remove it. Context can affect recognition; do not interpret the difference as a pronunciation score. |
-
-Continue to [Check your answer](04-check-your-answer.md).
+[Next: check the answer](04-check-your-answer.md).

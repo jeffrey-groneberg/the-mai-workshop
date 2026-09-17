@@ -1,19 +1,13 @@
 # Check your answer
 
-**What:** show the recognized text, your saved translation, and a clear
-match/retry result.
+Compare the transcript with the saved translation and show match/retry feedback.
+JavaScript handles this in `showTranscript`; no extra model call is needed.
 
-**How and which components:** the existing `/transcribe` response reaches
-`showTranscript` in `starter/static/app.js`. JavaScript normalizes and compares
-the **whole** transcript with the saved target. HTML displays the result using
-the existing CSS. **There is no extra model call, grading prompt, or hidden
-pronunciation service.**
-
-## Build it and see it work
+## Build
 
 In **`starter/static/app.js`, replace the entire `showTranscript(heard, word)`
-function** from lesson 3, including its closing `}`, with this block. Leave the
-Send handler's `showTranscript(result.text, word)` call unchanged.
+function**, including its closing `}`, with this block. Keep the Send handler
+unchanged.
 
 ```javascript title="starter/static/app.js"
 function normalizeAnswer(text, locale) {
@@ -45,39 +39,19 @@ function showTranscript(heard, word) {
 }
 ```
 
-NFC makes canonically equivalent Unicode spellings comparable. Locale-aware
-lowercasing tolerates case differences; the regular expressions remove
-**surrounding** punctuation and normalize whitespace. They preserve accents,
-internal apostrophes/hyphens, and German `ß` versus `ss`. We do not strip all
-non-ASCII characters, search for a matching substring, or accept a whole phrase
-just because it contains the expected word.
+Normalization tolerates case, surrounding punctuation, and extra spaces while
+preserving accents and internal punctuation. It compares whole strings, not
+substrings. This checks the recognized word, not pronunciation quality.
 
-**Run it end to end:** save JavaScript and reload. Select a pair and use the
-record/preview/send flow or the synthetic WAV. Read the heard text **and** saved
-answer. For a controlled mismatch, download another word's synthetic target WAV,
-select the original pair again, and send the other WAV. A usable different
-transcript should show **Not a match this time**. A rejected upload or no-speech
-response remains an error, not a mismatch.
+**Run:** reload and send an answer. Then send a different word's WAV against the
+same entry. Confirm the heard/saved text and the match versus retry result.
 
-A match means only that recognized text matches what you saved. Homophones can
-sound alike but have different spellings; the recognizer can choose the wrong
-word; your saved translation can be mistaken; several translations may be valid.
-Inspect the evidence before correcting the audio or entry. This is **not
-pronunciation, accent, or fluency assessment**. Azure's
-[pronunciation assessment](https://learn.microsoft.com/azure/ai-services/speech-service/pronunciation-assessment-tool)
-is a separate capability not called here. Compare with the
-[reference normalization function](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/static/app.js)
-if useful.
+## Try one
 
-## Experiment with your working feature
+- Replace `const matches = actual === expected;` with
+  `const matches = heard === word.target;`. Reload and resend audio whose
+  transcript differs only in case/punctuation. Compare, then restore normalization.
+- Compare saved `été` and `ete` against the same French audio. If the transcript
+  is `été`, only the accented entry should match.
 
-**Try one. Predict -> change -> run -> compare -> choose.**
-
-| Choice | Exact change and interpreting component | Observe and restore |
-| --- | --- | --- |
-| Strict versus tolerant | In `starter/static/app.js`, change `const matches = actual === expected;` to `const matches = heard === word.target;`. Add a sample entry whose saved target differs from its observed transcript only in case or surrounding punctuation. JavaScript now compares raw strings. | Reload and send the same approved WAV for that entry. Compare strict feedback with the normalized baseline, then restore `actual === expected` unless you intentionally want stricter matching. The displayed transcript reveals whether your test really isolated case/punctuation. |
-| Preserve meaning | With the normalizer restored, use an accented example you know. For illustrative French, compare saved `été` with a synthetic recording of `été`, then an entry saved as `ete` using that same WAV. | Send for both entries and inspect the actual transcript. If it says `été`, the accented entry should match and `ete` should not. Keep the meaningful spelling. If recognition changed the spelling, that is a recognition observation, not evidence that accents were removed by this function. |
-
-Each repeated Send is a new transcription request; the comparison itself is
-local and deterministic. Restore the normalization baseline before continuing
-to [Make a visual memory cue](05-memory-images.md).
+[Next: generate a memory image](05-memory-images.md).
