@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-17T19:51:41.872+02:00",
+  "title": "Design System: MAI Vocabulary Workshop",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "tonalRamp": ["oklch(15.00% 0.0167 88.00)", "oklch(26.43% 0.0167 88.00)", "oklch(37.86% 0.0167 88.00)", "oklch(49.29% 0.0167 88.00)", "oklch(60.71% 0.0167 88.00)", "oklch(72.14% 0.0167 88.00)", "oklch(83.57% 0.0167 88.00)", "oklch(95.00% 0.0167 88.00)"]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Ink",
+        "tonalRamp": ["oklch(15.00% 0.0184 54.59)", "oklch(26.43% 0.0184 54.59)", "oklch(37.86% 0.0184 54.59)", "oklch(49.29% 0.0184 54.59)", "oklch(60.71% 0.0184 54.59)", "oklch(72.14% 0.0184 54.59)", "oklch(83.57% 0.0184 54.59)", "oklch(95.00% 0.0184 54.59)"]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": ["oklch(15.00% 0.0256 58.41)", "oklch(26.43% 0.0256 58.41)", "oklch(37.86% 0.0256 58.41)", "oklch(49.29% 0.0256 58.41)", "oklch(60.71% 0.0256 58.41)", "oklch(72.14% 0.0256 58.41)", "oklch(83.57% 0.0256 58.41)", "oklch(95.00% 0.0256 58.41)"]
+      },
+      "sand": {
+        "role": "neutral",
+        "displayName": "Sand",
+        "tonalRamp": ["oklch(15.00% 0.0278 81.47)", "oklch(26.43% 0.0278 81.47)", "oklch(37.86% 0.0278 81.47)", "oklch(49.29% 0.0278 81.47)", "oklch(60.71% 0.0278 81.47)", "oklch(72.14% 0.0278 81.47)", "oklch(83.57% 0.0278 81.47)", "oklch(95.00% 0.0278 81.47)"]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "tonalRamp": ["oklch(15.00% 0.0258 69.39)", "oklch(26.43% 0.0258 69.39)", "oklch(37.86% 0.0258 69.39)", "oklch(49.29% 0.0258 69.39)", "oklch(60.71% 0.0258 69.39)", "oklch(72.14% 0.0258 69.39)", "oklch(83.57% 0.0258 69.39)", "oklch(95.00% 0.0258 69.39)"]
+      },
+      "field": {
+        "role": "neutral",
+        "displayName": "Field",
+        "tonalRamp": ["oklch(15.00% 0.0098 87.47)", "oklch(26.43% 0.0098 87.47)", "oklch(37.86% 0.0098 87.47)", "oklch(49.29% 0.0098 87.47)", "oklch(60.71% 0.0098 87.47)", "oklch(72.14% 0.0098 87.47)", "oklch(83.57% 0.0098 87.47)", "oklch(95.00% 0.0098 87.47)"]
+      },
+      "field-border": {
+        "role": "neutral",
+        "displayName": "Field Border",
+        "tonalRamp": ["oklch(15.00% 0.0363 62.74)", "oklch(26.43% 0.0363 62.74)", "oklch(37.86% 0.0363 62.74)", "oklch(49.29% 0.0363 62.74)", "oklch(60.71% 0.0363 62.74)", "oklch(72.14% 0.0363 62.74)", "oklch(83.57% 0.0363 62.74)", "oklch(95.00% 0.0363 62.74)"]
+      },
+      "control-border": {
+        "role": "neutral",
+        "displayName": "Control Border",
+        "tonalRamp": ["oklch(15.00% 0.0353 68.71)", "oklch(26.43% 0.0353 68.71)", "oklch(37.86% 0.0353 68.71)", "oklch(49.29% 0.0353 68.71)", "oklch(60.71% 0.0353 68.71)", "oklch(72.14% 0.0353 68.71)", "oklch(83.57% 0.0353 68.71)", "oklch(95.00% 0.0353 68.71)"]
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Focus",
+        "tonalRamp": ["oklch(15.00% 0.0648 55.88)", "oklch(26.43% 0.0648 55.88)", "oklch(37.86% 0.0648 55.88)", "oklch(49.29% 0.0648 55.88)", "oklch(60.71% 0.0648 55.88)", "oklch(72.14% 0.0648 55.88)", "oklch(83.57% 0.0648 55.88)", "oklch(95.00% 0.0648 55.88)"]
+      },
+      "error": {
+        "displayName": "Error",
+        "tonalRamp": ["oklch(15.00% 0.0953 31.60)", "oklch(26.43% 0.0953 31.60)", "oklch(37.86% 0.0953 31.60)", "oklch(49.29% 0.0953 31.60)", "oklch(60.71% 0.0953 31.60)", "oklch(72.14% 0.0953 31.60)", "oklch(83.57% 0.0953 31.60)", "oklch(95.00% 0.0953 31.60)"]
+      },
+      "success": {
+        "displayName": "Success",
+        "tonalRamp": ["oklch(15.00% 0.0514 148.40)", "oklch(26.43% 0.0514 148.40)", "oklch(37.86% 0.0514 148.40)", "oklch(49.29% 0.0514 148.40)", "oklch(60.71% 0.0514 148.40)", "oklch(72.14% 0.0514 148.40)", "oklch(83.57% 0.0514 148.40)", "oklch(95.00% 0.0514 148.40)"]
+      },
+      "error-surface": {
+        "displayName": "Error Surface",
+        "tonalRamp": ["oklch(15.00% 0.0221 54.33)", "oklch(26.43% 0.0221 54.33)", "oklch(37.86% 0.0221 54.33)", "oklch(49.29% 0.0221 54.33)", "oklch(60.71% 0.0221 54.33)", "oklch(72.14% 0.0221 54.33)", "oklch(83.57% 0.0221 54.33)", "oklch(95.00% 0.0221 54.33)"]
+      },
+      "success-surface": {
+        "displayName": "Success Surface",
+        "tonalRamp": ["oklch(15.00% 0.0227 114.96)", "oklch(26.43% 0.0227 114.96)", "oklch(37.86% 0.0227 114.96)", "oklch(49.29% 0.0227 114.96)", "oklch(60.71% 0.0227 114.96)", "oklch(72.14% 0.0227 114.96)", "oklch(83.57% 0.0227 114.96)", "oklch(95.00% 0.0227 114.96)"]
+      },
+      "warning-surface": {
+        "displayName": "Warning Surface",
+        "tonalRamp": ["oklch(15.00% 0.0323 81.00)", "oklch(26.43% 0.0323 81.00)", "oklch(37.86% 0.0323 81.00)", "oklch(49.29% 0.0323 81.00)", "oklch(60.71% 0.0323 81.00)", "oklch(72.14% 0.0323 81.00)", "oklch(83.57% 0.0323 81.00)", "oklch(95.00% 0.0323 81.00)"]
+      }
+    },
+    "shadows": [
+      {
+        "name": "guide-search-output",
+        "value": "0 0.4rem 1.2rem #5d524b1a",
+        "purpose": "Soft elevation for guide search output only."
+      },
+      {
+        "name": "guide-back-to-top",
+        "value": "0 0.25rem 0.75rem #5d524b14",
+        "purpose": "Soft elevation for the guide back-to-top affordance only."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-feedback",
+        "value": "background-color 160ms ease-out, border-color 160ms ease-out",
+        "purpose": "Guide and app action-state transitions."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "scroll-behavior: auto !important; animation: none !important; transition: none !important;",
+        "purpose": "Both stylesheets apply these declarations to all elements and pseudo-elements when prefers-reduced-motion is reduce."
+      }
+    ],
+    "breakpoints": [
+      { "name": "guide-drawer-max", "value": "76.234375em" },
+      { "name": "guide-tighten-max", "value": "60em" },
+      { "name": "guide-stack-max", "value": "44.984375em" },
+      { "name": "guide-narrow-max", "value": "24em" },
+      { "name": "app-stack-max", "value": "50rem" },
+      { "name": "app-compact-max", "value": "30rem" },
+      { "name": "app-input-stack-max", "value": "23rem" }
+    ]
+  },
+  "components": [
+    {
+      "name": "App primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid ink action for adding words or explicitly recording/sending.",
+      "html": "<button class=\"ds-app-primary\" type=\"button\">Add to my words</button>",
+      "css": ".ds-app-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; min-height: 2.875rem; max-width: 100%; padding: 0.7rem 1.2rem; border: 1px solid transparent; border-radius: 999px; color: var(--paper, #fef9ed); background: var(--ink, #5d524b); font: 500 0.875rem/1.4 var(--sans, system-ui, -apple-system, 'Segoe UI', 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans Devanagari', 'Noto Sans Thai', sans-serif); text-align: center; cursor: pointer; transition: background-color 160ms ease-out, border-color 160ms ease-out; } .ds-app-primary:focus-visible { outline: 3px solid var(--focus, #795338); outline-offset: 4px; } .ds-app-primary:active:not(:disabled) { background: #443a33; color: var(--paper, #fef9ed); } .ds-app-primary:disabled { color: #7c6f63; border-color: var(--line, #d9cbbc); background: #eae1d3; cursor: not-allowed; } @media (hover: hover) { .ds-app-primary:hover:not(:disabled) { background: #493f38; } } @media (max-width: 30rem) { .ds-app-primary { padding-inline: 1rem; } } @media (prefers-reduced-motion: reduce) { .ds-app-primary { scroll-behavior: auto !important; animation: none !important; transition: none !important; } } @media (forced-colors: active) { .ds-app-primary { border: 1px solid ButtonText; } .ds-app-primary:focus-visible { outline-color: Highlight; } }"
+    },
+    {
+      "name": "App secondary button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Sand action for playback, image generation and optional assistance.",
+      "html": "<button class=\"ds-app-secondary\" type=\"button\">Hear English</button>",
+      "css": ".ds-app-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; min-height: 2.875rem; max-width: 100%; padding: 0.7rem 1.2rem; border: 1px solid #c5b29e; border-radius: 999px; color: var(--ink, #5d524b); background: var(--sand, #f7ecd9); font: 500 0.875rem/1.4 var(--sans, system-ui, -apple-system, 'Segoe UI', 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans Devanagari', 'Noto Sans Thai', sans-serif); text-align: center; cursor: pointer; transition: background-color 160ms ease-out, border-color 160ms ease-out; } .ds-app-secondary:focus-visible { outline: 3px solid var(--focus, #795338); outline-offset: 4px; } .ds-app-secondary:active:not(:disabled) { background: #e8d6bf; color: #443a33; } .ds-app-secondary:disabled { color: #7c6f63; border-color: var(--line, #d9cbbc); background: #eae1d3; cursor: not-allowed; } @media (hover: hover) { .ds-app-secondary:hover:not(:disabled) { border-color: var(--field-border, #a18c7a); background: #efddc4; } } @media (max-width: 30rem) { .ds-app-secondary { padding-inline: 1rem; } } @media (prefers-reduced-motion: reduce) { .ds-app-secondary { scroll-behavior: auto !important; animation: none !important; transition: none !important; } } @media (forced-colors: active) { .ds-app-secondary { border: 1px solid ButtonText; } .ds-app-secondary:focus-visible { outline-color: Highlight; } }"
+    },
+    {
+      "name": "App text button",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Underlined lower-emphasis action; no invented icon decoration.",
+      "html": "<button class=\"ds-app-text\" type=\"button\">Discard recording</button>",
+      "css": ".ds-app-text { display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; min-height: 2.875rem; max-width: 100%; padding: 0.7rem 0.35rem; border: 1px solid transparent; border-radius: 999px; color: var(--ink, #5d524b); background: transparent; font: 500 0.875rem/1.4 var(--sans, system-ui, -apple-system, 'Segoe UI', 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans Devanagari', 'Noto Sans Thai', sans-serif); text-align: center; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.22em; cursor: pointer; transition: background-color 160ms ease-out, border-color 160ms ease-out; } .ds-app-text:focus-visible { outline: 3px solid var(--focus, #795338); outline-offset: 4px; } .ds-app-text:disabled { color: #7c6f63; border-color: var(--line, #d9cbbc); background: #eae1d3; cursor: not-allowed; } @media (hover: hover) { .ds-app-text:hover:not(:disabled) { background: var(--sand, #f7ecd9); } } @media (prefers-reduced-motion: reduce) { .ds-app-text { scroll-behavior: auto !important; animation: none !important; transition: none !important; } } @media (forced-colors: active) { .ds-app-text:focus-visible { outline-color: Highlight; } }"
+    },
+    {
+      "name": "Guide primary action",
+      "kind": "button",
+      "refersTo": "guide-button-primary",
+      "description": "The guide's ink link-button, with its own rem sizing and pressed fill.",
+      "html": "<a class=\"ds-guide-primary\" href=\"#getting-ready\">Get ready in Codespaces</a>",
+      "css": ".ds-guide-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 2.5rem; padding: 0.65rem 1.2rem; border: 1px solid var(--workshop-ink, #5d524b); border-radius: 999px; color: var(--workshop-paper, #fef9ed); background: var(--workshop-ink, #5d524b); font: 500 0.75rem/1.4 var(--workshop-sans, system-ui, -apple-system, 'Segoe UI', 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans Devanagari', 'Noto Sans Thai', sans-serif); text-align: center; text-decoration: none; transition: background-color 160ms ease-out, border-color 160ms ease-out; } .ds-guide-primary:active { background: #e8d6bf; color: #443a33; } .ds-guide-primary:focus-visible { outline: 3px solid var(--workshop-focus, #795338); outline-offset: 3px; } @media (hover: hover) { .ds-guide-primary:hover { border-color: #493f38; color: var(--workshop-paper, #fef9ed); background: #493f38; } } @media screen and (max-width: 24em) { .ds-guide-primary { width: 100%; } } @media (prefers-reduced-motion: reduce) { .ds-guide-primary { scroll-behavior: auto !important; animation: none !important; transition: none !important; } } @media (forced-colors: active) { .ds-guide-primary { border: 1px solid ButtonText; } .ds-guide-primary:focus-visible { outline-color: Highlight; } }"
+    },
+    {
+      "name": "Guide secondary action",
+      "kind": "button",
+      "refersTo": "guide-button-secondary",
+      "description": "Sand link-button for the guide's alternate next action.",
+      "html": "<a class=\"ds-guide-secondary\" href=\"#first-app\">Open your first app</a>",
+      "css": ".ds-guide-secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 2.5rem; padding: 0.65rem 1.2rem; border: 1px solid #c5b29e; border-radius: 999px; color: var(--workshop-ink, #5d524b); background: var(--workshop-sand, #f7ecd9); font: 500 0.75rem/1.4 var(--workshop-sans, system-ui, -apple-system, 'Segoe UI', 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans Devanagari', 'Noto Sans Thai', sans-serif); text-align: center; text-decoration: none; transition: background-color 160ms ease-out, border-color 160ms ease-out; } .ds-guide-secondary:active { background: #e8d6bf; color: #443a33; } .ds-guide-secondary:focus-visible { outline: 3px solid var(--workshop-focus, #795338); outline-offset: 3px; } @media (hover: hover) { .ds-guide-secondary:hover { border-color: #a18c7a; color: var(--workshop-ink, #5d524b); background: #efddc4; } } @media screen and (max-width: 24em) { .ds-guide-secondary { width: 100%; } } @media (prefers-reduced-motion: reduce) { .ds-guide-secondary { scroll-behavior: auto !important; animation: none !important; transition: none !important; } } @media (forced-colors: active) { .ds-guide-secondary { border: 1px solid ButtonText; } .ds-guide-secondary:focus-visible { outline-color: Highlight; } }"
+    },
+    {
+      "name": "Labeled word field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Visible label and warm outlined input, including source-defined invalid and disabled styling.",
+      "html": "<label class=\"ds-field-label\" for=\"ds-english-word\">English word</label><input class=\"ds-field\" id=\"ds-english-word\" name=\"english\" maxlength=\"120\" placeholder=\"apple\" autocomplete=\"off\" required>",
+      "css": ".ds-field-label { display: block; margin-bottom: 0.45rem; color: var(--ink, #5d524b); font: 500 0.875rem/1.65 var(--sans, system-ui, -apple-system, 'Segoe UI', 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans Devanagari', 'Noto Sans Thai', sans-serif); } .ds-field { width: 100%; min-width: 0; min-height: 3rem; padding: 0.65rem 0.85rem; border: 1px solid var(--field-border, #a18c7a); border-radius: 0.75rem; color: var(--ink, #5d524b); background: var(--field, #fffcf5); font: 400 1rem/1.5 var(--sans, system-ui, -apple-system, 'Segoe UI', 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans Devanagari', 'Noto Sans Thai', sans-serif); } .ds-field::placeholder { color: var(--muted, #75665b); opacity: 1; } .ds-field:focus-visible { outline: 3px solid var(--focus, #795338); outline-offset: 4px; } .ds-field:disabled { background: #ece4d6; cursor: not-allowed; } .ds-field[aria-invalid='true'] { border: 2px solid var(--error, #813e32); } @media (forced-colors: active) { .ds-field:focus-visible { outline-color: Highlight; } }"
+    },
+    {
+      "name": "Guide lesson navigation",
+      "kind": "nav",
+      "refersTo": "guide-navigation-active",
+      "description": "Selected lesson indicated by sand fill, stronger weight and an underline.",
+      "html": "<nav class=\"ds-guide-nav\" aria-label=\"Workshop lessons\"><a class=\"ds-guide-nav-link ds-guide-nav-active\" href=\"#word-list\">Make it your vocabulary</a><a class=\"ds-guide-nav-link\" href=\"#speech\">Hear both languages</a></nav>",
+      "css": ".ds-guide-nav { color: var(--workshop-ink, #5d524b); font: 400 0.7rem/1.55 var(--workshop-sans, system-ui, -apple-system, 'Segoe UI', 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans Devanagari', 'Noto Sans Thai', sans-serif); } .ds-guide-nav-link { display: block; padding: 0.35rem 0.5rem; border-radius: 0.5rem; color: inherit; text-decoration: none; } .ds-guide-nav-active { color: var(--workshop-ink, #5d524b); background: var(--workshop-sand, #f7ecd9); font-weight: 600; text-decoration: underline; text-underline-offset: 0.22em; } .ds-guide-nav-link:focus-visible { outline: 3px solid var(--workshop-focus, #795338); outline-offset: 3px; } @media (hover: hover) { .ds-guide-nav-link:hover { background: var(--workshop-sand, #f7ecd9); } } @media (forced-colors: active) { .ds-guide-nav-active { outline: 1px solid Highlight; } .ds-guide-nav-link:focus-visible { outline-color: Highlight; } }"
+    },
+    {
+      "name": "Practice panel",
+      "kind": "card",
+      "refersTo": "practice-panel",
+      "description": "The actual warm task container and empty-state copy, without promoting its one-off letter ornament.",
+      "html": "<section class=\"ds-practice-panel\" aria-labelledby=\"ds-practice-title\"><div class=\"ds-practice-empty\"><h2 id=\"ds-practice-title\">Every word opens a door.</h2><p>Add a word on the left, then choose it to start practising.</p></div></section>",
+      "css": ".ds-practice-panel { min-width: 0; padding: clamp(1.5rem, 3.2vw, 2.75rem); border: 1px solid var(--line, #d9cbbc); border-radius: 1.75rem; color: var(--ink, #5d524b); background: linear-gradient(150deg, #f9ecda, #f6e9e1 40%, var(--paper, #fef9ed) 85%); font: 400 1rem/1.65 var(--sans, system-ui, -apple-system, 'Segoe UI', 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans Devanagari', 'Noto Sans Thai', sans-serif); } .ds-practice-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 25rem; padding: 1.5rem 0; text-align: center; } .ds-practice-empty h2 { max-width: 15ch; margin: 0 0 0.65em; font: 400 1.9rem/1.2 var(--serif, 'Source Serif 4', 'Iowan Old Style', 'Noto Serif', 'Noto Serif CJK SC', 'Noto Serif Devanagari', 'Noto Serif Thai', Georgia, serif); letter-spacing: -0.035em; text-wrap: balance; } .ds-practice-empty p { max-width: 32ch; margin: 0; font-size: 0.9375rem; } @media (max-width: 50rem) { .ds-practice-empty { min-height: 20rem; } } @media (max-width: 30rem) { .ds-practice-panel { padding: 1.25rem; border-radius: 1.25rem; } } @media (forced-colors: active) { .ds-practice-panel { border: 1px solid ButtonText; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Microsoft AI companion",
+    "overview": "Warm paper, brown serif headings, quiet sans-serif reading text and compact\nmonospaced utility labels connect the guide and vocabulary app. Spacious,\nopen sections surround a small number of softly tinted working surfaces.\n\nThe user chose [Microsoft AI models](https://microsoft.ai/models/) and approved\nthe collection/practice layout. This extends that reference: seed not applicable;\nno selection roll or separate bespoke comp was performed. Source Serif 4 is the\napproved redistributable replacement for commercial Bradford LL.",
+    "keyCharacteristics": [
+      "Editorial headings, readable prose and functional mono labels.",
+      "Paper-first layouts, fine brown rules and sand pill controls.",
+      "Explicit interaction states and restrained original teaching artwork."
+    ],
+    "rules": [
+      {
+        "name": "The Type Has a Job Rule",
+        "body": "Serif carries headings and vocabulary; sans carries\ninstructions and status; mono identifies navigation, counts, steps and code.\nFunctional labels are not a license to add decorative above-heading copy.",
+        "section": "typography"
+      },
+      {
+        "name": "The Paper Before Panels Rule",
+        "body": "Use open paper and fine rules for hierarchy;\ntint working surfaces instead of boxing every section.",
+        "section": "elevation"
+      },
+      {
+        "name": "The State in Words Rule",
+        "body": "Pair state styling with explicit copy and native\ncontrol semantics; color alone does not explain selection, progress or results.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "**Do** preserve the Microsoft AI companion palette and approved font roles.",
+      "**Do** keep open reading areas distinct from tinted working surfaces.",
+      "**Do** retain explicit state copy, keyboard outlines, reduced motion and native controls.",
+      "**Do** distinguish labeled teaching illustrations from requested app outputs."
+    ],
+    "donts": [
+      "**Don't** add decorative above-heading labels or substitute text glyphs for icons.",
+      "**Don't** use the system sans-serif as the display face or add hard offset shadows.",
+      "**Don't** flatten guide/app type sizes into one rem scale or add a UI framework.",
+      "**Don't** turn unused CSS, one-off ornaments or remaining defects into reusable rules."
+    ]
+  }
+}

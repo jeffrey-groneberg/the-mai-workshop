@@ -29,7 +29,7 @@ the exact fork and private-secret steps. The
 [source-branch Codespaces creation link](https://codespaces.new/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop)
 is for instructors with write access to the original repository, not your fork.
 
-**GitHub Pages deployment target:**
+**Published workshop guide:**
 [jeffrey-groneberg.github.io/the-mai-workshop/](https://jeffrey-groneberg.github.io/the-mai-workshop/).
 Publication of the **static workshop guide** is authorized; verify the deployed
 site before sharing it as live. Pages cannot run Flask or hold participant

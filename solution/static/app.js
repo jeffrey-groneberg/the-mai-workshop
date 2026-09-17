@@ -137,7 +137,9 @@ function renderList() {
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "remove-word";
-    remove.textContent = "\u00d7";
+    remove.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" ' +
+      'fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">' +
+      '<path d="M6 6l12 12M18 6L6 18"/></svg>';
     remove.setAttribute("aria-label", `Remove ${word.english}`);
     remove.addEventListener("click", () => {
       const saved = memoryImages.get(word.id);

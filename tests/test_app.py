@@ -91,7 +91,7 @@ def test_starter_runs_without_completed_features():
     response = starter_client.get("/")
     assert response.status_code == 200
     assert b"apple" in response.data
-    assert b"YOUR APP / THE STARTING POINT" in response.data
+    assert b"Your starting app:" in response.data
     assert starter_client.get("/static/style.css").status_code == 200
     script = starter_client.get("/static/app.js").data
     assert b"MediaRecorder" not in script and b"localStorage" not in script

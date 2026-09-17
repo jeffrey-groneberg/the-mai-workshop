@@ -79,7 +79,6 @@ markers are insertion locations for later lessons, not hidden functionality.
   </header>
   <main id="main" class="app-shell">
     <section class="intro">
-      <p class="eyebrow">WORD BY WORD</p>
       <h1>A little vocabulary.<br>A world to explore.</h1>
       <p class="intro-copy">Choose a language. Keep a word. Make it yours.</p>
     </section>
@@ -135,6 +134,8 @@ markers are insertion locations for later lessons, not hidden functionality.
 `saveWords` writes only vocabulary; `textContent` displays text without treating
 it as HTML. The storage checks are deliberately visible: corrupted or blocked
 storage is an error, not a reason to silently overwrite someone's list.
+The removal icon uses a fixed SVG string; never interpolate participant text
+into that markup.
 
 ```javascript title="starter/static/app.js"
 "use strict";
@@ -202,7 +203,9 @@ function renderList() {
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "remove-word";
-    remove.textContent = "\u00d7";
+    remove.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" ' +
+      'fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">' +
+      '<path d="M6 6l12 12M18 6L6 18"/></svg>';
     remove.setAttribute("aria-label", `Remove ${word.english}`);
     remove.addEventListener("click", () => {
       if (!saveWords(words.filter((item) => item.id !== word.id))) return;
