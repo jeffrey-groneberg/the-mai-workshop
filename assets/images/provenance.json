@@ -1,0 +1,28 @@
+{
+  "model": "MAI-Image-2.6",
+  "purpose": "AI-generated teaching illustrations, not outputs from a participant's APIM gateway.",
+  "delivery": "Original PNG generations converted to WebP at quality 86 for the documentation site.",
+  "images": [
+    {
+      "file": "vocabulary-journey.webp",
+      "original_width": 1344,
+      "original_height": 768,
+      "original_png_sha256": "e9ce8725c55b343b883ea28e32f7e3760b56e60fff09b679907d44e50f36541c",
+      "prompt": "An original editorial watercolor illustration for a hands-on vocabulary learning workshop. On a warm ivory paper background (#fef9ed), arrange one bright red apple with a green leaf at the left, a softly drawn open notebook with blank pages in the center, and a small playful landscape vignette at the right. A subtle flowing ribbon of pastel sound-wave marks gently connects seeing an object, hearing a word, and imagining its meaning. Organic hand-painted texture, muted sage, peach, pale blue and soft lavender, delicate warm brown detail. Clear generous negative space, sophisticated friendly Microsoft AI companion mood, flat matte artwork, no glossy 3D, no computers, no screenshots. Wide landscape composition, with the subjects comfortably inside the frame. Absolutely no words, letters, numbers, labels, logos, or watermarks."
+    },
+    {
+      "file": "river-bank.webp",
+      "original_width": 1024,
+      "original_height": 1024,
+      "original_png_sha256": "8d98d61d288d9d48ad08456860dab29d5972ce446b9aa6f26999dbed1433c6ae",
+      "prompt": "Illustrate the English vocabulary word bank specifically meaning the natural edge of a river, not a financial institution. A graceful winding blue river meets a grassy green bank with a willow tree, reeds, a few small smooth stones and one tiny red flower. Clear single scene on warm ivory paper (#fef9ed), an original editorial watercolor visual memory cue. Soft sage, pale blue, warm brown and a small peach accent, elegant hand-painted texture, gentle daylight, flat matte illustration, centered square composition with generous breathing room. No people and no buildings. Absolutely no words, letters, numbers, labels, logos, or watermarks."
+    },
+    {
+      "file": "savings-bank.webp",
+      "original_width": 1024,
+      "original_height": 1024,
+      "original_png_sha256": "19b9332b71b0e7d3084a0512e03a8e5a220e579cc67efd94e9ed85cc109f6c81",
+      "prompt": "Illustrate the English vocabulary word bank specifically meaning a financial institution where people keep savings, not the edge of a river. A small welcoming stone bank building with three simple columns and an open doorway, with a few warm gold coins and a small terracotta piggy bank in the foreground. Clear single scene on warm ivory paper (#fef9ed), an original editorial watercolor visual memory cue. Soft sage, pale blue, warm brown and a small peach accent, elegant hand-painted texture, gentle daylight, flat matte illustration, centered square composition with generous breathing room. No people and no river. Absolutely no words, letters, numbers, signage, labels, logos, or watermarks."
+    }
+  ]
+}
