@@ -47,6 +47,11 @@ The visual authority is https://microsoft.ai/models/: warm paper, brown ink,
 serif typography, compact monospaced labels, generous spacing, and gentle pastel
 accents. Use redistributable fonts rather than commercial Bradford LL.
 
+The user supplied this existing visual reference and approved the
+collection/practice layout during planning. This is a reference extension, not
+a randomly selected new visual world: no selection roll, seed, or separate
+bespoke comp was produced. Do not invent retrospective selection provenance.
+
 The workshop includes three original MAI-Image-2.6 teaching illustrations:
 a vocabulary journey and two explicitly prompted senses of "bank".
 They are labeled AI-generated and have prompt provenance in

@@ -12,19 +12,20 @@
   OWN-WORLD: Microsoft AI companion; warm paper, brown serif, compact mono labels.
   STORY: Save a pair, hear it, say the translation, compare, and picture its meaning.
   FIRST VIEWPORT: Quiet header, editorial introduction, vocabulary list beside one practice card.
-  FORM: Brief-pinned visual reference, translated into an accessible working app.
+  FORM: User-pinned reference extension and approved layout; seed: not applicable.
+  No random selection was performed. PRODUCT.md records the visual authority.
   FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->
   <a class="skip-link" href="#main">Skip to vocabulary</a>
   <header class="site-header">
     <a class="brand" href="/">MAI <span>WORKSHOP</span></a>
-    <a class="reference-link" href="https://microsoft.ai/models/" target="_blank" rel="noreferrer">Explore the models <span aria-hidden="true">&#8599;</span></a>
+    <a class="reference-link" href="https://microsoft.ai/models/" target="_blank" rel="noreferrer">Explore the models</a>
   </header>
   <main id="main" class="app-shell">
     <section class="intro">
-      <p class="eyebrow">THE FINISHED SOLUTION</p>
       <h1>A word. A voice.<br>A world of possibilities.</h1>
       <p class="intro-copy">Build a little vocabulary. Hear it, say it, and find a picture that makes it yours.</p>
       <p class="connection-note" id="connection-note" data-configured="{{ 'true' if configured else 'false' }}">
+        <strong>Finished solution.</strong>
         {% if configured %}Gateway configured. Model access is checked when you use a feature.
         {% else %}Add your gateway settings to enable MAI features. Your word list works without them.{% endif %}
       </p>
@@ -32,7 +33,7 @@
     <p id="app-error" class="notice error-notice" role="alert" hidden></p>
     <div class="workspace">
       <section class="vocabulary-panel panel" aria-labelledby="vocabulary-title">
-        <div class="section-heading"><p class="eyebrow">01 / YOUR COLLECTION</p><h2 id="vocabulary-title">Words worth keeping.</h2></div>
+        <div class="section-heading"><h2 id="vocabulary-title">Words worth keeping.</h2></div>
         <form id="word-form">
           <label for="target-locale">I want to practise</label>
           <select id="target-locale" name="locale" required>
@@ -45,7 +46,7 @@
             <div><label for="english-word">English word</label><input id="english-word" name="english" maxlength="120" placeholder="apple" autocomplete="off" required></div>
             <div><label for="target-word">Your translation</label><input id="target-word" name="target" maxlength="120" placeholder="Your word" autocomplete="off" required></div>
           </div>
-          <button class="button primary" type="submit">Add to my words <span aria-hidden="true">+</span></button>
+          <button class="button primary" type="submit">Add to my words</button>
         </form>
         <div class="list-heading"><span class="eyebrow">YOUR WORDS</span><span id="word-count" class="count">0</span></div>
         <ul id="word-list" class="word-list" aria-label="Saved vocabulary"></ul>
@@ -53,7 +54,6 @@
         <button id="reset-storage" class="text-button" type="button" hidden>Clear unreadable saved data</button>
       </section>
       <section class="practice-panel panel" aria-labelledby="practice-title">
-        <p class="eyebrow">02 / MAKE IT YOURS</p>
         <div id="practice-empty" class="empty-state">
           <div class="word-orbit" aria-hidden="true"><span>a</span><span>A</span><span>?</span></div>
           <h2 id="practice-title">Every word opens a door.</h2>

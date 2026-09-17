@@ -36,3 +36,14 @@ jobs:
 
       - name: Build workshop guide
         run: zensical build --clean --strict
+
+      - name: Capture review evidence
+        run: python tests/capture_review.py
+
+      - name: Upload review evidence
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: visual-review
+          path: test-results/visual/
+          if-no-files-found: error
+          retention-days: 7

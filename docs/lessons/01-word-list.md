@@ -86,7 +86,6 @@ markers are insertion locations for later lessons, not hidden functionality.
     <p id="app-error" class="notice error-notice" role="alert" hidden></p>
     <div class="workspace">
       <section class="panel vocabulary-panel" aria-labelledby="list-title">
-        <p class="eyebrow">01 / YOUR COLLECTION</p>
         <h2 id="list-title">Words worth keeping.</h2>
         <form id="word-form">
           <label for="target-locale">I want to practise</label>
@@ -108,7 +107,6 @@ markers are insertion locations for later lessons, not hidden functionality.
         <button id="reset-storage" class="text-button" type="button" hidden>Clear unreadable saved data</button>
       </section>
       <section class="panel practice-panel" aria-label="Practise your selected word">
-        <p class="eyebrow">02 / MAKE IT YOURS</p>
         <div id="practice-empty" class="empty-state"><h2>Start with a word.</h2><p>Add a pair, then choose it in your list.</p></div>
         <div id="practice-content" hidden>
           <div class="word-heading">

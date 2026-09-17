@@ -4,6 +4,7 @@ import base64
 import importlib.util
 import io
 import json
+import os
 import re
 import shutil
 import struct
@@ -180,11 +181,14 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
 
     try:
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch(args=[
+            browser = playwright.chromium.launch(
+                channel=os.getenv("PLAYWRIGHT_BROWSER_CHANNEL") or None,
+                args=[
                 "--use-fake-device-for-media-stream",
                 "--use-fake-ui-for-media-stream",
                 "--mute-audio",
-            ])
+                ],
+            )
             context = browser.new_context(permissions=["microphone"], accept_downloads=True)
             page = context.new_page()
             errors = []
@@ -520,9 +524,17 @@ def assert_pending_permission_fallback(page, sample, calls, state):
             page.evaluate("""async () => {
                 const stream = await window.originalGetUserMedia({audio: true});
                 window.lateTracks = stream.getTracks();
+                for (const track of window.lateTracks) {
+                    const stop = track.stop.bind(track);
+                    track.stop = () => {
+                        stop();
+                        document.documentElement.dataset.lateTracksEnded =
+                            String(window.lateTracks.every(item => item.readyState === "ended"));
+                    };
+                }
                 window.resolvePermission(stream);
             }""")
-            page.wait_for_function("window.lateTracks.every(track => track.readyState === 'ended')")
+            expect(page.locator("html")).to_have_attribute("data-late-tracks-ended", "true")
             expect(page.locator("#audio-preview")).to_have_attribute("src", preview)
             expect(page.locator("#record-status")).to_contain_text("Ready to preview locally")
             expect(page.locator("#model-status")).to_contain_text("MAI is transcribing")

@@ -11,7 +11,8 @@ hide:
 OWN-WORLD: Microsoft AI companion: warm paper, brown Source Serif 4, Red Hat Mono, sand pills, quiet peach.
 STORY: Get ready in Codespaces, build in starter, reach a working checkpoint, then try one deliberate change.
 FIRST VIEWPORT: Spacious serif introduction, clear readiness action, honest session target, and the build/checkpoint/experiment rhythm.
-FORM: The user-approved Microsoft AI reference; content-led workshop guide with an unboxed lesson sequence.
+FORM: User-pinned reference extension and approved layout; seed: not applicable.
+No random selection was performed. PRODUCT.md records the visual authority.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->
 
 <section class="workshop-hero" markdown="1">
