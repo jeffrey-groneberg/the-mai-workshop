@@ -1,11 +1,26 @@
 import json
 import re
 import subprocess
+import tomllib
 from pathlib import Path
 
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_guide_uses_native_zensical_styling():
+    config = tomllib.loads((ROOT / "zensical.toml").read_text())
+    project = config["project"]
+    theme = project["theme"]
+    assert "extra_css" not in project
+    assert "custom_dir" not in theme
+    assert "font" not in theme
+    assert "palette" not in theme
+    home = (ROOT / "docs/index.md").read_text()
+    assert "template: home.html" not in home
+    assert 'class="workshop-' not in home
+    assert not (ROOT / "docs/stylesheets/workshop.css").exists()
 
 
 def test_private_endpoint_hosts_are_not_in_publishable_source():

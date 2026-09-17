@@ -41,16 +41,18 @@ server-side configuration; neither belongs in Git or published documentation.
 No automatic inference,
 database, frontend build system, provider framework, or fake model fallback.
 
-## Brand commitments
+## Visual commitments
 
-The visual authority is https://microsoft.ai/models/: warm paper, brown ink,
-serif typography, compact monospaced labels, generous spacing, and gentle pastel
-accents. Use redistributable fonts rather than commercial Bradford LL.
+The workshop guide uses **native Zensical styling**. The user replaced the
+custom companion skin to prioritize readable prose, code, and navigation.
+Use ordinary Markdown and built-in documentation components; do not reintroduce
+custom guide fonts, colors, or landing-page overrides.
 
-The user supplied this existing visual reference and approved the
-collection/practice layout during planning. This is a reference extension, not
-a randomly selected new visual world: no selection roll, seed, or separate
-bespoke comp was produced. Do not invent retrospective selection provenance.
+The Flask apps retain the https://microsoft.ai/models/ companion direction:
+warm paper, brown ink, serif typography, compact monospaced labels, generous
+spacing, and gentle pastel accents. The user approved a redistributable serif
+instead of commercial Bradford LL. The collection/practice layout is unchanged.
+No selection roll or separate bespoke comp was produced; do not invent one.
 
 The workshop includes three original MAI-Image-2.6 teaching illustrations:
 a vocabulary journey and two explicitly prompted senses of "bank".

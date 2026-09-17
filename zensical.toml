@@ -5,7 +5,6 @@ site_description = "Build a small Flask vocabulary app, reach a working checkpoi
 repo_url = "https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop"
 repo_name = "jeffrey-groneberg/the-mai-workshop"
 docs_dir = "docs"
-extra_css = ["stylesheets/workshop.css"]
 nav = [
   { "Welcome" = "index.md" },
   { "Getting ready" = "getting-ready.md" },
@@ -26,10 +25,7 @@ nav = [
 ]
 
 [project.theme]
-custom_dir = "overrides"
 language = "en"
-font = false
-favicon = "assets/images/favicon.svg"
 features = [
   "navigation.tabs",
   "navigation.sections",
@@ -41,11 +37,6 @@ features = [
   "search.highlight",
   "content.code.copy",
 ]
-
-[project.theme.palette]
-scheme = "default"
-primary = "custom"
-accent = "custom"
 
 [project.markdown_extensions]
 admonition = {}

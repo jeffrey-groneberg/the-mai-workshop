@@ -1,160 +1,72 @@
----
-title: MAI Vocabulary Workshop
-description: Build a small vocabulary app with Flask and MAI, one working feature and one experiment at a time.
-template: home.html
-hide:
-  - navigation
-  - toc
----
+# MAI Vocabulary Workshop
 
-<!-- THESIS: A readable invitation to build a real vocabulary practice loop, not a model dashboard.
-OWN-WORLD: Microsoft AI companion: warm paper, brown Source Serif 4, Red Hat Mono, sand pills, quiet peach.
-STORY: Get ready in Codespaces, build in starter, reach a working checkpoint, then try one deliberate change.
-FIRST VIEWPORT: Spacious serif introduction, clear readiness action, honest session target, and the build/checkpoint/experiment rhythm.
-FORM: User-pinned reference extension and approved layout; seed: not applicable.
-No random selection was performed. PRODUCT.md records the visual authority.
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->
+Build a small Flask vocabulary app, one working feature at a time. Save English
+words and their translations, hear both languages, record an answer, check the
+recognized text, and generate a visual memory cue.
 
-<section class="workshop-hero" markdown="1">
+**[Start with readiness pre-work](getting-ready.md)**, then
+[open your app](lessons/00-open-your-app.md).
 
-# Make a word<br>your starting point.
+You need basic Python and HTML. The guided session has a **two-hour target**;
+environment setup is pre-work, and the pacing still needs a representative
+learner pilot.
 
-Build a small vocabulary app with Python, HTML, and MAI. Keep a word, hear both
-languages, speak an answer, then make a picture to help it stick.
-{ .workshop-intro }
+## How each lesson works
 
-<div class="workshop-actions" markdown="1">
+1. **Understand:** what you are adding, how it works, and which components take part.
+2. **Build and run:** make small edits and see the complete feature work in your browser.
+3. **Experiment:** choose one option, predict the result, change it, run again, and compare.
 
-[Get ready in Codespaces](getting-ready.md){ .md-button .md-button--primary }
-[Open your first app](lessons/00-open-your-app.md){ .md-button }
+Your working app is the checkpoint. Looking at the finished solution does not
+replace implementing the feature yourself.
 
-</div>
+## Follow the workshop
 
-For developers who know a little Python and HTML. **A 2-hour session target, not
-validated pacing:** environment readiness is pre-work, and the full learning
-path still needs a representative learner pilot.
-{ .workshop-session }
+| Lesson | What works at the end |
+| --- | --- |
+| [00 — Open your app](lessons/00-open-your-app.md) | A running starter and a separately accessible finished reference. |
+| [01 — Your word list](lessons/01-word-list.md) | Your own word pairs, target-language choice, and browser persistence. |
+| [02 — Hear both languages](lessons/02-bilingual-speech.md) | English and target-language playback through MAI Voice. |
+| [03 — Record and transcribe](lessons/03-record-and-transcribe.md) | Recording, genuine WAV conversion, local preview, and explicit transcription. |
+| [04 — Check your answer](lessons/04-check-your-answer.md) | The recognized text compared with your saved translation. |
+| [05 — Make memory images](lessons/05-memory-images.md) | An on-demand picture and the complete practice loop. |
 
-</section>
+After the core, try the optional
+[MAI-Thinking mnemonic lab](extensions/mnemonics.md).
 
-<section class="workshop-rhythm" markdown="1">
+## Know where you are working
 
-## Build. See it work. Then experiment.
+| Location | Purpose |
+| --- | --- |
+| `starter/` — port 5050 | Your app. Edit these files during the lessons. |
+| `solution/` — port 5051 | The finished reference. Run it separately to compare behavior. |
+| GitHub Pages | This static workshop guide, not a Flask server. |
+| Port 8000 | An optional local preview of the guide. |
 
-<ol>
-<li>
-<h3>Build one feature.</h3>
-<p>Make a small, explained change in your app. Trace what happens in the browser,
-in Flask, and, when needed, at the model.</p>
-</li>
-<li>
-<h3>Reach a working checkpoint.</h3>
-<p>Run the feature in your browser. Your current <code>starter/</code> app must work
-before you move on; inspecting the solution is not the checkpoint.</p>
-</li>
-<li>
-<h3>Try one change.</h3>
-<p>Predict a result, change one option, and run it again. Compare what happened and
-choose what to keep. Every core lesson includes an experiment.</p>
-</li>
-</ol>
+Each app has four main files: `app.py`, `templates/index.html`,
+`static/app.js`, and `static/style.css`. There is no frontend build system,
+database, or hidden provider framework.
 
-</section>
+Codespaces is the recommended environment. Follow the
+[fork-and-branch setup](getting-ready.md#create-the-codespace), not default
+`main`. If Codespaces is unavailable, use the same app through
+[local setup](local-setup.md).
 
-<figure class="workshop-illustration" markdown="1">
+## Important boundaries
 
-![Watercolor of an apple beside an open notebook, with sound waves flowing toward a small mountain landscape.](assets/images/vocabulary-journey.webp){ width="1344" height="768" loading="lazy" decoding="async" }
+- Keep **both** `APIM_BASE_URL` and `APIM_API_KEY` in private server-side
+  configuration. Never commit or publish their values.
+- Use approved sample data. Microphone participation is voluntary; a synthetic
+  WAV alternative is provided.
+- Matching recognized text is **not** pronunciation assessment or verification
+  that your saved translation is correct.
 
-<figcaption>AI-generated learning illustration: a word, a voice, and a visual memory cue. Not a live app result.</figcaption>
+Use the [reference](reference.md) for API details and troubleshooting, and the
+[instructor guide](instructor.md) for access, data guidance, and classroom readiness.
 
-</figure>
+## From a word to a visual cue
 
-<section class="workshop-studio" markdown="1">
-<div markdown="1">
+![Watercolor of an apple, an open notebook, and sound waves leading toward a landscape.](assets/images/vocabulary-journey.webp){ width="640" height="366" loading="lazy" }
 
-## Small enough to understand.
-
-Four main files. One application you can follow from a click to a response.
-No frontend build system, database, or hidden provider framework.
-
-You will build a saved word list, bilingual playback, recording and transcription,
-answer matching, and on-demand memory images. Matching checks recognized text
-against your saved translation; it is **not a pronunciation score**.
-
-</div>
-<dl class="workshop-files">
-  <div><dt><code>app.py</code></dt><dd>Flask routes and model requests</dd></div>
-  <div><dt><code>templates/index.html</code></dt><dd>The page and its controls</dd></div>
-  <div><dt><code>static/style.css</code></dt><dd>Typography, layout, and states</dd></div>
-  <div><dt><code>static/app.js</code></dt><dd>Browser interactions and local storage</dd></div>
-</dl>
-<div class="workshop-copies" markdown="1">
-
-**`starter/` is yours to build.** It opens as a styled sample page, not a finished
-word list or recorder. Make your guided changes and experiments here.
-
-**`solution/` is your reference.** Run it separately to understand the goal or
-compare a feature. Model actions require valid instructor-provided gateway access.
-
-</div>
-</section>
-
-<section class="workshop-path" markdown="1">
-<div markdown="1">
-
-## One app.<br>Six working checkpoints.
-
-Start with [readiness pre-work](getting-ready.md), then follow these lessons in
-order. Keep your editor, app, and guide side by side.
-
-Codespaces is the default for your Flask app. Follow the
-[fork-and-branch setup](getting-ready.md#create-the-codespace) to create your
-own workspace on the workshop branch, not `main`.
-
-GitHub Pages hosts only this static guide; it cannot run Flask or securely store
-private configuration. Keep both
-`APIM_BASE_URL` and `APIM_API_KEY` in Codespaces secrets. Do not put either value
-in Git, the published guide, screenshots, or logs. To run the same app on your
-computer instead, use [local setup](local-setup.md).
-
-</div>
-<div class="workshop-lessons" markdown="1">
-
-0. [Open your app](lessons/00-open-your-app.md)
-
-    Launch the starter, inspect the finished solution, and meet the four files.
-
-1. [Make it your vocabulary](lessons/01-word-list.md)
-
-    Choose a target language, add word pairs, and keep them in this browser.
-
-2. [Hear both languages](lessons/02-bilingual-speech.md)
-
-    Connect English and target-language playback through the same Flask route.
-
-3. [Speak and see what was heard](lessons/03-record-and-transcribe.md)
-
-    Build recording and WAV conversion, preview locally, then choose to send.
-    A synthetic-audio alternative keeps microphone use voluntary.
-
-4. [Check your answer](lessons/04-check-your-answer.md)
-
-    Compare the transcript with your saved translation, without another model call.
-
-5. [Make a visual memory cue](lessons/05-memory-images.md)
-
-    Generate a picture on demand and use the complete practice loop.
-
-</div>
-</section>
-
-<section class="workshop-after" markdown="1">
-
-## A little further, when you are ready.
-
-Once the core works, try the optional [MAI-Thinking mnemonic lab](extensions/mnemonics.md).
-Use the [reference](reference.md) for request details and troubleshooting, or the
-[instructor guide](instructor.md) to prepare access, sample-data guidance, and
-classroom capacity.
-
-</section>
+*AI-generated teaching illustration, not a live app result.
+[Image provenance](assets/images/provenance.json).*

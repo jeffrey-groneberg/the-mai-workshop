@@ -59,9 +59,15 @@ def main():
                         page.evaluate("window.scrollTo(0, 0)")
                         name = f"{size}.png" if surface == "guide" else f"app-{size}.png"
                         page.screenshot(path=str(OUTPUT / name))
-                        selector = ".workshop-rhythm" if surface == "guide" else ".practice-panel"
-                        section = f"guide-rhythm-{size}.png" if surface == "guide" else f"app-practice-{size}.png"
-                        page.locator(selector).screenshot(path=str(OUTPUT / section))
+                        if surface == "guide":
+                            page.goto(url + "lessons/02-bilingual-speech/", wait_until="load")
+                            page.locator(".highlight").first.screenshot(
+                                path=str(OUTPUT / f"guide-code-{size}.png")
+                            )
+                        else:
+                            page.locator(".practice-panel").screenshot(
+                                path=str(OUTPUT / f"app-practice-{size}.png")
+                            )
                         overflow = page.evaluate("document.documentElement.scrollWidth > innerWidth")
                         if overflow:
                             raise RuntimeError(f"Horizontal overflow in {surface}/{size}")
