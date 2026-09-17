@@ -19,9 +19,10 @@ Codespaces, and an agreed compute/storage billing arrangement. Codespaces
 availability and cost are separate from model quotas. A free Codespace is not
 guaranteed for every participant.
 
-The instructor must confirm repository-secret access, organizational browser /
-network policies, and whether you need a participant-owned fork. Read-only
-repository access can affect secret injection. Do not make ports public or relax
+Use a participant-owned fork for this workshop so your Codespace and secrets
+belong to a repository you can write. The instructor must confirm organizational
+browser/network policies and your billing arrangement. Read-only repository
+access can affect secret injection. Do not make ports public or relax
 organization policy to work around access trouble. See GitHub's
 [Codespaces security guidance](https://docs.github.com/en/codespaces/reference/security-in-github-codespaces)
 and [account-specific secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces).
@@ -43,12 +44,23 @@ currently contains only a README. The
 [workshop source branch](https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop)
 contains the starter, solution, guide, and dev container.
 
-[Open branch-specific Codespaces creation](https://codespaces.new/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop)
-and confirm the branch on the GitHub creation page. Alternatively, use
-**Code > Codespaces > New with options** on the repository page and explicitly
-select **`jeffrey-groneberg-mai-vocabulary-workshop`** and the approved machine.
-If a participant-owned fork is required, confirm that the fork includes this
-branch and select it there; the link above targets the original repository.
+1. Open [**jeffrey-groneberg/the-mai-workshop**](https://github.com/jeffrey-groneberg/the-mai-workshop)
+   and choose **Fork**. Set **Owner** to your own GitHub account and
+   **Repository name** to `the-mai-workshop`. Uncheck **Copy the main branch only**
+   so the fork includes the workshop branch, not just the README on `main`.
+2. In your fork, **`YOUR-HANDLE/the-mai-workshop`** (or your existing fork's name),
+   select **`jeffrey-groneberg-mai-vocabulary-workshop`**.
+   If an existing fork lacks that branch, ask the instructor to help bring in
+   the workshop branch. Do not delete existing work, start a default-main
+   Codespace, or recreate missing workshop files.
+3. Choose **Code > Codespaces > New with options**. Confirm your fork and the
+   workshop branch. Select a **2-core machine if offered**, otherwise the
+   smallest machine your policy permits. The models run remotely; no GPU is
+   needed in the Codespace. Confirm the billing arrangement before creating it.
+
+Instructors with write access to the original repository can use
+[its branch-specific creation link](https://codespaces.new/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop).
+That link targets the original repository, not a participant's fork.
 
 The dev container recommends **both
 `APIM_BASE_URL` and `APIM_API_KEY`** as Codespaces secrets, by name and description
@@ -57,8 +69,8 @@ only; enter their private values in GitHub's secret fields. GitHub documents the
 do not expect it on every quick-create path.
 
 If no prompt appears, create account-specific **Codespaces** secrets named
-`APIM_BASE_URL` and `APIM_API_KEY`, and grant both access to the correct repository
-or fork. These are not Actions secrets. Stop and restart an existing Codespace after changing
+`APIM_BASE_URL` and `APIM_API_KEY`, and grant both access to **your fork**, not just
+the source repository. These are not Actions secrets. Stop and restart an existing Codespace after changing
 injected secrets, then restart Flask. If your permissions prevent this, ask the
 instructor to resolve access or use the explicitly approved `.env` fallback
 below; do not paste either value into source.

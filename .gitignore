@@ -10,6 +10,7 @@ __pycache__/
 .ruff_cache/
 .cache/
 .impeccable/hook.cache.json
+.impeccable/review/
 .coverage
 .coverage.*
 htmlcov/

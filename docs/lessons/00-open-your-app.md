@@ -75,10 +75,11 @@ same requests. The sample word came from Python, the surrounding markup from
 HTML, its appearance from CSS, and the status line from JavaScript.
 
 **Edit/run convention for every lesson:** save all named edits before running
-its checkpoint. After a Python edit, stop **Your app's** terminal with
-`Ctrl+C`, then run its same command again. After an HTML or JavaScript edit,
-reload the app; use a hard refresh if the browser shows an older file. We do
-not enable the interactive debugger. Leave the solution server alone.
+its checkpoint. After a **Python or HTML template edit**, stop **Your app's**
+terminal with `Ctrl+C`, run the same command again, **then reload the browser**.
+Flask may cache templates without automatic reload. For **JavaScript or CSS
+edits only**, reload the browser; use a hard refresh if an older file appears.
+Do not enable the interactive debugger. Leave the solution server alone.
 
 ## Experiment with your working feature
 

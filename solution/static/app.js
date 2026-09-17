@@ -12,9 +12,9 @@ let recorder = null;
 let recordingTimer = null;
 let pendingAudio = null;
 let previewUrl = null;
-let imageUrl = null;
 let storageReadable = true;
 const speechCache = new Map();
+const memoryImages = new Map();
 
 function showError(message) {
   $("#app-error").textContent = message;
@@ -95,10 +95,6 @@ function selectWord(id) {
   $("#practice-empty").hidden = Boolean(word);
   $("#practice-content").hidden = !word;
   $("#answer-result").hidden = true;
-  $("#memory-figure").hidden = true;
-  $("#image-mount").replaceChildren();
-  if (imageUrl) URL.revokeObjectURL(imageUrl);
-  imageUrl = null;
   $("#mnemonic-result").textContent = "";
   if (word) {
     $("#practice-word").textContent = word.english;
@@ -108,10 +104,24 @@ function selectWord(id) {
     $("#reveal-answer").textContent = "Reveal translation";
     $("#practice-language").textContent = [...$("#target-locale").options]
       .find((option) => option.value === word.locale).textContent;
-    $("#image-detail").value = "";
-    $("#generate-image").textContent = "Make a memory image";
   }
+  renderMemory();
   renderList();
+}
+
+function renderMemory() {
+  const saved = memoryImages.get(selectedId);
+  $("#image-mount").replaceChildren();
+  $("#memory-figure").hidden = !saved;
+  $("#image-detail").value = saved?.detail ?? "";
+  $("#generate-image").textContent = saved ? "Generate a new image" : "Make a memory image";
+  if (saved) {
+    const picture = new Image();
+    picture.id = "memory-image";
+    picture.alt = `Generated visual cue for ${saved.english}`;
+    picture.src = saved.url;
+    $("#image-mount").append(picture);
+  }
 }
 
 function renderList() {
@@ -130,6 +140,9 @@ function renderList() {
     remove.textContent = "\u00d7";
     remove.setAttribute("aria-label", `Remove ${word.english}`);
     remove.addEventListener("click", () => {
+      const saved = memoryImages.get(word.id);
+      if (saved) URL.revokeObjectURL(saved.url);
+      memoryImages.delete(word.id);
       words.splice(words.indexOf(word), 1);
       saveWords();
       if (word.id === selectedId) selectWord(words[0]?.id ?? null);
@@ -444,8 +457,9 @@ $("#generate-image").addEventListener("click", () => {
     picture.src = url;
     try { await picture.decode(); } catch { URL.revokeObjectURL(url); throw new Error("The generated image could not be displayed."); }
     if (version !== currentVersion) { URL.revokeObjectURL(url); return; }
-    if (imageUrl) URL.revokeObjectURL(imageUrl);
-    imageUrl = url;
+    const previous = memoryImages.get(word.id);
+    if (previous) URL.revokeObjectURL(previous.url);
+    memoryImages.set(word.id, {url, detail, english: word.english});
     $("#image-mount").replaceChildren(picture);
     $("#memory-figure").hidden = false;
     $("#generate-image").textContent = "Generate a new image";
@@ -460,6 +474,13 @@ $("#generate-mnemonic").addEventListener("click", () => {
     if (version === currentVersion) $("#mnemonic-result").textContent = result.text;
   });
 });
-window.addEventListener("pagehide", cancelActivity);
+window.addEventListener("pagehide", (event) => {
+  cancelActivity();
+  if (!event.persisted) {
+    memoryImages.forEach((image) => URL.revokeObjectURL(image.url));
+    memoryImages.clear();
+    speechCache.clear();
+  }
+});
 loadWords();
 selectWord(words[0]?.id ?? null);

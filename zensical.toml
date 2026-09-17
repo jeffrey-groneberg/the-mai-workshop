@@ -2,7 +2,7 @@
 site_name = "MAI Vocabulary Workshop"
 site_url = "https://jeffrey-groneberg.github.io/the-mai-workshop/"
 site_description = "Build a small Flask vocabulary app, reach a working checkpoint, and experiment with MAI speech, transcription, and images."
-repo_url = "https://github.com/jeffrey-groneberg/the-mai-workshop"
+repo_url = "https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop"
 repo_name = "jeffrey-groneberg/the-mai-workshop"
 docs_dir = "docs"
 extra_css = ["stylesheets/workshop.css"]

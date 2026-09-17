@@ -115,4 +115,5 @@ does not make the hosted model local.
 
 Continue with [Open your app](lessons/00-open-your-app.md), substituting the
 local commands above. Use `Ctrl+C` in the appropriate terminal before restarting
-Flask after Python edits. Do not run Flask's interactive debugger.
+Flask after Python or HTML-template edits, then reload the browser. JavaScript
+and CSS edits need a browser refresh. Do not run Flask's interactive debugger.

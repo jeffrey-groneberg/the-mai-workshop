@@ -40,30 +40,21 @@ path still needs a representative learner pilot.
 
 ## Build. See it work. Then experiment.
 
-<ol markdown="1">
-<li markdown="1">
-
-### Build one feature.
-
-Make a small, explained change in your app. Trace what happens in the browser,
-in Flask, and, when needed, at the model.
-
+<ol>
+<li>
+<h3>Build one feature.</h3>
+<p>Make a small, explained change in your app. Trace what happens in the browser,
+in Flask, and, when needed, at the model.</p>
 </li>
-<li markdown="1">
-
-### Reach a working checkpoint.
-
-Run the feature in your browser. Your current `starter/` app must work before
-you move on; inspecting the solution is not the checkpoint.
-
+<li>
+<h3>Reach a working checkpoint.</h3>
+<p>Run the feature in your browser. Your current <code>starter/</code> app must work
+before you move on; inspecting the solution is not the checkpoint.</p>
 </li>
-<li markdown="1">
-
-### Try one change.
-
-Predict a result, change one option, and run it again. Compare what happened and
-choose what to keep. Every core lesson includes an experiment.
-
+<li>
+<h3>Try one change.</h3>
+<p>Predict a result, change one option, and run it again. Compare what happened and
+choose what to keep. Every core lesson includes an experiment.</p>
 </li>
 </ol>
 
@@ -115,8 +106,12 @@ compare a feature. Model actions require valid instructor-provided gateway acces
 Start with [readiness pre-work](getting-ready.md), then follow these lessons in
 order. Keep your editor, app, and guide side by side.
 
-Codespaces is the default for your Flask app. GitHub Pages hosts only this static
-guide; it cannot run Flask or securely store private configuration. Keep both
+Codespaces is the default for your Flask app. Follow the
+[fork-and-branch setup](getting-ready.md#create-the-codespace) to create your
+own workspace on the workshop branch, not `main`.
+
+GitHub Pages hosts only this static guide; it cannot run Flask or securely store
+private configuration. Keep both
 `APIM_BASE_URL` and `APIM_API_KEY` in Codespaces secrets. Do not put either value
 in Git, the published guide, screenshots, or logs. To run the same app on your
 computer instead, use [local setup](local-setup.md).

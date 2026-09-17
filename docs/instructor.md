@@ -37,9 +37,9 @@ microphone operation, model capacity, or a learner-paced two-hour fit.
 
 | Readiness area | Confirm before the guided session |
 | --- | --- |
-| GitHub access | Accounts, repository access, Codespaces availability, repository-secret permissions, and any participant-owned fork requirement. Test the actual access level participants will have. |
+| GitHub access | Use participant-owned forks of `jeffrey-groneberg/the-mai-workshop`, preserving the workshop branch by unchecking **Copy the main branch only**. Confirm fork ownership, Codespaces availability, and access to both private secrets. Help import the branch into existing forks without deleting participant work. |
 | Billing | An approved Codespaces compute/storage arrangement and separate model-call/capacity arrangements. Do not promise a free environment or infer capacity from one successful request. |
-| Container | Select `jeffrey-groneberg-mai-vocabulary-workshop` explicitly in **New with options**, or use the branch-specific creation link in readiness. The pinned environment installs the runtime and Zensical. Recommend both `APIM_BASE_URL` and `APIM_API_KEY` as Codespaces secrets by name/description only; test the prompt and fallback rather than assuming quick creation prompts. |
+| Container | In the participant's fork, select `jeffrey-groneberg-mai-vocabulary-workshop` explicitly in **New with options** and choose 2 cores if offered, otherwise the smallest allowed machine. The source-repository creation link is for instructors with write access. Recommend both `APIM_BASE_URL` and `APIM_API_KEY` as Codespaces secrets by name/description only; test the prompt and fallback. |
 | Ports and browser | Labels **Your app** 5050, **Finished solution** 5051, **Workshop guide** 8000; all remain **Private**. Verify forwarded HTTPS in a normal browser tab, sign-in, same-origin POSTs, playback, and the intended desktop browsers. |
 | Gateway | Privately supply an HTTPS origin without a path and individual participant access. Store both `APIM_BASE_URL` and `APIM_API_KEY` as secrets; keep tracked `.env.example` values empty. Confirm the pinned routes, enabled deployments, event limits, outbound access, and content policy without publishing private hosts. |
 | Access lifetime | Provider keys expire 24 hours after initial issuance; revocation/rotation can also invalidate access. Arrange issuance around the event and have the portal recovery path ready. |
@@ -119,6 +119,12 @@ This is an ordinary pytest test, not a shipped stage/checkpoint runner.
 
 No checked-in app file is edited by the replay. Browser fixtures belong only in
 tests; no fake-inference switch belongs in a shipped app.
+
+The source snapshot
+[`e009350`](https://github.com/jeffrey-groneberg/the-mai-workshop/commit/e0093507af7f122a706d7de2d771aa005302657d)
+passed the [GitHub Check job on Python 3.12](https://github.com/jeffrey-groneberg/the-mai-workshop/actions/runs/35247785317).
+Local checks also ran on Python 3.14. These are code/fixture observations, not
+evidence of a live participant gateway or a learner-paced pilot.
 
 Site maintainers also run:
 

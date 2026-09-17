@@ -171,7 +171,7 @@ sets a 24-hour key lifetime from issuance; rotation/revocation can end it sooner
 
 | Symptom | Check and safe recovery |
 | --- | --- |
-| App shows an old version | Save all edits. Restart **Your app's** Flask terminal after Python changes; reload/hard-refresh after HTML/JS changes. Confirm port 5050, not solution 5051. |
+| App shows an old version | Save all edits. Restart **Your app's** Flask terminal after Python or HTML-template changes, then reload the browser. JavaScript/CSS edits need reload/hard-refresh. Confirm port 5050, not solution 5051. |
 | Flask won't start | Read the terminal error; check import/indentation and the lesson's exact insertion point. Keep JS initialization last. Do not copy solution files over work. |
 | Can't reach Flask / sign-in HTML instead of JSON, WAV, or PNG | Reopen the private forwarded port and sign in. Confirm the process is running. This is not necessarily APIM authentication failure. |
 | App `503` configuration error | The private origin must be HTTPS with no path; the key must be present server-side. Check both injected secrets versus `.env` precedence, then restart. Never print either value. |
@@ -180,7 +180,7 @@ sets a 24-hour key lifetime from issuance; rotation/revocation can end it sooner
 | `404` | Check the gateway origin and instructor-confirmed routes/deployments against the pinned catalog. Do not probe unrelated endpoints. |
 | `429` | Respect displayed `Retry-After` guidance, wait, and coordinate shared quota/capacity with the instructor. No automatic retry loop or silent model fallback. |
 | Gateway timeout / other server failure | Keep the error visible; retry deliberately only after checking connectivity/service status. A timeout may still have consumed capacity; no guaranteed latency is implied. |
-| No microphone / permission declined | Check HTTPS normal tab, browser permission, hardware, and policy. If unavailable or not approved, choose a synthetic WAV. Do not bypass browser/OS warnings. |
+| No microphone / permission pending or declined | Check HTTPS normal tab, browser permission, hardware, and policy. For an unanswered prompt, press **Stop recording** or uncheck consent to unlock the synthetic-file picker immediately. Preview and explicitly send the sample; a late permission result cannot replace that work. Do not bypass browser/OS warnings. |
 | WAV rejected / `413` | Use the short MAI-generated sample or the learner's real PCM converter. Check rate/channels/duration and request size; a filename or MIME label does not establish format. |
 | No words / `422` | Preview the sample, check locale and silence, then try approved audio again. This is not a mismatch verdict. |
 | Image or text format error | The app checks response shape and refuses malformed output. Check the provider contract; do not display base64/HTML as if it were a valid model result. |

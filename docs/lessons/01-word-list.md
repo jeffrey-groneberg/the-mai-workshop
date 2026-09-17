@@ -277,8 +277,9 @@ Keep `// Start the page.` and its two calls **at the bottom**. Future JavaScript
 goes immediately before that marker, so its state exists before the first card
 renders. These are ordinary functions in the same file, not a checkpoint system.
 
-**Run it end to end:** restart Flask and reload Your app. Choose a target language
-you know, add two sample pairs, select each, and reveal its translation. Reload
+**Run it end to end:** these edits changed Python and the HTML template, so
+restart Flask with the same command, **then reload Your app**. Choose a target
+language you know, add two sample pairs, select each, and reveal its translation. Reload
 again: both pairs remain. Remove one. Network shows no model request; browser
 Application/Storage shows only the vocabulary JSON under
 `mai-learner-words-v1`. Another app origin has a different list.

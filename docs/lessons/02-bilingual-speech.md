@@ -227,10 +227,13 @@ In **`starter/static/app.js`, insert this block immediately before
 `// Start the page.`** The shared helpers handle browser-to-Flask requests and
 visible progress, not model selection. Controls are temporarily disabled during
 an action, so a late result cannot land on a different word. Stop and consent
-controls introduced next remain available.
+controls introduced next remain available. `actionVersion` identifies the
+current action: cancelling a recording in the next lesson invalidates its
+number, so late errors or cleanup cannot change a newer action's UI.
 
 ```javascript title="starter/static/app.js"
 let busy = false;
+let actionVersion = 0;
 let speechUrl = null;
 const speechCache = new Map();
 
@@ -249,15 +252,20 @@ async function runAction(message, action) {
     return;
   }
   showError("");
+  const attempt = ++actionVersion;
   setBusy(true);
   $("#model-status").textContent = message;
   try {
-    await action();
+    await action(attempt);
   } catch (error) {
-    showError(error.message || "The action failed. Check the server and try again.");
+    if (attempt === actionVersion) {
+      showError(error.message || "The action failed. Check the server and try again.");
+    }
   } finally {
-    setBusy(false);
-    $("#model-status").textContent = "";
+    if (attempt === actionVersion) {
+      setBusy(false);
+      $("#model-status").textContent = "";
+    }
   }
 }
 

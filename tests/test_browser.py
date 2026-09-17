@@ -223,6 +223,12 @@ def test_image_and_mnemonic_are_visible_not_html(page, server):
     page.get_by_role("button", name="Make a memory image").click()
     expect(page.locator("#memory-figure")).to_be_visible()
     assert page.locator("#memory-image").evaluate("(image) => image.naturalWidth") == 1024
+    add_word(page, "pear", "Birne")
+    expect(page.locator("#memory-figure")).to_be_hidden()
+    page.get_by_role("button", name="apple / de-DE", exact=True).click()
+    expect(page.locator("#memory-figure")).to_be_visible()
+    expect(page.locator("#image-detail")).to_have_value("An apple wearing a crown")
+    assert len(calls) == 1
     page.locator("summary").click()
     page.get_by_role("button", name="Suggest a mnemonic").click()
     expect(page.locator("#mnemonic-result")).to_contain_text("<script>not executed</script>")

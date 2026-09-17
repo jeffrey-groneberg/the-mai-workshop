@@ -131,6 +131,10 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             ElementTree.fromstring(kwargs["content"])
             return httpx.Response(200, content=wav, request=request)
         if url.endswith("/speech/transcribe"):
+            gate = state.get("transcribe_gate")
+            if gate:
+                state["transcribe_started"].set()
+                assert gate.wait(timeout=10), "Fixture response was not released"
             assert kwargs["params"] == {"api-version": "2025-10-15"}
             assert set(kwargs["data"]) == {"definition"}
             definition = json.loads(kwargs["data"]["definition"])
@@ -349,6 +353,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             assert calls[-1][2]["files"]["audio"][1] == wav
             page.locator("#audio-consent").uncheck()
             expect(page.locator("#recording-review")).to_be_hidden()
+            assert_pending_permission_fallback(page, sample, calls, state)
 
             lesson = "lessons/04-check-your-answer.md"
             old = re.search(
@@ -475,6 +480,63 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
         server.shutdown()
         server.server_close()
         thread.join(timeout=5)
+
+
+def assert_pending_permission_fallback(page, sample, calls, state):
+    for cancel_with in ("stop", "consent"):
+        page.reload()
+        page.locator("#audio-consent").check()
+        page.evaluate("""() => {
+            window.originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+            navigator.mediaDevices.getUserMedia = () => new Promise((resolve) => {
+                window.resolvePermission = resolve;
+            });
+        }""")
+        before = len(calls)
+        page.locator("#record-answer").click()
+        expect(page.locator("#record-status")).to_contain_text("Waiting for microphone permission")
+        expect(page.locator("#audio-file")).to_be_disabled()
+        if cancel_with == "stop":
+            page.locator("#stop-recording").click()
+        else:
+            page.locator("#audio-consent").uncheck()
+        expect(page.locator("#audio-file")).to_be_enabled(timeout=1000)
+        expect(page.locator("#stop-recording")).to_be_hidden()
+        page.locator("#audio-file").set_input_files(str(sample))
+        expect(page.locator("#record-status")).to_contain_text("Ready to preview locally")
+        preview = page.locator("#audio-preview").get_attribute("src")
+        assert len(calls) == before
+        page.locator("#audio-consent").check()
+
+        gate = threading.Event()
+        started = threading.Event()
+        state["transcribe_gate"] = gate
+        state["transcribe_started"] = started
+        try:
+            page.locator("#send-answer").click()
+            assert started.wait(timeout=5), "Synthetic upload did not reach Flask"
+            expect(page.locator("#model-status")).to_contain_text("MAI is transcribing")
+            expect(page.locator("#audio-file")).to_be_disabled()
+            page.evaluate("""async () => {
+                const stream = await window.originalGetUserMedia({audio: true});
+                window.lateTracks = stream.getTracks();
+                window.resolvePermission(stream);
+            }""")
+            page.wait_for_function("window.lateTracks.every(track => track.readyState === 'ended')")
+            expect(page.locator("#audio-preview")).to_have_attribute("src", preview)
+            expect(page.locator("#record-status")).to_contain_text("Ready to preview locally")
+            expect(page.locator("#model-status")).to_contain_text("MAI is transcribing")
+            expect(page.locator("#audio-file")).to_be_disabled()
+            expect(page.locator("#send-answer")).to_be_disabled()
+            expect(page.locator("#app-error")).to_be_hidden()
+        finally:
+            gate.set()
+            state.pop("transcribe_gate")
+            state.pop("transcribe_started")
+        expect(page.locator("#answer-result")).to_have_text("I heard: pomme")
+        expect(page.locator("#audio-file")).to_be_enabled()
+        assert len(calls) == before + 1
+        assert calls[-1][2]["files"]["audio"][1] == sample.read_bytes()
 
 
 def assert_gateway_failures(module, wav, png, state, calls, monkeypatch):

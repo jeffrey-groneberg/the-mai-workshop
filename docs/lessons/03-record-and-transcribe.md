@@ -121,7 +121,7 @@ const MAX_SECONDS = 12;
 let activeRecorder = null;
 let captureStream = null;
 let recordingTimer = null;
-let cancelCapture = false;
+let captureAttempt = null;
 let pendingAudio = null;
 let previewUrl = null;
 
@@ -182,9 +182,19 @@ function reviewRecording(blob) {
 }
 
 function cancelRecording() {
-  cancelCapture = true;
+  if (captureAttempt !== null && captureAttempt === actionVersion) {
+    actionVersion += 1;
+    setBusy(false);
+    $("#model-status").textContent = "";
+  }
+  captureAttempt = null;
   if (activeRecorder?.state === "recording") activeRecorder.stop();
   captureStream?.getTracks().forEach((track) => track.stop());
+  activeRecorder = null;
+  captureStream = null;
+  clearTimeout(recordingTimer);
+  recordingTimer = null;
+  $("#stop-recording").hidden = true;
   discardRecording();
   $("#record-status").textContent = "Local recording discarded.";
 }
@@ -199,47 +209,60 @@ async function recordAnswer() {
     showError("Recording is unavailable. Use the HTTPS app in a normal tab, or choose a synthetic WAV.");
     return;
   }
-  await runAction("Preparing your microphone...", async () => {
+  await runAction("Preparing your microphone...", async (attempt) => {
+    captureAttempt = attempt;
+    const current = () => captureAttempt === attempt && actionVersion === attempt;
+    let stream = null;
+    let recorder = null;
+    let timer = null;
     discardRecording();
+    stopPlayback();
     $("#answer-result").hidden = true;
-    cancelCapture = false;
     $("#stop-recording").hidden = false;
     $("#record-status").textContent = "Waiting for microphone permission...";
     try {
-      captureStream = await navigator.mediaDevices.getUserMedia({audio: true});
-      if (cancelCapture || !$("#audio-consent").checked) return;
-      activeRecorder = new MediaRecorder(captureStream);
+      stream = await navigator.mediaDevices.getUserMedia({audio: true});
+      if (!current() || !$("#audio-consent").checked) return;
+      captureStream = stream;
+      recorder = new MediaRecorder(stream);
+      activeRecorder = recorder;
       const chunks = [];
-      activeRecorder.addEventListener("dataavailable", (event) => {
+      recorder.addEventListener("dataavailable", (event) => {
         if (event.data.size) chunks.push(event.data);
       });
       const stopped = new Promise((resolve, reject) => {
-        activeRecorder.addEventListener("stop", resolve, {once: true});
-        activeRecorder.addEventListener("error", () => reject(new Error("Capture failed.")), {once: true});
+        recorder.addEventListener("stop", resolve, {once: true});
+        recorder.addEventListener("error", () => reject(new Error("Capture failed.")), {once: true});
       });
-      activeRecorder.start();
+      recorder.start();
       $("#record-status").textContent = `Recording locally; stops after ${MAX_SECONDS} seconds.`;
-      recordingTimer = setTimeout(() => {
-        if (activeRecorder?.state === "recording") activeRecorder.stop();
+      timer = setTimeout(() => {
+        if (recorder.state === "recording") recorder.stop();
       }, MAX_SECONDS * 1000);
+      recordingTimer = timer;
       await stopped;
-      captureStream.getTracks().forEach((track) => track.stop());
-      if (cancelCapture) return;
+      stream.getTracks().forEach((track) => track.stop());
+      if (!current()) return;
       $("#record-status").textContent = "Converting to WAV...";
-      const wav = await recordingToWav(new Blob(chunks, {type: activeRecorder.mimeType}));
-      if (!cancelCapture) reviewRecording(wav);
+      const wav = await recordingToWav(new Blob(chunks, {type: recorder.mimeType}));
+      if (current()) reviewRecording(wav);
     } catch (error) {
+      if (!current()) return;
       $("#record-status").textContent = "Recording did not finish. Try again or choose a synthetic WAV.";
       throw new Error(error.name === "NotAllowedError"
         ? "Microphone access was declined. Choose a synthetic WAV instead."
         : "Recording or WAV conversion failed. Check your microphone or choose a synthetic WAV.");
     } finally {
-      captureStream?.getTracks().forEach((track) => track.stop());
-      if (activeRecorder?.state === "recording") activeRecorder.stop();
-      activeRecorder = null;
-      captureStream = null;
-      clearTimeout(recordingTimer);
-      $("#stop-recording").hidden = true;
+      stream?.getTracks().forEach((track) => track.stop());
+      if (recorder?.state === "recording") recorder.stop();
+      clearTimeout(timer);
+      if (captureAttempt === attempt) {
+        captureAttempt = null;
+        activeRecorder = null;
+        captureStream = null;
+        recordingTimer = null;
+        $("#stop-recording").hidden = true;
+      }
     }
   });
 }
@@ -312,6 +335,13 @@ consent stops/discards local capture; it cannot recall an upload already sent.
 Tracks stop before conversion and also in cleanup on failure/cancel. Only words,
 never microphone audio, go into `localStorage`.
 
+The attempt number belongs to one asynchronous action. Cancel advances it and
+unlocks the controls immediately, even if the browser has not answered the
+permission request. A late stream is stopped locally; its cleanup cannot unlock
+or overwrite a newer action. The synthetic-file picker therefore remains a
+usable alternative after canceling. The app cannot dismiss the browser's own
+permission prompt; dismiss or decline that prompt if it obstructs the tab.
+
 <details>
 <summary>What the WAV header and limits mean</summary>
 
@@ -340,6 +370,10 @@ inspect multipart `audio` and `locale`, then read **I heard: ...** in the card.
 2, preview it, opt in to sending sample audio, and press the same Send button.
 This exercises the same Flask route, not simulated recognition. An empty
 transcript or an HTTP failure must appear as an error, not a wrong-answer result.
+If microphone permission remains unanswered, press **Stop recording** or uncheck
+consent: the file picker unlocks immediately. Choose the synthetic WAV without
+waiting for permission to settle; any later stream is stopped without replacing
+your preview or interrupting a new upload.
 The [reference capture and conversion](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/jeffrey-groneberg-mai-vocabulary-workshop/solution/static/app.js)
 is available for comparison.
 

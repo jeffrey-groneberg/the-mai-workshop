@@ -22,9 +22,12 @@ you do not need Node, an Azure SDK, or infrastructure tooling.
 [`jeffrey-groneberg-mai-vocabulary-workshop`](https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop).
 Initial publication preserves this branch rather than merging it into `main`;
 the default `main` currently contains only a README.
-[Open branch-specific Codespaces creation](https://codespaces.new/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop),
-or explicitly select this branch under **New with options**. The readiness page
-covers recommended secrets and participant-owned forks.
+The recommended participant path is a **fork in your own GitHub account**:
+retain the workshop branch, then select it under **New with options** and choose
+2 cores if offered, otherwise the smallest allowed machine. Follow readiness for
+the exact fork and private-secret steps. The
+[source-branch Codespaces creation link](https://codespaces.new/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop)
+is for instructors with write access to the original repository, not your fork.
 
 **GitHub Pages deployment target:**
 [jeffrey-groneberg.github.io/the-mai-workshop/](https://jeffrey-groneberg.github.io/the-mai-workshop/).
