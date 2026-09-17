@@ -66,7 +66,7 @@ Inspect the evidence before correcting the audio or entry. This is **not
 pronunciation, accent, or fluency assessment**. Azure's
 [pronunciation assessment](https://learn.microsoft.com/azure/ai-services/speech-service/pronunciation-assessment-tool)
 is a separate capability not called here. Compare with the
-[reference normalization function](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/jeffrey-groneberg-mai-vocabulary-workshop/solution/static/app.js)
+[reference normalization function](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/static/app.js)
 if useful.
 
 ## Experiment with your working feature

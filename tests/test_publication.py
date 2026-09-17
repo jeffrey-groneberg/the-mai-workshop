@@ -9,6 +9,17 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_participant_docs_do_not_require_a_development_branch():
+    paths = [ROOT / "README.md", ROOT / "zensical.toml", *(ROOT / "docs").rglob("*.md")]
+    for path in paths:
+        text = path.read_text(encoding="utf-8")
+        assert "jeffrey-groneberg-mai-vocabulary-workshop" not in text, str(path)
+        assert "currently contains only a README" not in text, str(path)
+    readiness = (ROOT / "docs/getting-ready.md").read_text()
+    assert "Use the default **`main`** branch." in readiness
+    assert "Keep **Copy the main branch only**" in readiness
+
+
 def test_guide_uses_native_zensical_styling():
     config = tomllib.loads((ROOT / "zensical.toml").read_text())
     project = config["project"]

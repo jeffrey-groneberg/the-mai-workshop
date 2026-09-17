@@ -18,16 +18,15 @@ Complete [readiness pre-work](docs/getting-ready.md), then follow
 [Open your app](docs/lessons/00-open-your-app.md). You need basic Python and HTML;
 you do not need Node, an Azure SDK, or infrastructure tooling.
 
-**Use the workshop source branch:**
-[`jeffrey-groneberg-mai-vocabulary-workshop`](https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop).
-Initial publication preserves this branch rather than merging it into `main`;
-the default `main` currently contains only a README.
-The recommended participant path is a **fork in your own GitHub account**:
-retain the workshop branch, then select it under **New with options** and choose
-2 cores if offered, otherwise the smallest allowed machine. Follow readiness for
-the exact fork and private-secret steps. The
-[source-branch Codespaces creation link](https://codespaces.new/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop)
-is for instructors with write access to the original repository, not your fork.
+**Start from `main`.** It contains the complete workshop, starter, solution, and
+Codespaces configuration. Participants can fork the repository with the default
+**Copy the main branch only** option, then choose **New with options** in their
+own fork. Leave the branch on `main` and choose 2 cores if offered, otherwise the
+smallest allowed machine. Follow readiness for the private-secret steps.
+Instructors with write access can
+[create a Codespace from the original repository](https://codespaces.new/jeffrey-groneberg/the-mai-workshop).
+The separate `gh-pages` branch contains generated website output only; it is not
+part of the participant workflow.
 
 **Published workshop guide:**
 [jeffrey-groneberg.github.io/the-mai-workshop/](https://jeffrey-groneberg.github.io/the-mai-workshop/).

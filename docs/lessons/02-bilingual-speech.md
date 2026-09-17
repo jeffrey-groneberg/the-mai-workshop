@@ -410,7 +410,7 @@ locally. Keep it for lesson 3; downloads contain synthetic audio, not your key.
 Successful speech is cached only in this page by text/locale, so hearing or
 downloading the same sample again need not make a new model call.
 
-The [reference `/speak` route](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/jeffrey-groneberg-mai-vocabulary-workshop/solution/app.py)
+The [reference `/speak` route](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/app.py)
 uses the same contract. Your smaller learner UI locks selection during a request;
 the reference additionally cancels stale actions. Neither app calls a model on
 startup.

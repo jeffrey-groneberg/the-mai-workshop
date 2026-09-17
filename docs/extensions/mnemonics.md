@@ -88,7 +88,7 @@ selected word.
 **Try a mnemonic**, and press the button. Inspect `POST /mnemonic` and the text
 on the card. Mark any factual or language mistake. Text is displayed with
 `textContent`, never executed as HTML or accepted as a grading answer.
-The [reference `/mnemonic`](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/jeffrey-groneberg-mai-vocabulary-workshop/solution/app.py)
+The [reference `/mnemonic`](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/app.py)
 uses the same response shape.
 
 ## Experiment with your working feature

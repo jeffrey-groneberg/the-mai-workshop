@@ -10,16 +10,14 @@ below is only a local documentation preview; it is unnecessary when using the
 published guide.
 
 Install Git and the Python version specified by the repository's dev-container
-configuration (Python 3.12). Obtain the
-[`jeffrey-groneberg-mai-vocabulary-workshop` branch](https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop),
-not default `main`, which currently has only a README. For a fresh Git checkout:
+configuration (Python 3.12). Clone the repository's default `main` branch:
 
 ```sh
-git clone --branch jeffrey-groneberg-mai-vocabulary-workshop --single-branch https://github.com/jeffrey-groneberg/the-mai-workshop.git
+git clone https://github.com/jeffrey-groneberg/the-mai-workshop.git
 cd the-mai-workshop
 ```
 
-A trusted download from that branch works too. Run the following commands from
+A trusted download from `main` works too. Run the following commands from
 the repository root. Local Python, microphone permission, and network access
 need their own readiness check; do this before the core session.
 

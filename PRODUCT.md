@@ -25,6 +25,10 @@ complete reference. The starter has a styled sample vocabulary view, not
 completed word-list or recording functionality. The fixed workshop slot is two
 hours with environment readiness as pre-work. Its pacing requires a learner pilot.
 
+Participants start from the repository's default `main` branch. No development
+branch is part of the workshop instructions. `gh-pages` contains generated
+documentation only, not a participant workspace.
+
 Each concise lesson explains what, how, and which components participate, then
 delivers a working end-to-end feature followed by a participant experiment.
 

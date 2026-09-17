@@ -38,28 +38,24 @@ is the access-policy source.
 
 ## Create the Codespace
 
-For this initial publication, use
-**`jeffrey-groneberg-mai-vocabulary-workshop`**, not `main`: the default `main`
-currently contains only a README. The
-[workshop source branch](https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop)
-contains the starter, solution, guide, and dev container.
+Use the default **`main`** branch. It contains the starter, solution, guide, and
+dev container. There is no separate workshop branch to find or copy.
 
 1. Open [**jeffrey-groneberg/the-mai-workshop**](https://github.com/jeffrey-groneberg/the-mai-workshop)
    and choose **Fork**. Set **Owner** to your own GitHub account and
-   **Repository name** to `the-mai-workshop`. Uncheck **Copy the main branch only**
-   so the fork includes the workshop branch, not just the README on `main`.
+   **Repository name** to `the-mai-workshop`. Keep **Copy the main branch only**
+   selected; that is all the source you need.
 2. In your fork, **`YOUR-HANDLE/the-mai-workshop`** (or your existing fork's name),
-   select **`jeffrey-groneberg-mai-vocabulary-workshop`**.
-   If an existing fork lacks that branch, ask the instructor to help bring in
-   the workshop branch. Do not delete existing work, start a default-main
-   Codespace, or recreate missing workshop files.
+   stay on **`main`**. If you already have an older fork, sync its `main` with
+   the source repository before starting. Ask the instructor for help with any
+   conflicting edits; do not delete your work or recreate missing workshop files.
 3. Choose **Code > Codespaces > New with options**. Confirm your fork and the
-   workshop branch. Select a **2-core machine if offered**, otherwise the
+   default `main` branch. Select a **2-core machine if offered**, otherwise the
    smallest machine your policy permits. The models run remotely; no GPU is
    needed in the Codespace. Confirm the billing arrangement before creating it.
 
 Instructors with write access to the original repository can use
-[its branch-specific creation link](https://codespaces.new/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop).
+[its Codespaces creation link](https://codespaces.new/jeffrey-groneberg/the-mai-workshop).
 That link targets the original repository, not a participant's fork.
 
 The dev container recommends **both
@@ -80,8 +76,8 @@ python-dotenv, and Zensical. Participants do not install runtime packages by
 hand. GitHub's
 [Python dev-container guide](https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/adding-a-dev-container-configuration/setting-up-your-python-project-for-codespaces)
 explains this setup mechanism. After creation, confirm that `starter/`,
-`solution/`, and `docs/` exist. If you see only a README, return to branch
-selection rather than trying to recreate missing workshop files.
+`solution/`, and `docs/` exist. If they are missing, check that your fork's `main`
+is up to date rather than trying to recreate missing workshop files.
 
 ## Configure both private values server-side
 

@@ -48,8 +48,8 @@ Each app has four main files: `app.py`, `templates/index.html`,
 database, or hidden provider framework.
 
 Codespaces is the recommended environment. Follow the
-[fork-and-branch setup](getting-ready.md#create-the-codespace), not default
-`main`. If Codespaces is unavailable, use the same app through
+[Codespaces setup](getting-ready.md#create-the-codespace) using the default
+`main` branch. If Codespaces is unavailable, use the same app through
 [local setup](local-setup.md).
 
 ## Important boundaries

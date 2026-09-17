@@ -11,10 +11,9 @@ private port over HTTPS. No model is involved in this page.
 
 ## Build it and see it work
 
-Confirm that the editor is on **`jeffrey-groneberg-mai-vocabulary-workshop`**
-and contains `starter/`, `solution/`, and `docs/`. A default-main Codespace
-currently has only a README; use [readiness pre-work](../getting-ready.md) to
-select the workshop branch instead.
+Confirm that the editor is on the default **`main`** branch and contains
+`starter/`, `solution/`, and `docs/`. If those folders are missing, update your
+fork using [readiness pre-work](../getting-ready.md) before continuing.
 
 In a Codespaces terminal, from the repository root, run:
 
@@ -62,10 +61,10 @@ The [local fallback](../local-setup.md) has separate loopback commands.
 | `starter/static/style.css` | Style the page, including the classes reused by later lessons. |
 
 Keep the existing CSS and licensed assets. **All learner edits stay in
-`starter/`.** The [solution Python](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/jeffrey-groneberg-mai-vocabulary-workshop/solution/app.py),
-[JavaScript](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/jeffrey-groneberg-mai-vocabulary-workshop/solution/static/app.js),
-and [HTML](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/jeffrey-groneberg-mai-vocabulary-workshop/solution/templates/index.html)
-are readable references pinned to the workshop branch. You can also open those
+`starter/`.** The [solution Python](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/app.py),
+[JavaScript](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/static/app.js),
+and [HTML](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/templates/index.html)
+are readable references on `main`. You can also open those
 files in your editor. Do not overwrite your files with them or import their
 implementation.
 

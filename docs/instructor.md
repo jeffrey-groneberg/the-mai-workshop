@@ -14,12 +14,11 @@ Confirm the actual deployed result before announcing that address as live.
 Check the home page, a nested lesson, navigation, and image/provenance links
 under the `/the-mai-workshop/` prefix, not only at a root-level local preview.
 
-Initial publication uses the existing
-[`jeffrey-groneberg-mai-vocabulary-workshop` source branch](https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop),
-without silently merging it into `main`. Ensure this branch is pushed before
-publication, and verify that repository/source links and Codespaces creation
-select it. The default `main` currently contains only a README. A participant
-fork must include the workshop branch too.
+Keep the complete workshop source on
+[`main`](https://github.com/jeffrey-groneberg/the-mai-workshop/tree/main).
+Participants start from that default branch; `starter/` and `solution/` provide
+the exercise/reference separation. The `gh-pages` branch contains only the
+generated static site and is a publishing detail, not a participant workspace.
 
 Pages serves the built **static workshop guide**. It cannot run Flask, accept
 the app's recording uploads, make its server-side gateway requests, or hold
@@ -37,9 +36,9 @@ microphone operation, model capacity, or a learner-paced two-hour fit.
 
 | Readiness area | Confirm before the guided session |
 | --- | --- |
-| GitHub access | Use participant-owned forks of `jeffrey-groneberg/the-mai-workshop`, preserving the workshop branch by unchecking **Copy the main branch only**. Confirm fork ownership, Codespaces availability, and access to both private secrets. Help import the branch into existing forks without deleting participant work. |
+| GitHub access | Use participant-owned forks of `jeffrey-groneberg/the-mai-workshop` with **Copy the main branch only** selected. Confirm fork ownership, an up-to-date `main`, Codespaces availability, and access to both private secrets. Help resolve sync conflicts without deleting participant work. |
 | Billing | An approved Codespaces compute/storage arrangement and separate model-call/capacity arrangements. Do not promise a free environment or infer capacity from one successful request. |
-| Container | In the participant's fork, select `jeffrey-groneberg-mai-vocabulary-workshop` explicitly in **New with options** and choose 2 cores if offered, otherwise the smallest allowed machine. The source-repository creation link is for instructors with write access. Recommend both `APIM_BASE_URL` and `APIM_API_KEY` as Codespaces secrets by name/description only; test the prompt and fallback. |
+| Container | In the participant's fork, use **New with options**, leave the branch on `main`, and choose 2 cores if offered, otherwise the smallest allowed machine. The source-repository creation link is for instructors with write access. Recommend both `APIM_BASE_URL` and `APIM_API_KEY` as Codespaces secrets by name/description only; test the prompt and fallback. |
 | Ports and browser | Labels **Your app** 5050, **Finished solution** 5051, **Workshop guide** 8000; all remain **Private**. Verify forwarded HTTPS in a normal browser tab, sign-in, same-origin POSTs, playback, and the intended desktop browsers. |
 | Gateway | Privately supply an HTTPS origin without a path and individual participant access. Store both `APIM_BASE_URL` and `APIM_API_KEY` as secrets; keep tracked `.env.example` values empty. Confirm the pinned routes, enabled deployments, event limits, outbound access, and content policy without publishing private hosts. |
 | Access lifetime | Provider keys expire 24 hours after initial issuance; revocation/rotation can also invalidate access. Arrange issuance around the event and have the portal recovery path ready. |

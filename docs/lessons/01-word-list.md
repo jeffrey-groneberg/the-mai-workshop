@@ -287,7 +287,7 @@ Application/Storage shows only the vocabulary JSON under
 
 To correct a pair, remove it and add the corrected text. This intentionally
 avoids an extra editing dialog. The
-[reference's list functions](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/jeffrey-groneberg-mai-vocabulary-workshop/solution/static/app.js)
+[reference's list functions](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/static/app.js)
 provide a comparison, not a dependency.
 
 ## Experiment with your working feature

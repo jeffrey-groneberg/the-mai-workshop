@@ -149,7 +149,7 @@ Now use the complete loop in **Your app**: select a pair, hear both languages,
 record under approved guidance or choose a synthetic WAV, preview, explicitly
 send, inspect transcript/match feedback, and view its image. Your build is a
 small independent implementation of the core, not a wrapper around the
-[finished solution](https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop/solution).
+[finished solution](https://github.com/jeffrey-groneberg/the-mai-workshop/tree/main/solution).
 It locks controls during work rather than implementing the reference's richer
 cancellation behavior; its image deployment is explicit here rather than an
 environment override. Errors remain visible in both.

@@ -374,7 +374,7 @@ If microphone permission remains unanswered, press **Stop recording** or uncheck
 consent: the file picker unlocks immediately. Choose the synthetic WAV without
 waiting for permission to settle; any later stream is stopped without replacing
 your preview or interrupting a new upload.
-The [reference capture and conversion](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/jeffrey-groneberg-mai-vocabulary-workshop/solution/static/app.js)
+The [reference capture and conversion](https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/static/app.js)
 is available for comparison.
 
 ## Experiment with your working feature
