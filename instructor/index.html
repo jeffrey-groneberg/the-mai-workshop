@@ -132,7 +132,7 @@
     
     <div class="md-header__source">
       
-        <a href="https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/jeffrey-groneberg/the-mai-workshop" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -315,7 +315,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/jeffrey-groneberg/the-mai-workshop" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -1022,12 +1022,11 @@ target is
 Confirm the actual deployed result before announcing that address as live.
 Check the home page, a nested lesson, navigation, and image/provenance links
 under the <code>/the-mai-workshop/</code> prefix, not only at a root-level local preview.</p>
-<p>Initial publication uses the existing
-<a href="https://github.com/jeffrey-groneberg/the-mai-workshop/tree/jeffrey-groneberg-mai-vocabulary-workshop"><code>jeffrey-groneberg-mai-vocabulary-workshop</code> source branch</a>,
-without silently merging it into <code>main</code>. Ensure this branch is pushed before
-publication, and verify that repository/source links and Codespaces creation
-select it. The default <code>main</code> currently contains only a README. A participant
-fork must include the workshop branch too.</p>
+<p>Keep the complete workshop source on
+<a href="https://github.com/jeffrey-groneberg/the-mai-workshop/tree/main"><code>main</code></a>.
+Participants start from that default branch; <code>starter/</code> and <code>solution/</code> provide
+the exercise/reference separation. The <code>gh-pages</code> branch contains only the
+generated static site and is a publishing detail, not a participant workspace.</p>
 <p>Pages serves the built <strong>static workshop guide</strong>. It cannot run Flask, accept
 the app's recording uploads, make its server-side gateway requests, or hold
 private gateway configuration. <strong>Treat <code>APIM_BASE_URL</code> as sensitive, just like
@@ -1049,7 +1048,7 @@ microphone operation, model capacity, or a learner-paced two-hour fit.</p>
 <tbody>
 <tr>
 <td>GitHub access</td>
-<td>Use participant-owned forks of <code>jeffrey-groneberg/the-mai-workshop</code>, preserving the workshop branch by unchecking <strong>Copy the main branch only</strong>. Confirm fork ownership, Codespaces availability, and access to both private secrets. Help import the branch into existing forks without deleting participant work.</td>
+<td>Use participant-owned forks of <code>jeffrey-groneberg/the-mai-workshop</code> with <strong>Copy the main branch only</strong> selected. Confirm fork ownership, an up-to-date <code>main</code>, Codespaces availability, and access to both private secrets. Help resolve sync conflicts without deleting participant work.</td>
 </tr>
 <tr>
 <td>Billing</td>
@@ -1057,7 +1056,7 @@ microphone operation, model capacity, or a learner-paced two-hour fit.</p>
 </tr>
 <tr>
 <td>Container</td>
-<td>In the participant's fork, select <code>jeffrey-groneberg-mai-vocabulary-workshop</code> explicitly in <strong>New with options</strong> and choose 2 cores if offered, otherwise the smallest allowed machine. The source-repository creation link is for instructors with write access. Recommend both <code>APIM_BASE_URL</code> and <code>APIM_API_KEY</code> as Codespaces secrets by name/description only; test the prompt and fallback.</td>
+<td>In the participant's fork, use <strong>New with options</strong>, leave the branch on <code>main</code>, and choose 2 cores if offered, otherwise the smallest allowed machine. The source-repository creation link is for instructors with write access. Recommend both <code>APIM_BASE_URL</code> and <code>APIM_API_KEY</code> as Codespaces secrets by name/description only; test the prompt and fallback.</td>
 </tr>
 <tr>
 <td>Ports and browser</td>
