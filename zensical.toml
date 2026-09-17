@@ -1,0 +1,65 @@
+[project]
+site_name = "MAI Vocabulary Workshop"
+site_url = "https://jeffrey-groneberg.github.io/the-mai-workshop/"
+site_description = "Build a small Flask vocabulary app, reach a working checkpoint, and experiment with MAI speech, transcription, and images."
+repo_url = "https://github.com/jeffrey-groneberg/the-mai-workshop"
+repo_name = "jeffrey-groneberg/the-mai-workshop"
+docs_dir = "docs"
+extra_css = ["stylesheets/workshop.css"]
+nav = [
+  { "Welcome" = "index.md" },
+  { "Getting ready" = "getting-ready.md" },
+  { "Build your app" = [
+    { "00 - Open your app" = "lessons/00-open-your-app.md" },
+    { "01 - Your word list" = "lessons/01-word-list.md" },
+    { "02 - Hear both languages" = "lessons/02-bilingual-speech.md" },
+    { "03 - Record and transcribe" = "lessons/03-record-and-transcribe.md" },
+    { "04 - Check your answer" = "lessons/04-check-your-answer.md" },
+    { "05 - Make memory images" = "lessons/05-memory-images.md" },
+  ] },
+  { "Go further" = [
+    { "Optional mnemonics" = "extensions/mnemonics.md" },
+  ] },
+  { "Reference" = "reference.md" },
+  { "Instructor guide" = "instructor.md" },
+  { "Local setup" = "local-setup.md" },
+]
+
+[project.theme]
+custom_dir = "overrides"
+language = "en"
+font = false
+favicon = "assets/images/favicon.svg"
+features = [
+  "navigation.tabs",
+  "navigation.sections",
+  "navigation.expand",
+  "navigation.path",
+  "navigation.footer",
+  "navigation.top",
+  "toc.follow",
+  "search.highlight",
+  "content.code.copy",
+]
+
+[project.theme.palette]
+scheme = "default"
+primary = "custom"
+accent = "custom"
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+md_in_html = {}
+tables = {}
+toc.permalink = true
+pymdownx.details = {}
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.superfences = {}
+pymdownx.tabbed.alternate_style = true
+
+[project.extra]
+generator = false

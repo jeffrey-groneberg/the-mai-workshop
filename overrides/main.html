@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  <meta name="theme-color" content="#fef9ed">
+  <link rel="preload" href="{{ 'assets/fonts/source-serif4-roman.woff2' | url }}" as="font" type="font/woff2" crossorigin>
+{% endblock %}

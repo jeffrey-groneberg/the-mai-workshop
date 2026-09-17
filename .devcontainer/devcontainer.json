@@ -1,0 +1,38 @@
+{
+  "name": "MAI vocabulary workshop",
+  "image": "mcr.microsoft.com/devcontainers/python:3.2.3-3.12-bookworm",
+  "remoteUser": "vscode",
+  "postCreateCommand": "python -m pip install -r requirements.txt -r requirements-docs.txt",
+  "waitFor": "postCreateCommand",
+  "forwardPorts": [5050, 5051, 8000],
+  "portsAttributes": {
+    "5050": {
+      "label": "Your app",
+      "onAutoForward": "notify"
+    },
+    "5051": {
+      "label": "Finished solution",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "Workshop guide",
+      "onAutoForward": "notify"
+    }
+  },
+  "customizations": {
+    "codespaces": {
+      "openFiles": ["README.md", "starter/app.py"]
+    },
+    "vscode": {
+      "extensions": ["ms-python.python"]
+    }
+  },
+  "secrets": {
+    "APIM_BASE_URL": {
+      "description": "Your private workshop gateway base URL from the instructor's portal. Recommended when creating a Codespace with New with options; never commit or share it."
+    },
+    "APIM_API_KEY": {
+      "description": "Your private, individual workshop gateway key from the instructor's portal. Recommended when creating a Codespace with New with options; never commit or share it."
+    }
+  }
+}
