@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#after-core-a-mnemonic-with-mai-thinking" class="md-skip">
+        <a href="#add-a-mnemonic" class="md-skip">
           Skip to content
         </a>
       
@@ -245,38 +245,6 @@
         
   
   Reference
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../instructor/" class="md-tabs__link">
-        
-  
-  Instructor guide
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../local-setup/" class="md-tabs__link">
-        
-  
-  Local setup
 
       </a>
     </li>
@@ -722,10 +690,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-it-and-see-it-work" class="md-nav__link">
+  <a href="#build" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Build it and see it work
+        Build
       </span>
     </span>
   </a>
@@ -733,10 +701,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#experiment-with-your-working-feature" class="md-nav__link">
+  <a href="#try-one" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Experiment with your working feature
+        Try one
       </span>
     </span>
   </a>
@@ -774,58 +742,6 @@
     
   
   Reference
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../instructor/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Instructor guide
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../local-setup/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Local setup
 
     
   </span>
@@ -878,10 +794,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-it-and-see-it-work" class="md-nav__link">
+  <a href="#build" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Build it and see it work
+        Build
       </span>
     </span>
   </a>
@@ -889,10 +805,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#experiment-with-your-working-feature" class="md-nav__link">
+  <a href="#try-one" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Experiment with your working feature
+        Try one
       </span>
     </span>
   </a>
@@ -970,21 +886,12 @@
   
 
 
-<h1 id="after-core-a-mnemonic-with-mai-thinking">After core: a mnemonic with MAI-Thinking<a class="headerlink" href="#after-core-a-mnemonic-with-mai-thinking" title="Permanent link">&para;</a></h1>
-<p><strong>Optional, after the guided core.</strong> Add a short English memory suggestion to
-the same app. Do not replace the deterministic answer matcher with an LLM.</p>
-<p><strong>What, how, and which components:</strong> a new button sends an English word to
-Flask <code>/mnemonic</code>; Flask calls the gateway's chat-completions route using the
-<code>mai-thinking</code> deployment; JavaScript displays the returned <strong>plain text</strong> in
-the card. The model may be wrong, verbose, or unhelpful. Preview status and model
-availability apply; there is no guaranteed JSON schema or verified multilingual
-mnemonic coverage.</p>
-<p>Sources: <a href="https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-thinking">MAI Thinking API</a>,
-<a href="https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/config/models.yaml">pinned deployment catalog</a>,
-and <a href="https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/app/catalog.py">gateway participant example</a>.</p>
-<h2 id="build-it-and-see-it-work">Build it and see it work<a class="headerlink" href="#build-it-and-see-it-work" title="Permanent link">&para;</a></h2>
-<p>Complete core lessons 1-5 first. <strong>Append this route at the end of
-<code>starter/app.py</code></strong>; its helpers were added in the core:</p>
+<h1 id="add-a-mnemonic">Add a mnemonic<a class="headerlink" href="#add-a-mnemonic" title="Permanent link">&para;</a></h1>
+<p>Optional, after lessons 1–5. Ask MAI-Thinking for an English memory aid:
+button → Flask <code>/mnemonic</code> → chat completions → text on the card.
+<a href="https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-thinking">API details</a>.</p>
+<h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">&para;</a></h2>
+<p><strong>Append to <code>starter/app.py</code>:</strong></p>
 <div class="language-python highlight"><span class="filename">starter/app.py</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/mnemonic"</span><span class="p">)</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">mnemonic</span><span class="p">():</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">json_body</span><span class="p">()</span>
@@ -1011,10 +918,8 @@ and <a href="https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2f
 </span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        <span class="n">abort</span><span class="p">(</span><span class="mi">502</span><span class="p">,</span> <span class="s2">"No text suggestion was returned. The model may have exhausted its output budget."</span><span class="p">)</span>
 </span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
 </span></code></pre></div>
-<p>The <code>messages</code> prompt requests a length and tone; it does not enforce them.
-<code>max_completion_tokens</code> bounds model output, including the reasoning budget.
-Do not parse <code>choices[0].message.content</code> as JSON or assume it contains exactly
-two sentences. The app reports an empty result instead of inventing a fallback.</p>
+<p>The prompt sets tone and length; <code>max_completion_tokens</code> caps output including
+reasoning. Read <code>choices[0].message.content</code> as text, not JSON.</p>
 <p>In <strong><code>starter/templates/index.html</code>, replace</strong>
 <code>&lt;!-- Add mnemonic controls here. --&gt;</code> with:</p>
 <div class="language-html highlight"><span class="filename">starter/templates/index.html</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">details</span> <span class="na">class</span><span class="o">=</span><span class="s">"extension"</span><span class="p">&gt;</span>
@@ -1038,41 +943,18 @@ two sentences. The app reports an empty result instead of inventing a fallback.<
 </span></code></pre></div>
 <p>Finally, <strong>inside <code>selectWord</code> in that same JavaScript file, insert</strong>
 <code>$("#mnemonic-result").textContent = "";</code> <strong>immediately after</strong>
-<code>$("#answer-result").hidden = true;</code>. This keeps an old suggestion off a newly
-selected word.</p>
-<p><strong>Run it end to end:</strong> restart Flask, reload, select an English word, expand
-<strong>Try a mnemonic</strong>, and press the button. Inspect <code>POST /mnemonic</code> and the text
-on the card. Mark any factual or language mistake. Text is displayed with
-<code>textContent</code>, never executed as HTML or accepted as a grading answer.
-The <a href="https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/app.py">reference <code>/mnemonic</code></a>
-uses the same response shape.</p>
-<h2 id="experiment-with-your-working-feature">Experiment with your working feature<a class="headerlink" href="#experiment-with-your-working-feature" title="Permanent link">&para;</a></h2>
-<p><strong>Try one if you chose this extension. Predict -&gt; change -&gt; run -&gt; compare -&gt;
-choose.</strong> Each click makes a fresh request.</p>
-<table>
-<thead>
-<tr>
-<th>Choice</th>
-<th>Exact change and interpreting component</th>
-<th>Observe and restore</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Example instead of mnemonic</td>
-<td>In <code>starter/app.py</code>, change <code>one short, imaginative English mnemonic</code> in the <code>messages</code> prompt to <code>one simple English example sentence</code>.</td>
-<td>Restart Flask and request the same word. Compare usefulness and accuracy, then choose or restore the prompt. MAI interprets the words, not an output schema.</td>
-</tr>
-<tr>
-<td>A quieter tone</td>
-<td>Replace <code>imaginative</code> in that prompt with <code>practical and understated</code>. Keep the same word and length request.</td>
-<td>Restart, generate, and compare tone without assuming factual correctness improves. Keep your preference or restore <code>imaginative</code>.</td>
-</tr>
-</tbody>
-</table>
-<p>Larger additions such as explicitly approved answer variants or a practice
-schedule are also after-core work. They are not prerequisites for the workshop's
-completed core loop.</p>
+<code>$("#answer-result").hidden = true;</code>. This clears the suggestion when selecting
+another word.</p>
+<p><strong>Run:</strong> restart Flask, reload, select a word, expand <strong>Try a mnemonic</strong>, and
+press <strong>Suggest a mnemonic</strong>. The suggestion should appear on its card.</p>
+<h2 id="try-one">Try one<a class="headerlink" href="#try-one" title="Permanent link">&para;</a></h2>
+<ul>
+<li>In the Python prompt, replace <code>one short, imaginative English mnemonic</code>
+  with <code>one simple English example sentence</code>.</li>
+<li>Replace <code>imaginative</code> with <code>practical and understated</code>.</li>
+</ul>
+<p>Restart Flask, request the same word, compare results, and keep your preferred
+prompt. Answer matching stays deterministic.</p>
 
 
 

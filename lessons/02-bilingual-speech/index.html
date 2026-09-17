@@ -251,38 +251,6 @@
   
 
       
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../instructor/" class="md-tabs__link">
-        
-  
-  Instructor guide
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../local-setup/" class="md-tabs__link">
-        
-  
-  Local setup
-
-      </a>
-    </li>
-  
-
-      
     </ul>
   </div>
 </nav>
@@ -555,22 +523,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-it-and-see-it-work" class="md-nav__link">
+  <a href="#build" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Build it and see it work
+        Build
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Build it and see it work">
+    <nav class="md-nav" aria-label="Build">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-add-the-small-server-side-boundary" class="md-nav__link">
+  <a href="#1-configure-requests-and-errors" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        1. Add the small server-side boundary
+        1. Configure requests and errors
       </span>
     </span>
   </a>
@@ -605,10 +573,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#experiment-with-your-working-feature" class="md-nav__link">
+  <a href="#try-one" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Experiment with your working feature
+        Try one
       </span>
     </span>
   </a>
@@ -824,58 +792,6 @@
   
 
     
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../instructor/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Instructor guide
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../local-setup/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Local setup
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
   </ul>
 </nav>
                   </div>
@@ -917,22 +833,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-it-and-see-it-work" class="md-nav__link">
+  <a href="#build" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Build it and see it work
+        Build
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Build it and see it work">
+    <nav class="md-nav" aria-label="Build">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-add-the-small-server-side-boundary" class="md-nav__link">
+  <a href="#1-configure-requests-and-errors" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        1. Add the small server-side boundary
+        1. Configure requests and errors
       </span>
     </span>
   </a>
@@ -967,10 +883,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#experiment-with-your-working-feature" class="md-nav__link">
+  <a href="#try-one" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Experiment with your working feature
+        Try one
       </span>
     </span>
   </a>
@@ -1049,24 +965,16 @@
 
 
 <h1 id="hear-both-languages">Hear both languages<a class="headerlink" href="#hear-both-languages" title="Permanent link">&para;</a></h1>
-<p><strong>What:</strong> make English playback work, then extend the <strong>same route</strong> to your
-saved translation. Also download a synthetic target-language WAV for the next
-lesson's microphone alternative.</p>
-<p><strong>How and which components:</strong> button -&gt; browser <code>fetch("/speak")</code> -&gt; Flask -&gt;
-gateway <code>/speech/tts</code> -&gt; MAI Voice -&gt; real WAV bytes -&gt; browser audio. Words
-leave your browser only when you press a speech button. Both the private gateway
-endpoint (<code>APIM_BASE_URL</code>) and key (<code>APIM_API_KEY</code>) stay in Python.</p>
-<p>We send native SSML, not an invented JSON speech request. The gateway uses
-<code>api-key</code>; requesting <code>riff-16khz-16bit-mono-pcm</code> produces a WAV container with
-16 kHz, mono, 16-bit PCM audio. Sources:
-<a href="https://learn.microsoft.com/azure/ai-services/speech-service/mai-voices">MAI voices / SSML</a>,
-<a href="https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/app/catalog.py">pinned gateway examples</a>,
-and <a href="https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/scripts/test_apim_live.py">gateway WAV acceptance request</a>.</p>
-<h2 id="build-it-and-see-it-work">Build it and see it work<a class="headerlink" href="#build-it-and-see-it-work" title="Permanent link">&para;</a></h2>
-<h3 id="1-add-the-small-server-side-boundary">1. Add the small server-side boundary<a class="headerlink" href="#1-add-the-small-server-side-boundary" title="Permanent link">&para;</a></h3>
-<p>In <strong><code>starter/app.py</code>, replace only the first import line</strong>
-(<code>from flask import Flask, render_template</code>) with this block. Keep <code>app =
-Flask(__name__)</code>, the language table, and the index route below it.</p>
+<p>Add English playback, then reuse the route for the translation.</p>
+<p><strong>Flow:</strong> button → <code>fetch("/speak")</code> → Flask → gateway <code>/speech/tts</code> →
+MAI Voice → WAV → browser playback.</p>
+<p><a href="https://learn.microsoft.com/azure/ai-services/speech-service/mai-voices">MAI Voice</a>
+accepts SSML: text plus a voice selection. We request 16 kHz mono PCM WAV,
+which the next lesson can also upload. <a href="../../reference/#requests">Gateway contract</a>.</p>
+<h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">&para;</a></h2>
+<h3 id="1-configure-requests-and-errors">1. Configure requests and errors<a class="headerlink" href="#1-configure-requests-and-errors" title="Permanent link">&para;</a></h3>
+<p>In <strong><code>starter/app.py</code>, replace only</strong>
+<code>from flask import Flask, render_template</code> with this block. Keep the rest.</p>
 <div class="language-python highlight"><span class="filename">starter/app.py</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">wave</span>
@@ -1081,22 +989,9 @@ Flask(__name__)</code>, the language table, and the index route below it.</p>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="n">load_dotenv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="s2">".env"</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></code></pre></div>
-<p><strong>Insert the following block immediately before <code>@app.get("/")</code> in
-<code>starter/app.py</code>.</strong> These are small, explicit guards, not an API framework:</p>
-<ul>
-<li><code>gateway_settings</code> reads both private configuration values server-side and
-  accepts an HTTPS <strong>origin only</strong>. Prefer two Codespaces secrets; existing
-  environment variables beat the ignored <code>.env</code> fallback. Neither value belongs
-  in tracked examples or published output.</li>
-<li>Host/origin checks accept loopback or the <strong>exact</strong> private Codespaces hosts.
-  A same-origin browser POST supplies its <code>Origin</code> automatically; do not add
-  CORS, trust arbitrary forwarded headers, or put the gateway endpoint or key in
-  JavaScript.</li>
-<li>Field and WAV checks reject malformed input/output. <code>MAX_CONTENT_LENGTH</code> is
-  our app's upload guardrail, not a claimed service limit.</li>
-<li>Error handlers show safe recovery messages and log status/type only, not
-  private endpoint URLs, keys, response bodies, SSML, or recordings. Timeouts are bounded.</li>
-</ul>
+<p><strong>Insert before <code>@app.get("/")</code> in <code>starter/app.py</code>.</strong> These helpers load
+connection settings, validate requests/WAV responses, and turn failures into
+UI messages. Later routes reuse them.</p>
 <div class="language-python highlight"><span class="filename">starter/app.py</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">"MAX_CONTENT_LENGTH"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">TIMEOUT</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Timeout</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="n">connect</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">codespace_hosts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -1221,9 +1116,8 @@ Flask(__name__)</code>, the language table, and the index route below it.</p>
 </span><span id="__span-1-122"><a id="__codelineno-1-122" name="__codelineno-1-122" href="#__codelineno-1-122"></a>    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="s2">"The gateway could not be reached in time. Check your connection and try again."</span><span class="p">),</span> <span class="mi">504</span>
 </span></code></pre></div>
 <h3 id="2-make-english-playback-work">2. Make English playback work<a class="headerlink" href="#2-make-english-playback-work" title="Permanent link">&para;</a></h3>
-<p><strong>Append this route at the end of <code>starter/app.py</code>.</strong> <code>escape(text)</code> keeps
-participant text inside the SSML text node rather than treating it as markup.
-The output is checked before Flask labels it as WAV.</p>
+<p><strong>Append to <code>starter/app.py</code>.</strong> <code>escape(text)</code> makes the word valid SSML text;
+the response contains audio bytes.</p>
 <div class="language-python highlight"><span class="filename">starter/app.py</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/speak"</span><span class="p">)</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">speak</span><span class="p">():</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">json_body</span><span class="p">()</span>
@@ -1247,21 +1141,18 @@ The output is checked before Flask labels it as WAV.</p>
 </span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    <span class="n">check_wav</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">max_seconds</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">error_status</span><span class="o">=</span><span class="mi">502</span><span class="p">)</span>
 </span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">mimetype</span><span class="o">=</span><span class="s2">"audio/wav"</span><span class="p">)</span>
 </span></code></pre></div>
-<p>In <strong><code>starter/templates/index.html</code>, replace the single comment
-<code>&lt;!-- Add speech controls here. --&gt;</code></strong> with:</p>
+<p>In <strong><code>starter/templates/index.html</code>, replace</strong>
+<code>&lt;!-- Add speech controls here. --&gt;</code>** with:</p>
 <div class="language-html highlight"><span class="filename">starter/templates/index.html</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"listen-actions"</span><span class="p">&gt;</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">"speak-english"</span> <span class="na">class</span><span class="o">=</span><span class="s">"button secondary"</span> <span class="na">type</span><span class="o">=</span><span class="s">"button"</span><span class="p">&gt;</span>Hear English<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>  <span class="cm">&lt;!-- Add target playback here. --&gt;</span>
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">&lt;</span><span class="nt">audio</span> <span class="na">id</span><span class="o">=</span><span class="s">"speech-audio"</span> <span class="na">controls</span> <span class="na">hidden</span> <span class="na">aria-label</span><span class="o">=</span><span class="s">"Generated speech"</span><span class="p">&gt;&lt;/</span><span class="nt">audio</span><span class="p">&gt;</span>
 </span></code></pre></div>
-<p>In <strong><code>starter/static/app.js</code>, insert this block immediately before
-<code>// Start the page.</code></strong> The shared helpers handle browser-to-Flask requests and
-visible progress, not model selection. Controls are temporarily disabled during
-an action, so a late result cannot land on a different word. Stop and consent
-controls introduced next remain available. <code>actionVersion</code> identifies the
-current action: cancelling a recording in the next lesson invalidates its
-number, so late errors or cleanup cannot change a newer action's UI.</p>
+<p>In <strong><code>starter/static/app.js</code>, insert before <code>// Start the page.</code></strong>
+<code>runAction</code> manages progress and locks competing controls. Its attempt number
+prevents cancelled work from changing a newer action's UI. <code>speechBlob</code> caches
+audio by text/locale; <code>playSpeech</code> plays it.</p>
 <div class="language-javascript highlight"><span class="filename">starter/static/app.js</span><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kd">let</span><span class="w"> </span><span class="nx">busy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kd">let</span><span class="w"> </span><span class="nx">actionVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kd">let</span><span class="w"> </span><span class="nx">speechUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
@@ -1372,23 +1263,20 @@ number, so late errors or cleanup cannot change a newer action's UI.</p>
 </span><span id="__span-4-108"><a id="__codelineno-4-108" name="__codelineno-4-108" href="#__codelineno-4-108"></a><span class="nx">$</span><span class="p">(</span><span class="s2">"#speech-audio"</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"error"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">showError</span><span class="p">(</span><span class="s2">"The browser could not play the WAV."</span><span class="p">));</span>
 </span><span id="__span-4-109"><a id="__codelineno-4-109" name="__codelineno-4-109" href="#__codelineno-4-109"></a><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"pagehide"</span><span class="p">,</span><span class="w"> </span><span class="nx">stopPlayback</span><span class="p">);</span>
 </span></code></pre></div>
-<p>In the same JavaScript file, <strong>insert these lines immediately after
-<code>function selectWord(id) {</code></strong>, before <code>selectedId = id;</code>:</p>
+<p>In the same file, <strong>insert immediately after <code>function selectWord(id) {</code></strong>:</p>
 <div class="language-javascript highlight"><span class="filename">starter/static/app.js</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">busy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">showError</span><span class="p">(</span><span class="s2">"Wait for the current action to finish."</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nx">stopPlayback</span><span class="p">();</span>
 </span></code></pre></div>
-<p>Save, restart Flask, reload, choose a word, and press <strong>Hear English</strong>.
-Network should show <code>POST /speak</code> with <code>{"text":"your English word"}</code> and an
-<code>audio/wav</code> response. Missing configuration or expired access must show an error,
-not a pretend recording. Do not proceed by disabling guards.</p>
+<p><strong>Run:</strong> restart Flask, reload, and press <strong>Hear English</strong>.
+Network should show <code>POST /speak</code> with <code>text</code> and an <code>audio/wav</code> response.</p>
 <h3 id="3-extend-that-route-to-the-target-language">3. Extend that route to the target language<a class="headerlink" href="#3-extend-that-route-to-the-target-language" title="Permanent link">&para;</a></h3>
 <p>In <strong><code>starter/app.py</code></strong>, inside <code>speak</code>, <strong>replace only</strong>
 <code>locale = "en-US"</code> with:</p>
 <div class="language-python highlight"><span class="filename">starter/app.py</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>    <span class="n">locale</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"locale"</span><span class="p">)</span>
 </span></code></pre></div>
 <p>In <strong><code>starter/static/app.js</code></strong>, inside <code>speechBlob</code>, <strong>replace only</strong>
-<code>jsonOptions({text})</code> with <code>jsonOptions({text, locale})</code>. Now English explicitly
-sends <code>en-US</code>, and the same function can send the selected target locale.</p>
+<code>jsonOptions({text})</code> with <code>jsonOptions({text, locale})</code>. The browser now sends
+<code>en-US</code> or the saved target locale.</p>
 <p>In <strong><code>starter/templates/index.html</code></strong>, <strong>replace</strong>
 <code>&lt;!-- Add target playback here. --&gt;</code> with:</p>
 <div class="language-html highlight"><span class="filename">starter/templates/index.html</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">"speak-target"</span> <span class="na">class</span><span class="o">=</span><span class="s">"button secondary"</span> <span class="na">type</span><span class="o">=</span><span class="s">"button"</span><span class="p">&gt;</span>Hear translation<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
@@ -1412,46 +1300,19 @@ sends <code>en-US</code>, and the same function can send the selected target loc
 </span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">  </span><span class="p">});</span>
 </span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="p">});</span>
 </span></code></pre></div>
-<p>A <strong>language</strong> such as Spanish can have multiple <strong>locales</strong>, such as <code>es-ES</code>
-and <code>es-MX</code>. The table maps each locale to a documented <strong>voice</strong> identifier;
-the voice identifier selects the <strong>MAI-Voice-2-Flash model</strong>. The API does not
-translate: it reads exactly the text you supply.</p>
-<p><strong>Run it end to end:</strong> restart Flask and reload. Select a pair, play <strong>Hear
-English</strong> and <strong>Hear translation</strong>, and inspect their different <code>text</code> and
-<code>locale</code> request fields. Download a short synthetic target WAV and play it
-locally. Keep it for lesson 3; downloads contain synthetic audio, not your key.
-Successful speech is cached only in this page by text/locale, so hearing or
-downloading the same sample again need not make a new model call.</p>
-<p>The <a href="https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/app.py">reference <code>/speak</code> route</a>
-uses the same contract. Your smaller learner UI locks selection during a request;
-the reference additionally cancels stale actions. Neither app calls a model on
-startup.</p>
-<h2 id="experiment-with-your-working-feature">Experiment with your working feature<a class="headerlink" href="#experiment-with-your-working-feature" title="Permanent link">&para;</a></h2>
-<p><strong>Try one. Predict -&gt; change -&gt; run -&gt; compare -&gt; choose.</strong> New text or a new
-locale makes a fresh request; a repeated text/locale may use the page cache.
-Reload to clear that cache after changing Python voice settings.</p>
-<table>
-<thead>
-<tr>
-<th>Choice</th>
-<th>Exact change and interpreting component</th>
-<th>Observe and restore</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Word versus phrase</td>
-<td>Add a new sample pair with a short phrase in a language you know. The browser sends the phrase as <code>text</code>; the selected MAI voice reads it.</td>
-<td>Play both the word and phrase, compare how context changes the sound, and choose which entry to keep. This is not automatic translation or a pronunciation verdict.</td>
-</tr>
-<tr>
-<td>Explicit locale variants</td>
-<td>Add illustrative <code>apple</code> / <code>manzana</code> entries for <strong>Spanish (Spain)</strong> and <strong>Spanish (Mexico)</strong>. The table selects Marta versus Valeria, both documented Flash voices.</td>
-<td>Play each target, inspect <code>es-ES</code> versus <code>es-MX</code>, and compare rather than assuming a quality winner. Keep either entry or remove both. Other documented target locales work through the same map.</td>
-</tr>
-</tbody>
-</table>
-<p>Continue to <a href="../03-record-and-transcribe/">Speak and see what was heard</a>.</p>
+<p>The locale maps to a voice, whose name selects MAI-Voice-2-Flash.
+The API reads supplied text; it does not translate it.</p>
+<p><strong>Run:</strong> restart Flask and reload. Play both languages and compare their
+<code>text</code>/<code>locale</code> fields in Network. Download a short synthetic WAV and keep it
+for lesson 3.</p>
+<h2 id="try-one">Try one<a class="headerlink" href="#try-one" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Add a short phrase and compare its playback with an isolated word.</li>
+<li>Add <code>apple</code> / <code>manzana</code> for Spanish (Spain) and Spanish (Mexico). Compare
+  Marta and Valeria, selected by <code>es-ES</code> and <code>es-MX</code>.</li>
+</ul>
+<p>Reload to clear cached audio after changing Python voice settings.</p>
+<p><a href="../03-record-and-transcribe/">Next: record and transcribe</a>.</p>
 
 
 

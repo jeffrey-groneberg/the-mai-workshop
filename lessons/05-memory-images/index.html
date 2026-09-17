@@ -251,38 +251,6 @@
   
 
       
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../instructor/" class="md-tabs__link">
-        
-  
-  Instructor guide
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../local-setup/" class="md-tabs__link">
-        
-  
-  Local setup
-
-      </a>
-    </li>
-  
-
-      
     </ul>
   </div>
 </nav>
@@ -636,15 +604,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-it-and-see-it-work" class="md-nav__link">
+  <a href="#build" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Build it and see it work
+        Build
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Build it and see it work">
+    <nav class="md-nav" aria-label="Build">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -664,10 +632,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#experiment-with-your-working-feature" class="md-nav__link">
+  <a href="#try-one" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Experiment with your working feature
+        Try one
       </span>
     </span>
   </a>
@@ -802,58 +770,6 @@
   
 
     
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../instructor/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Instructor guide
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../local-setup/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Local setup
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
   </ul>
 </nav>
                   </div>
@@ -895,15 +811,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-it-and-see-it-work" class="md-nav__link">
+  <a href="#build" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Build it and see it work
+        Build
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Build it and see it work">
+    <nav class="md-nav" aria-label="Build">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -923,10 +839,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#experiment-with-your-working-feature" class="md-nav__link">
+  <a href="#try-one" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Experiment with your working feature
+        Try one
       </span>
     </span>
   </a>
@@ -1005,32 +921,20 @@
 
 
 <h1 id="make-a-visual-memory-cue">Make a visual memory cue<a class="headerlink" href="#make-a-visual-memory-cue" title="Permanent link">&para;</a></h1>
-<p><strong>What:</strong> generate an image for the selected English word, keep the latest
-successful image on its card while this page is open, and complete the whole
-practice loop.</p>
-<p><strong>How and which components:</strong> button -&gt; JavaScript sends the English word and
-scene -&gt; Flask <code>/image</code> -&gt; gateway <code>/mai/v1/images/generations</code> -&gt; MAI Image -&gt;
-base64 PNG -&gt; validated bytes -&gt; browser image. Nothing is generated on page
-load or merely selecting a word.</p>
-<p><code>mai-image-flash</code> is the gateway <strong>deployment name</strong>, not an SSML voice ID.
-The image offering is preview. Use an <strong>English prompt</strong>, request
-<code>width=1024, height=1024</code>, and read <code>data[0].b64_json</code>.
-The documented minimum dimension is 768 and the pixel budget is at most
-1,048,576; a small card thumbnail is <strong>not</strong> a tiny API image.
-Sources: <a href="https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-image">MAI image API</a>,
-<a href="https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/config/models.yaml">pinned deployment catalog</a>,
-and <a href="https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/app/catalog.py">participant request</a>.</p>
-<h2 id="build-it-and-see-it-work">Build it and see it work<a class="headerlink" href="#build-it-and-see-it-work" title="Permanent link">&para;</a></h2>
+<p>Generate a picture that helps you remember a word.</p>
+<p><strong>Flow:</strong> button → Flask <code>/image</code> → MAI Image → base64 PNG → browser image.
+The request uses deployment <code>mai-image-flash</code>, an English prompt, and
+1024 × 1024 dimensions. Flask decodes <code>data[0].b64_json</code>.
+<a href="https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-image">API details</a>.</p>
+<h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">&para;</a></h2>
 <p>In <strong><code>starter/app.py</code>, insert these imports at the top</strong>, keeping the existing
 imports:</p>
 <div class="language-python highlight"><span class="filename">starter/app.py</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">binascii</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
 </span></code></pre></div>
-<p><strong>Append this route at the end of <code>starter/app.py</code>.</strong> It reuses your existing
-input, configuration, JSON, and error helpers. Base64 decoding alone would not
-establish that an output is a PNG, so check its signature, IHDR, and dimensions;
-the browser will also decode it before display.</p>
+<p><strong>Append to <code>starter/app.py</code>.</strong> The route checks the returned PNG before
+serving its bytes.</p>
 <div class="language-python highlight"><span class="filename">starter/app.py</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">"/image"</span><span class="p">)</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">image</span><span class="p">():</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">json_body</span><span class="p">()</span>
@@ -1125,24 +1029,12 @@ the browser will also decode it before display.</p>
 </span></code></pre></div>
 <p>Finally, in <strong><code>starter/static/app.js</code>, inside <code>selectWord</code>, insert</strong>
 <code>renderMemory();</code> <strong>immediately before that function's final <code>renderList();</code>.</strong>
-Do not insert it in <code>renderList</code> itself. This restores an already generated
-image when selecting its word; selecting a word does not make a new request.</p>
-<p><strong>Run it end to end:</strong> restart Flask, reload, select a sample pair, and press
-<strong>Make a memory image</strong>. Network shows <code>POST /image</code> with <code>word</code> and <code>detail</code>,
-then an <code>image/png</code> response. A decoded image appears on the selected card.
-Switch to another word and back: the image returns without another model call.
-Reloading clears page-only media, but not saved vocabulary.</p>
-<p>Now use the complete loop in <strong>Your app</strong>: select a pair, hear both languages,
-record under approved guidance or choose a synthetic WAV, preview, explicitly
-send, inspect transcript/match feedback, and view its image. Your build is a
-small independent implementation of the core, not a wrapper around the
-<a href="https://github.com/jeffrey-groneberg/the-mai-workshop/tree/main/solution">finished solution</a>.
-It locks controls during work rather than implementing the reference's richer
-cancellation behavior; its image deployment is explicit here rather than an
-environment override. Errors remain visible in both.</p>
+This restores a word's cached image without another request.</p>
+<p><strong>Run:</strong> restart Flask, reload, and press <strong>Make a memory image</strong>.
+Network shows <code>POST /image</code> and an <code>image/png</code> response. Switch words and back:
+the picture returns. Reloading clears images, not the word list.</p>
 <h3 id="one-word-two-explicit-scenes">One word, two explicit scenes<a class="headerlink" href="#one-word-two-explicit-scenes" title="Permanent link">&para;</a></h3>
-<p>An explicit <strong>English scene prompt</strong> disambiguates the intended meaning of
-<code>bank</code>. Compare these two deliberately prompted teaching examples:</p>
+<p>The scene prompt distinguishes two meanings of <code>bank</code>:</p>
 <table>
 <thead>
 <tr>
@@ -1157,45 +1049,18 @@ environment override. Errors remain visible in both.</p>
 </tr>
 </tbody>
 </table>
-<p>These are <strong>generated teaching examples</strong>, made with MAI-Image-2.6 using different
-explicit scene prompts. They are <strong>not evidence of the bare word <code>bank</code>'s default
-output</strong>, or of acceptance by a participant's gateway. The
-<a href="../../assets/images/provenance.json">exact prompts and provenance</a> record how they
-were made. Use the ambiguity experiment below to explore your own requests.</p>
-<h2 id="experiment-with-your-working-feature">Experiment with your working feature<a class="headerlink" href="#experiment-with-your-working-feature" title="Permanent link">&para;</a></h2>
-<p><strong>Try one. Predict -&gt; change -&gt; run -&gt; compare -&gt; choose.</strong> Every intentional
-<strong>Generate a new image</strong> click makes another potentially billable request,
-including repeated prompts. Shared quota, content policy, and capacity apply;
-there is no guaranteed latency or identical result.</p>
-<table>
-<thead>
-<tr>
-<th>Choice</th>
-<th>Exact change and interpreting component</th>
-<th>Observe and restore</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Specify a scene</td>
-<td>In the card's English scene field, compare an empty field with <code>A single apple on a picnic blanket, soft watercolor</code>. Flask appends this to the English prompt; MAI interprets it.</td>
-<td>Generate each, compare how clearly it cues the intended meaning, and keep your preferred scene. Clear the field to restore the baseline. The tiny subject in a prompt is still a 1024 x 1024 API image.</td>
-</tr>
-<tr>
-<td>Resolve ambiguity</td>
-<td>For an illustrative English word such as <code>bank</code>, compare <code>A river bank with reeds, no buildings</code> and <code>A bank building on a city street</code>. Keep the saved translation appropriate to your intended meaning.</td>
-<td>Generate both and compare against that translation. Choose the prompt that communicates the meaning, or discard the entry. A plausible image is not proof that the word or translation is correct.</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Core complete when your own app works and you have tried one choice on every
-core page.</strong> The fixed two-hour target remains unvalidated until a
-representative learner-paced pilot includes these edits, experiments, and real
-service behavior. Do not count a fast fixture replay or reference demonstration
-as that pilot.</p>
-<p><a href="../../extensions/mnemonics/">MAI-Thinking mnemonics</a> are an <strong>after-core,
-optional</strong> addition. Troubleshooting and API details are in
-<a href="../../reference/">Reference</a>.</p>
+<p><em>MAI-generated examples with different prompts. <a href="../../assets/images/provenance.json">Exact prompts</a>.</em></p>
+<h2 id="try-one">Try one<a class="headerlink" href="#try-one" title="Permanent link">&para;</a></h2>
+<ul>
+<li>For <code>apple</code>, compare an empty scene with
+  <code>A single apple on a picnic blanket, soft watercolor</code>.</li>
+<li>For <code>bank</code>, compare <code>A river bank with reeds, no buildings</code> with
+  <code>A bank building on a city street</code>. Which matches your saved translation?</li>
+</ul>
+<p>Generate both versions and keep the more useful prompt. Each Generate click
+makes a new request.</p>
+<p><strong>Finish:</strong> use the full loop—select, listen, record or upload, check, and picture.
+Then try <a href="../../extensions/mnemonics/">optional mnemonics</a>.</p>
 
 
 

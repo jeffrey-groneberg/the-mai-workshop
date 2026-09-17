@@ -251,38 +251,6 @@
   
 
       
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../instructor/" class="md-tabs__link">
-        
-  
-  Instructor guide
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../local-setup/" class="md-tabs__link">
-        
-  
-  Local setup
-
-      </a>
-    </li>
-  
-
-      
     </ul>
   </div>
 </nav>
@@ -501,10 +469,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-it-and-see-it-work" class="md-nav__link">
+  <a href="#run" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Build it and see it work
+        Run
       </span>
     </span>
   </a>
@@ -512,10 +480,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#experiment-with-your-working-feature" class="md-nav__link">
+  <a href="#try-one" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Experiment with your working feature
+        Try one
       </span>
     </span>
   </a>
@@ -785,58 +753,6 @@
   
 
     
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../instructor/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Instructor guide
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../local-setup/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Local setup
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
   </ul>
 </nav>
                   </div>
@@ -878,10 +794,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-it-and-see-it-work" class="md-nav__link">
+  <a href="#run" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Build it and see it work
+        Run
       </span>
     </span>
   </a>
@@ -889,10 +805,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#experiment-with-your-working-feature" class="md-nav__link">
+  <a href="#try-one" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Experiment with your working feature
+        Try one
       </span>
     </span>
   </a>
@@ -971,110 +887,58 @@
 
 
 <h1 id="open-your-app">Open your app<a class="headerlink" href="#open-your-app" title="Permanent link">&para;</a></h1>
-<p><strong>What:</strong> open a styled page you own, and inspect the finished goal separately.
-This begins the guided core; <a href="../../getting-ready/">environment readiness</a> is
-pre-work.</p>
-<p><strong>How and which components:</strong> Python runs <code>starter/app.py</code>; Flask renders
-<code>starter/templates/index.html</code>, then your browser requests
-<code>starter/static/style.css</code> and <code>starter/static/app.js</code>. GitHub forwards the
-private port over HTTPS. No model is involved in this page.</p>
-<h2 id="build-it-and-see-it-work">Build it and see it work<a class="headerlink" href="#build-it-and-see-it-work" title="Permanent link">&para;</a></h2>
-<p>Confirm that the editor is on the default <strong><code>main</code></strong> branch and contains
-<code>starter/</code>, <code>solution/</code>, and <code>docs/</code>. If those folders are missing, update your
-fork using <a href="../../getting-ready/">readiness pre-work</a> before continuing.</p>
-<p>In a Codespaces terminal, from the repository root, run:</p>
+<p>Run the starter and see how Flask, HTML, CSS, and JavaScript produce the page.
+Complete <a href="../../getting-ready/">setup</a> first.</p>
+<h2 id="run">Run<a class="headerlink" href="#run" title="Permanent link">&para;</a></h2>
+<p>From the repository root on <code>main</code>:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>flask<span class="w"> </span>--app<span class="w"> </span>starter/app.py<span class="w"> </span>run<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">5050</span>
 </span></code></pre></div>
-<p>In the Ports panel, keep <strong>Your app</strong> (5050) <strong>Private</strong> and choose <strong>Open in
-Browser</strong>. Use a normal browser tab, not an iframe/editor preview. You should
-see a sample word and "JavaScript is connected." This is a functioning starting
-page, not a finished word list or a page of broken AI buttons.</p>
-<p>In a <strong>second terminal</strong>, run the independent reference:</p>
+<p>Open <strong>Your app — 5050</strong> from <strong>Ports &gt; Open in Browser</strong>. You should see
+<code>apple</code> and “JavaScript is connected.”</p>
+<p>To compare with the finished app, run this in a second terminal:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>-m<span class="w"> </span>flask<span class="w"> </span>--app<span class="w"> </span>solution/app.py<span class="w"> </span>run<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">5051</span>
 </span></code></pre></div>
-<p>Open <strong>Finished solution</strong> (5051) in another tab. Inspect the intended
-listen / say / check / picture loop. Model actions require valid instructor
-access and approved sample data; opening the page makes no inference request.
-Its saved vocabulary is separate from Your app because the origins differ.</p>
-<p>Keep the instructor-confirmed GitHub Pages guide open if you are reading it
-there. Pages hosts these <strong>static instructions</strong>, not Flask, your microphone
-workflow, or private gateway configuration. Both the endpoint and key stay
-server-side. All app actions belong in the separate <strong>Your
-app</strong> tab.</p>
-<p>To preview the guide in your Codespace instead, use a <strong>third terminal</strong>:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>zensical<span class="w"> </span>serve<span class="w"> </span>--dev-addr<span class="w"> </span><span class="m">0</span>.0.0.0:8000
-</span></code></pre></div>
-<p>Open <strong>Workshop guide</strong> (8000). This preview and the published guide serve the
-same purpose; you need only one. Keep the editor, guide, and Your app nearby.
-The <a href="../../local-setup/">local fallback</a> has separate loopback commands.</p>
+<p>Edit <code>starter/</code>; use <code>solution/</code> as a reference.</p>
 <table>
 <thead>
 <tr>
-<th>File you edit</th>
-<th>Job</th>
+<th>File</th>
+<th>Role</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>starter/app.py</code></td>
-<td>Render the page and, later, make server-side model requests.</td>
+<td><code>app.py</code></td>
+<td>Flask routes and model requests.</td>
 </tr>
 <tr>
-<td><code>starter/templates/index.html</code></td>
-<td>Define headings, fields, buttons, and result containers.</td>
+<td><code>templates/index.html</code></td>
+<td>Page structure and controls.</td>
 </tr>
 <tr>
-<td><code>starter/static/app.js</code></td>
-<td>Handle browser events, local storage, audio, and calls to Flask.</td>
+<td><code>static/app.js</code></td>
+<td>Browser interactions and state.</td>
 </tr>
 <tr>
-<td><code>starter/static/style.css</code></td>
-<td>Style the page, including the classes reused by later lessons.</td>
+<td><code>static/style.css</code></td>
+<td>Appearance; keep the supplied styles.</td>
 </tr>
 </tbody>
 </table>
-<p>Keep the existing CSS and licensed assets. <strong>All learner edits stay in
-<code>starter/</code>.</strong> The <a href="https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/app.py">solution Python</a>,
-<a href="https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/static/app.js">JavaScript</a>,
-and <a href="https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/templates/index.html">HTML</a>
-are readable references on <code>main</code>. You can also open those
-files in your editor. Do not overwrite your files with them or import their
-implementation.</p>
-<p><strong>Run it end to end:</strong> reload Your app. In browser developer tools, Network shows
-<code>GET /</code>, <code>/static/style.css</code>, and <code>/static/app.js</code>; the Flask terminal shows the
-same requests. The sample word came from Python, the surrounding markup from
-HTML, its appearance from CSS, and the status line from JavaScript.</p>
-<p><strong>Edit/run convention for every lesson:</strong> save all named edits before running
-its checkpoint. After a <strong>Python or HTML template edit</strong>, stop <strong>Your app's</strong>
-terminal with <code>Ctrl+C</code>, run the same command again, <strong>then reload the browser</strong>.
-Flask may cache templates without automatic reload. For <strong>JavaScript or CSS
-edits only</strong>, reload the browser; use a hard refresh if an older file appears.
-Do not enable the interactive debugger. Leave the solution server alone.</p>
-<h2 id="experiment-with-your-working-feature">Experiment with your working feature<a class="headerlink" href="#experiment-with-your-working-feature" title="Permanent link">&para;</a></h2>
-<p><strong>Try one. Predict -&gt; change -&gt; run -&gt; compare -&gt; choose.</strong></p>
-<table>
-<thead>
-<tr>
-<th>Choice</th>
-<th>Exact change and component</th>
-<th>Observe and restore</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A different sample</td>
-<td>In <code>starter/app.py</code>, change <code>sample_word="apple"</code> to <code>sample_word="river"</code>. Flask passes this value to the template.</td>
-<td>Restart Flask and reload. Does the word change while the JavaScript message stays the same? Compare, then keep your choice or restore <code>"apple"</code>.</td>
-</tr>
-<tr>
-<td>A different message</td>
-<td>In <code>starter/static/app.js</code>, replace the quoted status message with <code>"My browser is ready to build."</code>. JavaScript, not Flask, writes this line.</td>
-<td>Save and reload. Compare with the original line, then choose which to keep. No model or Python change is needed.</td>
-</tr>
-</tbody>
-</table>
-<p>Lesson 1 replaces the small starting files, so neither choice becomes a hidden
-prerequisite. Continue to <a href="../01-word-list/">Make it your vocabulary</a>.</p>
+<p>Flask passes the word into the template. The browser loads CSS for styling
+and JavaScript for interactions.</p>
+<p><strong>Check:</strong> reload and inspect Network: <code>GET /</code>, <code>/static/style.css</code>, and
+<code>/static/app.js</code>.</p>
+<p><strong>For every lesson:</strong> save first. After Python/HTML edits, stop Flask with
+<code>Ctrl+C</code>, rerun its command, and reload. JS/CSS edits need a browser reload only.</p>
+<h2 id="try-one">Try one<a class="headerlink" href="#try-one" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Change <code>sample_word="apple"</code> to <code>"river"</code> in <code>starter/app.py</code>. Restart and
+  reload: the word changes, but the JavaScript message does not.</li>
+<li>Change the status string in <code>starter/static/app.js</code>. Reload: only the
+  message changes.</li>
+</ul>
+<p><a href="../01-word-list/">Next: build the word list</a>.</p>
 
 
 

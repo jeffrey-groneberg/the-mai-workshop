@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#readiness-pre-work" class="md-skip">
+        <a href="#setup" class="md-skip">
           Skip to content
         </a>
       
@@ -251,38 +251,6 @@
   
 
       
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../instructor/" class="md-tabs__link">
-        
-  
-  Instructor guide
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../local-setup/" class="md-tabs__link">
-        
-  
-  Local setup
-
-      </a>
-    </li>
-  
-
-      
     </ul>
   </div>
 </nav>
@@ -420,17 +388,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#check-access-with-the-instructor" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Check access with the instructor
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#create-the-codespace" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -442,10 +399,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configure-both-private-values-server-side" class="md-nav__link">
+  <a href="#run-the-app" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Configure both private values server-side
+        Run the app
       </span>
     </span>
   </a>
@@ -453,10 +410,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#browser-and-data-readiness" class="md-nav__link">
+  <a href="#alternative-configuration" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Browser and data readiness
+        Alternative configuration
       </span>
     </span>
   </a>
@@ -804,58 +761,6 @@
   
 
     
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../instructor/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Instructor guide
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../local-setup/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Local setup
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
   </ul>
 </nav>
                   </div>
@@ -897,17 +802,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#check-access-with-the-instructor" class="md-nav__link">
-    <span class="md-ellipsis">
-      <span class="md-typeset">
-        Check access with the instructor
-      </span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#create-the-codespace" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
@@ -919,10 +813,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configure-both-private-values-server-side" class="md-nav__link">
+  <a href="#run-the-app" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Configure both private values server-side
+        Run the app
       </span>
     </span>
   </a>
@@ -930,10 +824,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#browser-and-data-readiness" class="md-nav__link">
+  <a href="#alternative-configuration" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Browser and data readiness
+        Alternative configuration
       </span>
     </span>
   </a>
@@ -966,134 +860,57 @@
   
 
 
-<h1 id="readiness-pre-work">Readiness pre-work<a class="headerlink" href="#readiness-pre-work" title="Permanent link">&para;</a></h1>
-<p>Have the environment ready <strong>before</strong> the guided two-hour target session.
-Pre-work installs tools and checks access; it does not implement the word list,
-recording, or any other app feature.</p>
-<p>The static guide's GitHub Pages deployment target is
-<a href="https://jeffrey-groneberg.github.io/the-mai-workshop/">jeffrey-groneberg.github.io/the-mai-workshop/</a>.
-Use the instructor-confirmed published guide, or the private <strong>Workshop guide</strong>
-preview on port 8000. Neither runs your app: <strong>Your app</strong> (5050) and <strong>Finished
-solution</strong> (5051) are separate Flask servers in Codespaces or on your laptop.
-Pages cannot run Flask or hold private gateway configuration; keep both the
-endpoint and key server-side, never in the published guide.</p>
-<h2 id="check-access-with-the-instructor">Check access with the instructor<a class="headerlink" href="#check-access-with-the-instructor" title="Permanent link">&para;</a></h2>
-<p>You need a GitHub account, access to this repository, permission to use
-Codespaces, and an agreed compute/storage billing arrangement. Codespaces
-availability and cost are separate from model quotas. A free Codespace is not
-guaranteed for every participant.</p>
-<p>Use a participant-owned fork for this workshop so your Codespace and secrets
-belong to a repository you can write. The instructor must confirm organizational
-browser/network policies and your billing arrangement. Read-only repository
-access can affect secret injection. Do not make ports public or relax
-organization policy to work around access trouble. See GitHub's
-<a href="https://docs.github.com/en/codespaces/reference/security-in-github-codespaces">Codespaces security guidance</a>
-and <a href="https://docs.github.com/en/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces">account-specific secrets</a>.</p>
-<p>Obtain the approved portal details, private gateway origin, and individual
-participant key from the instructor through the approved private channel.
-Treat the gateway origin as sensitive, just like the key. The provider's key lifetime is <strong>24 hours from initial
-issuance</strong>, not from your first model request. Arrange issuance for the event;
-do not put either private configuration value in chat, screenshots, logs, Git,
-or this guide. Access can also be revoked or rotated. The
-<a href="https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/README.md">pinned provider README</a>
-is the access-policy source.</p>
+<h1 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h1>
+<p>Use a GitHub account with Codespaces access and the gateway values supplied
+by the instructor. Python dependencies install automatically.</p>
 <h2 id="create-the-codespace">Create the Codespace<a class="headerlink" href="#create-the-codespace" title="Permanent link">&para;</a></h2>
-<p>Use the default <strong><code>main</code></strong> branch. It contains the starter, solution, guide, and
-dev container. There is no separate workshop branch to find or copy.</p>
+<p>Use the default <strong><code>main</code></strong> branch.</p>
 <ol>
-<li>Open <a href="https://github.com/jeffrey-groneberg/the-mai-workshop"><strong>jeffrey-groneberg/the-mai-workshop</strong></a>
-   and choose <strong>Fork</strong>. Set <strong>Owner</strong> to your own GitHub account and
-   <strong>Repository name</strong> to <code>the-mai-workshop</code>. Keep <strong>Copy the main branch only</strong>
-   selected; that is all the source you need.</li>
-<li>In your fork, <strong><code>YOUR-HANDLE/the-mai-workshop</code></strong> (or your existing fork's name),
-   stay on <strong><code>main</code></strong>. If you already have an older fork, sync its <code>main</code> with
-   the source repository before starting. Ask the instructor for help with any
-   conflicting edits; do not delete your work or recreate missing workshop files.</li>
-<li>Choose <strong>Code &gt; Codespaces &gt; New with options</strong>. Confirm your fork and the
-   default <code>main</code> branch. Select a <strong>2-core machine if offered</strong>, otherwise the
-   smallest machine your policy permits. The models run remotely; no GPU is
-   needed in the Codespace. Confirm the billing arrangement before creating it.</li>
+<li><a href="https://github.com/jeffrey-groneberg/the-mai-workshop">Fork the repository</a>.
+   Keep <strong>Copy the main branch only</strong> selected. For an existing fork, sync <code>main</code>.</li>
+<li>In your fork, choose <strong>Code &gt; Codespaces &gt; New with options</strong>.
+   Select <code>main</code> and a 2-core machine, or the smallest available.</li>
+<li>Set both recommended <strong>Codespaces secrets</strong>:</li>
 </ol>
-<p>Instructors with write access to the original repository can use
-<a href="https://codespaces.new/jeffrey-groneberg/the-mai-workshop">its Codespaces creation link</a>.
-That link targets the original repository, not a participant's fork.</p>
-<p>The dev container recommends <strong>both
-<code>APIM_BASE_URL</code> and <code>APIM_API_KEY</code></strong> as Codespaces secrets, by name and description
-only; enter their private values in GitHub's secret fields. GitHub documents the
-<a href="https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/configuring-dev-containers/specifying-recommended-secrets-for-a-repository">recommended-secret prompt on the options creation path</a>;
-do not expect it on every quick-create path.</p>
-<p>If no prompt appears, create account-specific <strong>Codespaces</strong> secrets named
-<code>APIM_BASE_URL</code> and <code>APIM_API_KEY</code>, and grant both access to <strong>your fork</strong>, not just
-the source repository. These are not Actions secrets. Stop and restart an existing Codespace after changing
-injected secrets, then restart Flask. If your permissions prevent this, ask the
-instructor to resolve access or use the explicitly approved <code>.env</code> fallback
-below; do not paste either value into source.</p>
-<p>Wait for container setup to finish. It installs Python, Flask, HTTPX,
-python-dotenv, and Zensical. Participants do not install runtime packages by
-hand. GitHub's
-<a href="https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/adding-a-dev-container-configuration/setting-up-your-python-project-for-codespaces">Python dev-container guide</a>
-explains this setup mechanism. After creation, confirm that <code>starter/</code>,
-<code>solution/</code>, and <code>docs/</code> exist. If they are missing, check that your fork's <code>main</code>
-is up to date rather than trying to recreate missing workshop files.</p>
-<h2 id="configure-both-private-values-server-side">Configure both private values server-side<a class="headerlink" href="#configure-both-private-values-server-side" title="Permanent link">&para;</a></h2>
-<p>Prefer the two Codespaces secrets above. <code>APIM_BASE_URL</code> must contain the
-instructor's private HTTPS <strong>origin only</strong>, with no route, query, embedded
-credentials, or fragment. Do not include <code>/speech</code>, <code>/mai</code>, or <code>/v1</code>; the app
-adds each relative route itself. <code>APIM_API_KEY</code> contains your individual
-participant key.</p>
-<p>The gateway's <a href="https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/app/catalog.py">participant examples</a>
-use a participant <code>api-key</code> for all REST endpoints, including Speech; this is
-not a direct Azure Speech resource key.</p>
-<p><strong>Fallback only:</strong> if Codespaces secret injection is unavailable and the
-instructor approves, create a root <code>.env</code> in the editor using the <strong>empty</strong>
-<code>.env.example</code> as a guide:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>APIM_BASE_URL=
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>APIM_API_KEY=
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>APIM_BASE_URL</code></td>
+<td>The instructor's HTTPS gateway origin, without a path such as <code>/speech</code> or <code>/mai/v1</code>.</td>
+</tr>
+<tr>
+<td><code>APIM_API_KEY</code></td>
+<td>Your participant key.</td>
+</tr>
+</tbody>
+</table>
+<p>If the creation page does not prompt for them, add
+<a href="https://docs.github.com/en/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces">account-specific Codespaces secrets</a>
+and grant access to your fork. These are not Actions secrets. Restart an
+existing Codespace after changing them.</p>
+<h2 id="run-the-app">Run the app<a class="headerlink" href="#run-the-app" title="Permanent link">&para;</a></h2>
+<p>Wait for container setup, then run from the repository root:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>flask<span class="w"> </span>--app<span class="w"> </span>starter/app.py<span class="w"> </span>run<span class="w"> </span>--host<span class="w"> </span><span class="m">0</span>.0.0.0<span class="w"> </span>--port<span class="w"> </span><span class="m">5050</span>
 </span></code></pre></div>
-<p>Keep the tracked example empty. Enter actual values only in your ignored <code>.env</code>,
-after the ignore check below. Avoid shell commands containing either value.
-Do not paste them into code, documentation, screenshots, logs, or provenance,
-and never copy private environment files into <code>site/</code>. The local setup uses the
-same fallback.</p>
-<p>Check that <code>.env</code> is ignored without printing it:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>check-ignore<span class="w"> </span>.env
+<p>In <strong>Ports</strong>, open <strong>Your app — 5050</strong> with <strong>Open in Browser</strong>. Use the normal
+HTTPS browser tab for microphone support. Leave forwarding at its default
+settings; the Flask server itself uses HTTP.</p>
+<p>Continue to <a href="../lessons/00-open-your-app/">Open your app</a>.</p>
+<h2 id="alternative-configuration">Alternative configuration<a class="headerlink" href="#alternative-configuration" title="Permanent link">&para;</a></h2>
+<p>For local use or unavailable secret injection, copy <code>.env.example</code> to a root
+<code>.env</code> and fill in the two values:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>APIM_BASE_URL=
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>APIM_API_KEY=
 </span></code></pre></div>
-<p>The command should print <code>.env</code>. If it does not, do not put either private value there. Both
-apps load the root <code>.env</code> with <code>override=False</code>: an already-set environment
-variable wins. An old injected endpoint or key therefore is <strong>not</strong> replaced by
-editing <code>.env</code>; fix the corresponding Codespaces secret and restart instead.</p>
-<p>Check the installed tools, without invoking a model:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import flask, httpx, dotenv; print('Python runtime is ready')"</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>zensical<span class="w"> </span>--version
-</span></code></pre></div>
-<p>There is no model call on app startup. The initial starter needs no gateway
-configuration; missing or invalid settings produce a visible error when you
-later use a model feature.</p>
-<h2 id="browser-and-data-readiness">Browser and data readiness<a class="headerlink" href="#browser-and-data-readiness" title="Permanent link">&para;</a></h2>
-<p>Keep ports 5050, 5051, and 8000 <strong>Private</strong>. The container servers use internal
-HTTP; GitHub's forwarded URLs use browser-facing HTTPS. Do not configure local
-TLS or change the port protocol to HTTPS. Open forwarded links with <strong>Open in
-Browser</strong>, not an embedded preview. See
-<a href="https://docs.github.com/en/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace">GitHub port forwarding</a>.</p>
-<p>The microphone belongs to <strong>your browser</strong>, not the remote Codespace. It needs a
-secure context, browser permission, and permitted organizational policy
-(<a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia">MDN <code>getUserMedia</code></a>).
-The instructor must preflight the intended desktop browser and forwarded tab;
-a local test does not establish that this path works.</p>
-<p>The portal currently allows synthetic/sample data only. <strong>Do not submit
-personal or confidential content.</strong> A real voice can itself be personal data.
-Voluntary microphone use requires instructor-approved guidance and the app's
-explicit consent; a checked box alone does not override portal policy. Otherwise
-use the synthetic WAV path: the finished solution can generate and download a
-short target-language sample with MAI Voice, and you build that capability in
-lesson 2. No prepackaged <code>sample.wav</code> is assumed.</p>
-<p><strong>Ready means:</strong> the environment starts, dependencies import, private forwarding
-is allowed, the instructor has checked gateway access/capacity and data guidance,
-and you have a usable browser or synthetic-audio alternative. No live access has
-been established merely by following these configuration checks.</p>
-<p>Continue to <a href="../lessons/00-open-your-app/">Open your app</a>.
-If Codespaces is unavailable, use <a href="../local-setup/">local setup</a>, not a different
-application.</p>
+<p>Existing environment variables override <code>.env</code>. Restart Flask after changing
+configuration.</p>
+<p>No Codespaces? Use <a href="../local-setup/">local setup</a>.</p>
 
 
 

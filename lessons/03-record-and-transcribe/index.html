@@ -251,38 +251,6 @@
   
 
       
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../instructor/" class="md-tabs__link">
-        
-  
-  Instructor guide
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../local-setup/" class="md-tabs__link">
-        
-  
-  Local setup
-
-      </a>
-    </li>
-  
-
-      
     </ul>
   </div>
 </nav>
@@ -582,15 +550,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-it-and-see-it-work" class="md-nav__link">
+  <a href="#build" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Build it and see it work
+        Build
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Build it and see it work">
+    <nav class="md-nav" aria-label="Build">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -605,10 +573,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-add-consent-local-preview-and-an-explicit-send-button" class="md-nav__link">
+  <a href="#2-add-recording-controls" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        2. Add consent, local preview, and an explicit send button
+        2. Add recording controls
       </span>
     </span>
   </a>
@@ -632,10 +600,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#experiment-with-your-working-feature" class="md-nav__link">
+  <a href="#try-one" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Experiment with your working feature
+        Try one
       </span>
     </span>
   </a>
@@ -824,58 +792,6 @@
   
 
     
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../instructor/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Instructor guide
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../local-setup/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-  Local setup
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
   </ul>
 </nav>
                   </div>
@@ -917,15 +833,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#build-it-and-see-it-work" class="md-nav__link">
+  <a href="#build" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Build it and see it work
+        Build
       </span>
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Build it and see it work">
+    <nav class="md-nav" aria-label="Build">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -940,10 +856,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-add-consent-local-preview-and-an-explicit-send-button" class="md-nav__link">
+  <a href="#2-add-recording-controls" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        2. Add consent, local preview, and an explicit send button
+        2. Add recording controls
       </span>
     </span>
   </a>
@@ -967,10 +883,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#experiment-with-your-working-feature" class="md-nav__link">
+  <a href="#try-one" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Experiment with your working feature
+        Try one
       </span>
     </span>
   </a>
@@ -1049,23 +965,12 @@
 
 
 <h1 id="speak-and-see-what-was-heard">Speak and see what was heard<a class="headerlink" href="#speak-and-see-what-was-heard" title="Permanent link">&para;</a></h1>
-<p><strong>What:</strong> implement browser recording and genuine WAV conversion, preview the
-result locally, then deliberately send it and display the recognized text.
-Recording code is part of this guided core, not a prebuilt dependency.</p>
-<p><strong>How and which components:</strong> your browser's microphone -&gt; <code>MediaRecorder</code> -&gt;
-Web Audio decode / mono resampling -&gt; PCM WAV -&gt; local preview -&gt; explicit
-<code>fetch("/transcribe")</code> -&gt; Flask -&gt; gateway -&gt; MAI-Transcribe-2 -&gt; text in the card.
-Only the <strong>Send for transcription</strong> action uploads audio.</p>
-<p><strong>Data boundary:</strong> the portal currently permits synthetic/sample data only. A
-real voice can be personal data. Use a microphone only under instructor-approved
-guidance and with explicit consent; the checkbox does not rewrite portal policy.
-Otherwise use <strong>Download synthetic WAV</strong> from lesson 2 or the finished solution.
-You still implement the capture/conversion code. Neither app includes an assumed
-prepackaged <code>sample.wav</code>.</p>
-<h2 id="build-it-and-see-it-work">Build it and see it work<a class="headerlink" href="#build-it-and-see-it-work" title="Permanent link">&para;</a></h2>
+<p>Record an answer, convert it to WAV, and display what MAI heard.</p>
+<p><strong>Flow:</strong> microphone → <code>MediaRecorder</code> → WAV conversion → preview →
+Flask <code>/transcribe</code> → MAI-Transcribe-2 → text.</p>
+<h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">&para;</a></h2>
 <h3 id="1-receive-and-validate-audio-in-flask">1. Receive and validate audio in Flask<a class="headerlink" href="#1-receive-and-validate-audio-in-flask" title="Permanent link">&para;</a></h3>
-<p>In <strong><code>starter/app.py</code>, insert <code>import json</code> at the top</strong>, alongside the other
-imports. Then <strong>append this whole block at the end of the file</strong>:</p>
+<p>In <strong><code>starter/app.py</code>, add <code>import json</code> to the imports</strong>, then <strong>append</strong>:</p>
 <div class="language-python highlight"><span class="filename">starter/app.py</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">upstream_json</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="k">try</span><span class="p">:</span>
@@ -1107,15 +1012,11 @@ imports. Then <strong>append this whole block at the end of the file</strong>:</
 </span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        <span class="n">abort</span><span class="p">(</span><span class="mi">422</span><span class="p">,</span> <span class="s2">"No words were recognized. Preview the sample or try again."</span><span class="p">)</span>
 </span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
 </span></code></pre></div>
-<p>The gateway expects <strong>multipart <code>audio</code> and a JSON-encoded <code>definition</code> string</strong>,
-not a JSON body containing the audio. <code>enhancedMode</code> explicitly selects
-MAI-Transcribe-2; <code>locales</code> takes the STT language code, such as <code>fr</code>, not a voice
-ID or a TTS locale such as <code>fr-FR</code>. Read <code>combinedPhrases[].text</code>.
-Sources: <a href="https://learn.microsoft.com/azure/ai-services/speech-service/mai-transcribe">MAI transcription</a>,
-<a href="https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/app/catalog.py">pinned participant request</a>,
-and <a href="https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/infra/gateway.tf">gateway routes / version contract</a>.
-We send <strong>no saved answer or expected-answer phrase hints</strong>.</p>
-<h3 id="2-add-consent-local-preview-and-an-explicit-send-button">2. Add consent, local preview, and an explicit send button<a class="headerlink" href="#2-add-consent-local-preview-and-an-explicit-send-button" title="Permanent link">&para;</a></h3>
+<p>The <a href="https://learn.microsoft.com/azure/ai-services/speech-service/mai-transcribe">API</a>
+expects multipart <code>audio</code> plus JSON-encoded <code>definition</code>.
+<code>enhancedMode</code> selects MAI-Transcribe-2; <code>locales</code> takes a language code such
+as <code>fr</code>, not <code>fr-FR</code>. The transcript is in <code>combinedPhrases[].text</code>.</p>
+<h3 id="2-add-recording-controls">2. Add recording controls<a class="headerlink" href="#2-add-recording-controls" title="Permanent link">&para;</a></h3>
 <p>In <strong><code>starter/templates/index.html</code>, replace</strong>
 <code>&lt;!-- Add answer controls here. --&gt;</code> with:</p>
 <div class="language-html highlight"><span class="filename">starter/templates/index.html</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">section</span> <span class="na">class</span><span class="o">=</span><span class="s">"practice-step"</span> <span class="na">aria-labelledby</span><span class="o">=</span><span class="s">"voice-title"</span><span class="p">&gt;</span>
@@ -1138,16 +1039,12 @@ We send <strong>no saved answer or expected-answer phrase hints</strong>.</p>
 </span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="p">&lt;/</span><span class="nt">section</span><span class="p">&gt;</span>
 </span></code></pre></div>
 <h3 id="3-implement-capture-conversion-preview-and-upload">3. Implement capture, conversion, preview, and upload<a class="headerlink" href="#3-implement-capture-conversion-preview-and-upload" title="Permanent link">&para;</a></h3>
-<p>In <strong><code>starter/static/app.js</code>, insert this complete block immediately before
-<code>// Start the page.</code></strong> Keep it in this file; do not import it from <code>solution/</code>.</p>
-<p>The browser chooses a supported recording format. Merely naming that blob
-<code>answer.wav</code> would <strong>not</strong> convert it. <code>decodeAudioData</code> decodes its contents;
-<code>OfflineAudioContext</code> mixes to one channel at 16 kHz; <code>encodeWav</code> writes the
-container and signed 16-bit PCM samples.</p>
-<p>Sources: <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia">MDN <code>getUserMedia</code></a>,
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder"><code>MediaRecorder</code></a>,
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData"><code>decodeAudioData</code></a>,
-and <a href="https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext"><code>OfflineAudioContext</code></a>.</p>
+<p>In <strong><code>starter/static/app.js</code>, insert before <code>// Start the page.</code></strong></p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder"><code>MediaRecorder</code></a>
+may not produce WAV. <code>decodeAudioData</code> decodes its output;
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext"><code>OfflineAudioContext</code></a>
+resamples it to mono at 16 kHz. <code>encodeWav</code> writes a 44-byte header and 16-bit
+PCM samples. Renaming the original blob would not convert it.</p>
 <div class="language-javascript highlight"><span class="filename">starter/static/app.js</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">MAX_SECONDS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">12</span><span class="p">;</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kd">let</span><span class="w"> </span><span class="nx">activeRecorder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kd">let</span><span class="w"> </span><span class="nx">captureStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
@@ -1356,75 +1253,24 @@ insert</strong>:</p>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nx">$</span><span class="p">(</span><span class="s2">"#answer-result"</span><span class="p">).</span><span class="nx">hidden</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nx">$</span><span class="p">(</span><span class="s2">"#record-status"</span><span class="p">).</span><span class="nx">textContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">;</span>
 </span></code></pre></div>
-<p>Selecting another word discards the old local audio and transcript. Recording,
-decoding, and model requests temporarily lock vocabulary controls. Unchecking
-consent stops/discards local capture; it cannot recall an upload already sent.
-Tracks stop before conversion and also in cleanup on failure/cancel. Only words,
-never microphone audio, go into <code>localStorage</code>.</p>
-<p>The attempt number belongs to one asynchronous action. Cancel advances it and
-unlocks the controls immediately, even if the browser has not answered the
-permission request. A late stream is stopped locally; its cleanup cannot unlock
-or overwrite a newer action. The synthetic-file picker therefore remains a
-usable alternative after canceling. The app cannot dismiss the browser's own
-permission prompt; dismiss or decline that prompt if it obstructs the tab.</p>
-<details>
-<summary>What the WAV header and limits mean</summary>
-
-The 44-byte header declares RIFF/WAVE, PCM format `1`, one channel, 16,000
-samples/second, and 16 bits/sample. Each sample occupies two bytes, so the byte
-rate is 32,000 and the data length is `samples.length * 2`. `true` makes numeric
-fields little-endian. Floating samples are clamped to [-1, 1] and scaled to the
-signed 16-bit range.
-
-Capture stops at 12 seconds; conversion clips timer overshoot to that app limit.
-Flask validates complete PCM frames and rejects uploads longer than 12 seconds,
-wrong rates/channels, and truncated files. Its 2 MiB request cap also includes
-multipart overhead. These are teaching-app guardrails, not advertised model
-limits. A WAV signature alone is insufficient; the server performs the complete
-format check. Use a short synthetic word/phrase for the alternative.
-
-</details>
-
-<p><strong>Run it end to end:</strong> restart Flask and reload the normal HTTPS app tab. Choose
-a sample pair. Under approved guidance, opt in, record its target translation,
-stop, and play the local preview. Verify the microphone indicator stops and
-Network shows <strong>no <code>/transcribe</code> request yet</strong>. Press <strong>Send for transcription</strong>:
-inspect multipart <code>audio</code> and <code>locale</code>, then read <strong>I heard: ...</strong> in the card.</p>
-<p><strong>Without a microphone:</strong> choose the short synthetic WAV you generated in lesson
-2, preview it, opt in to sending sample audio, and press the same Send button.
-This exercises the same Flask route, not simulated recognition. An empty
-transcript or an HTTP failure must appear as an error, not a wrong-answer result.
-If microphone permission remains unanswered, press <strong>Stop recording</strong> or uncheck
-consent: the file picker unlocks immediately. Choose the synthetic WAV without
-waiting for permission to settle; any later stream is stopped without replacing
-your preview or interrupting a new upload.
-The <a href="https://github.com/jeffrey-groneberg/the-mai-workshop/blob/main/solution/static/app.js">reference capture and conversion</a>
-is available for comparison.</p>
-<h2 id="experiment-with-your-working-feature">Experiment with your working feature<a class="headerlink" href="#experiment-with-your-working-feature" title="Permanent link">&para;</a></h2>
-<p><strong>Try one. Predict -&gt; change -&gt; run -&gt; compare -&gt; choose.</strong> Each Send makes
-another transcription request. Reusing a local preview avoids recording again.</p>
-<table>
-<thead>
-<tr>
-<th>Choice</th>
-<th>Exact change and interpreting component</th>
-<th>Observe and restore</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Hint versus detection</td>
-<td>In <code>starter/app.py</code>, remove only <code>"locales": [language["stt"]],</code> from <code>definition</code>. MAI transcription now detects language; keep <code>enhancedMode</code> unchanged.</td>
-<td>Restart Flask and send the same approved sample. Compare the transcript with the hinted result, then choose or restore the line. Detection is not guaranteed to improve short words. Never add the expected answer as a phrase hint.</td>
-</tr>
-<tr>
-<td>Word versus phrase</td>
-<td>Add a new sample pair with a short target phrase, then record it under approved guidance or generate/download its synthetic WAV. The audio content changes; the route and locale stay the same.</td>
-<td>Send each and compare the full recognized text. Keep the useful entry or remove it. Context can affect recognition; do not interpret the difference as a pronunciation score.</td>
-</tr>
-</tbody>
-</table>
-<p>Continue to <a href="../04-check-your-answer/">Check your answer</a>.</p>
+<p>Changing words clears the old recording. Cancelling advances the attempt number
+so a late microphone response cannot replace newer work.</p>
+<p><strong>Run:</strong> restart Flask and reload the HTTPS app tab. Select a pair, tick the
+audio checkbox, record its translation, stop, and preview. Then press
+<strong>Send for transcription</strong>. Network shows multipart <code>audio</code>/<code>locale</code>; the card
+shows <strong>I heard: ...</strong>.</p>
+<p><strong>No microphone?</strong> Choose the synthetic WAV downloaded in lesson 2 and use the
+same Send button. If a permission prompt hangs, <strong>Stop recording</strong> unlocks
+the file picker. Keep samples within the app's 12-second limit.</p>
+<h2 id="try-one">Try one<a class="headerlink" href="#try-one" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Remove <code>"locales": [language["stt"]],</code> from <code>definition</code> in <code>starter/app.py</code>.
+  Restart and send the same audio. Compare automatic detection with the hint,
+  then restore the line. Keep the expected answer out of recognition hints.</li>
+<li>Compare an isolated word with a short phrase. Does the added context change
+  the transcript?</li>
+</ul>
+<p><a href="../04-check-your-answer/">Next: check the answer</a>.</p>
 
 
 
