@@ -265,6 +265,8 @@ all state and handlers are defined.
 translation, then reload again. Both pairs should remain. Remove one.
 To correct a pair, remove it and add it again.
 
+![A saved apple and pomme word pair selected in the learner's vocabulary list.](../assets/workshop/01-word-list.webp){ width="960" loading="lazy" }
+
 ## Try one
 
 - Add a pair in another language. Switch between entries: each keeps its own

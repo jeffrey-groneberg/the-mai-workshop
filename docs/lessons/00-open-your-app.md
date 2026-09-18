@@ -35,6 +35,8 @@ and JavaScript for interactions.
 **Check:** reload and inspect Network: `GET /`, `/static/style.css`, and
 `/static/app.js`.
 
+![The running starter showing the word apple and the connected JavaScript status.](../assets/workshop/00-open-app.webp){ width="960" loading="lazy" }
+
 **For every lesson:** save first. After Python/HTML edits, stop Flask with
 `Ctrl+C`, rerun its command, and reload. JS/CSS edits need a browser reload only.
 

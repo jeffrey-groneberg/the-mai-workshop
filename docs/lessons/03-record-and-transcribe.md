@@ -316,6 +316,10 @@ audio checkbox, record its translation, stop, and preview. Then press
 **Send for transcription**. Network shows multipart `audio`/`locale`; the card
 shows **I heard: ...**.
 
+![Recording controls, a local audio preview, and the transcript I heard: pomme.](../assets/workshop/03-transcription.webp){ width="484" loading="lazy" }
+
+*Captured with an example transcript.*
+
 **No microphone?** Choose the synthetic WAV downloaded in lesson 2 and use the
 same Send button. If a permission prompt hangs, **Stop recording** unlocks
 the file picker. Keep samples within the app's 12-second limit.

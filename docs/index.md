@@ -7,6 +7,15 @@ to a vocabulary list.
 Work in `starter/`; compare with `solution/`. After each working feature,
 try one of its experiments.
 
+<details open>
+<summary>See the app in action</summary>
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/workshop/walkthrough-poster.webp">
+  <img src="assets/workshop/app-walkthrough.gif" width="880" height="644" alt="App walkthrough: add a French word pair, hear both languages, record and match an answer, generate an image, and request a mnemonic." loading="lazy">
+</picture>
+<p>Silent walkthrough with example model responses. Plays once; close this panel to hide it.</p>
+</details>
+
 | Step | What you build |
 | --- | --- |
 | [00 — Open the app](lessons/00-open-your-app.md) | A page served by Flask. |

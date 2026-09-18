@@ -129,6 +129,10 @@ This restores a word's cached image without another request.
 Network shows `POST /image` and an `image/png` response. Switch words and back:
 the picture returns. Reloading clears images, not the word list.
 
+![The app's memory-image section displaying a watercolor apple below its scene prompt.](../assets/workshop/05-memory-image.webp){ width="484" loading="lazy" }
+
+*Captured with an example image response.*
+
 ### One word, two explicit scenes
 
 The scene prompt distinguishes two meanings of `bank`:

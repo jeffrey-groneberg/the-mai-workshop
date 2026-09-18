@@ -10,6 +10,7 @@ import shutil
 import struct
 import sys
 import threading
+import time
 import wave
 import zlib
 from pathlib import Path
@@ -19,6 +20,7 @@ from xml.etree import ElementTree
 import httpx
 from playwright.sync_api import expect, sync_playwright
 from werkzeug.serving import make_server
+from workshop_media import checkpoint, example_image, walkthrough
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -101,8 +103,9 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
         "APIM_BASE_URL=https://ignored.example.test\nAPIM_API_KEY=ignored-fixture\n",
         encoding="utf-8",
     )
-    wav = wav_bytes()
-    png = png_bytes()
+    media_image = example_image()
+    wav = wav_bytes(frames=32000 if media_image else 4000)
+    png = media_image or png_bytes()
     calls = []
     state = {"status": 200, "text": "pomme", "override": None, "timeout": False}
 
@@ -113,6 +116,8 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
         assert timeout.connect == 10 and timeout.read == 120
         calls.append((url, headers, kwargs))
         request = httpx.Request("POST", url)
+        if state.get("demo"):
+            time.sleep(0.7)
         if state["timeout"]:
             raise httpx.ReadTimeout("fixture timeout", request=request)
         if state["status"] != 200:
@@ -163,8 +168,12 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             assert body["model"] == "mai-thinking"
             assert body["max_completion_tokens"] == 2048
             assert body["messages"][0]["role"] == "user"
+            text = (
+                "Picture a pomme resting in your palm: an apple ready to eat."
+                if state.get("demo") else "<b>A sample mnemonic.</b>"
+            )
             return httpx.Response(
-                200, json={"choices": [{"message": {"content": "<b>A sample mnemonic.</b>"}}]},
+                200, json={"choices": [{"message": {"content": text}}]},
                 request=request,
             )
         raise AssertionError(f"Unexpected gateway call: {url}")
@@ -197,6 +206,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             expect(page.locator("#starter-status")).to_contain_text("JavaScript is connected")
             assert page.locator("#word-form").count() == 0
             assert calls == []
+            checkpoint(page, "00-open-app", ".app-shell")
 
             lesson = "lessons/01-word-list.md"
             python.write_text(blocks(lesson, "python")[0], encoding="utf-8")
@@ -222,6 +232,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             page.get_by_role("button", name="Remove summer", exact=True).click()
             expect(page.locator("#practice-word")).to_have_text("apple")
             assert calls == [] and errors == []
+            checkpoint(page, "01-word-list", ".workspace")
 
             lesson = "lessons/02-bilingual-speech.md"
             py = blocks(lesson, "python")
@@ -244,6 +255,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             assert b"en-US-Harper:MAI-Voice-2-Flash" in calls[-1][2]["content"]
             assert page.locator("#speak-target").count() == 0
             assert errors == []
+            checkpoint(page, "02-english-speech", ".workspace")
 
             replace_once(python, '    locale = "en-US"\n', py[3])
             replace_once(javascript, "jsonOptions({text})", "jsonOptions({text, locale})")
@@ -266,6 +278,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             assert sample.read_bytes() == wav
             assert len(calls) == before_download
             assert errors == []
+            checkpoint(page, "02-bilingual-speech", ".workspace")
 
             lesson = "lessons/03-record-and-transcribe.md"
             python.write_text("import json\n" + python.read_text(encoding="utf-8"), encoding="utf-8")
@@ -322,6 +335,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             page.locator("#send-answer").click()
             expect(page.locator("#answer-result")).to_have_text("I heard: pomme")
             assert len(calls) == before_record + 1
+            checkpoint(page, "03-transcription", ".practice-step")
             assert json.loads(calls[-1][2]["data"]["definition"])["locales"] == ["fr"]
             storage = page.evaluate("JSON.parse(localStorage.getItem('mai-learner-words-v1'))")
             assert set(storage[0]) == {"id", "english", "target", "locale"}
@@ -371,6 +385,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             expect(page.locator("#record-status")).to_contain_text("Ready to preview locally")
             page.locator("#send-answer").click()
             expect(page.locator("#answer-result")).to_contain_text("That matches your saved translation.")
+            checkpoint(page, "04-answer-match", "#answer-result")
             state["text"] = "rivière"
             page.locator("#send-answer").click()
             expect(page.locator("#answer-result")).to_contain_text("Not a match this time.")
@@ -418,6 +433,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             expect(page.locator("#memory-figure")).to_be_visible()
             assert page.locator("#memory-image").evaluate("image => image.naturalWidth") == 1024
             assert calls[-1][2]["json"]["prompt"].endswith("soft watercolor")
+            checkpoint(page, "05-memory-image", ".practice-step:has(#generate-image)")
             page.locator("#english-word").fill("river")
             page.locator("#target-word").fill("rivière")
             page.locator("#target-locale").select_option("fr-FR")
@@ -478,6 +494,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
                 assert private_value not in caplog.text
             assert "solution" not in python.read_text(encoding="utf-8")
             assert "solution" not in javascript.read_text(encoding="utf-8")
+            walkthrough(browser, origin, state)
             context.close()
             browser.close()
     finally:

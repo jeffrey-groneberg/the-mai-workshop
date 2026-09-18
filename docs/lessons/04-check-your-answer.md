@@ -46,6 +46,10 @@ substrings. This checks the recognized word, not pronunciation quality.
 **Run:** reload and send an answer. Then send a different word's WAV against the
 same entry. Confirm the heard/saved text and the match versus retry result.
 
+![Match feedback showing the recognized word pomme and the same saved answer.](../assets/workshop/04-answer-match.webp){ width="484" loading="lazy" }
+
+*Captured with an example transcript.*
+
 ## Try one
 
 - Replace `const matches = actual === expected;` with

@@ -69,6 +69,10 @@ gateway's live behavior.
 The Zensical guide is published to GitHub Pages. Flask continues to run in
 Codespaces or locally, never on the static Pages site.
 
+Checkpoint screenshots show the actual learner app produced by the lesson
+edits. A short GIF introduces the completed flow. Media uses labeled example
+model responses and includes a static alternative for reduced motion.
+
 ## Accessibility
 
 Keyboard-operable controls, clear permission/error states, reduced motion,

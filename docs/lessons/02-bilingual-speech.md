@@ -329,6 +329,10 @@ In the same file, **insert immediately after `function selectWord(id) {`**:
 **Run:** restart Flask, reload, and press **Hear English**.
 Network should show `POST /speak` with `text` and an `audio/wav` response.
 
+![The learner app with the English speaker button and generated-audio player.](../assets/workshop/02-english-speech.webp){ width="960" loading="lazy" }
+
+*Captured with an example audio response.*
+
 ### 3. Extend that route to the target language
 
 In **`starter/app.py`**, inside `speak`, **replace only**
@@ -377,6 +381,10 @@ The API reads supplied text; it does not translate it.
 **Run:** restart Flask and reload. Play both languages and compare their
 `text`/`locale` fields in Network. Download a short synthetic WAV and keep it
 for lesson 3.
+
+![English and translation playback buttons, the synthetic WAV download, and the audio player.](../assets/workshop/02-bilingual-speech.webp){ width="960" loading="lazy" }
+
+*Captured with example audio responses.*
 
 ## Try one
 

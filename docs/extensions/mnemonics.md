@@ -74,6 +74,10 @@ another word.
 **Run:** restart Flask, reload, select a word, expand **Try a mnemonic**, and
 press **Suggest a mnemonic**. The suggestion should appear on its card.
 
+![The mnemonic section with the example suggestion to picture a pomme resting in your palm.](../assets/workshop/06-mnemonic.webp){ width="484" loading="lazy" }
+
+*Captured with an example text response.*
+
 ## Try one
 
 - In the Python prompt, replace `one short, imaginative English mnemonic`
