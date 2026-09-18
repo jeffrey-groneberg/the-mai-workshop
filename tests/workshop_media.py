@@ -46,6 +46,40 @@ def save_webp(png, destination):
     )
 
 
+def set_walkthrough_playback(path):
+    """Slow the GIF 1.5x and loop it without re-encoding any image data."""
+    data = bytearray(path.read_bytes())
+    if data[:6] != b"GIF89a" or b"NETSCAPE2.0" in data:
+        raise ValueError("Expected a newly captured, non-looping GIF89a.")
+    header_end = 13 + (3 * 2 ** ((data[10] & 7) + 1) if data[10] & 128 else 0)
+    cursor = header_end
+    while data[cursor] != 0x3B:
+        marker = data[cursor]
+        cursor += 1
+        if marker == 0x21:
+            label = data[cursor]
+            cursor += 1
+            if label == 0xF9:
+                if data[cursor] != 4:
+                    raise ValueError("Unexpected GIF graphic-control size.")
+                delay = int.from_bytes(data[cursor + 2:cursor + 4], "little")
+                slower = max(1, (delay * 3 + 1) // 2)
+                data[cursor + 2:cursor + 4] = slower.to_bytes(2, "little")
+        elif marker == 0x2C:
+            flags = data[cursor + 8]
+            cursor += 9 + (3 * 2 ** ((flags & 7) + 1) if flags & 128 else 0)
+            cursor += 1
+        else:
+            raise ValueError(f"Unexpected GIF block: {marker}")
+        while data[cursor]:
+            cursor += 1 + data[cursor]
+        cursor += 1
+    if cursor != len(data) - 1:
+        raise ValueError("Unexpected data after the GIF trailer.")
+    loop = b"\x21\xff\x0bNETSCAPE2.0\x03\x01\x00\x00\x00"
+    path.write_bytes(data[:header_end] + loop + data[header_end:])
+
+
 def checkpoint(page, name, selector):
     directory = output_directory()
     if directory is None:
@@ -141,6 +175,7 @@ def walkthrough(browser, origin, state):
     raw_video.unlink()
     (directory / "recording").rmdir()
     animation = directory / "app-walkthrough.gif"
+    set_walkthrough_playback(animation)
     if animation.stat().st_size > 3 * 1024 * 1024:
         raise RuntimeError("The walkthrough exceeds its 3 MiB download budget.")
     probe = json.loads(subprocess.check_output([
@@ -153,6 +188,7 @@ def walkthrough(browser, origin, state):
         "WORKSHOP_MEDIA_DIR=test-results/workshop-media python -m pytest -q tests/test_lessons.py\n\n"
         "Screenshots show the actual app produced by the published lesson edits.\n"
         "The silent GIF records that completed learner app, including optional mnemonics.\n"
+        "Playback loops and runs at two-thirds speed, without re-encoding its image frames.\n"
         "Model responses and microphone input are offline fixtures, not live model calls.\n"
         "The image fixture is an apple crop (320:320:30:220) of the existing MAI-generated\n"
         "docs/assets/images/vocabulary-journey.webp. No endpoint or key is captured.\n",
@@ -175,7 +211,8 @@ def walkthrough(browser, origin, state):
             "width": probe["width"], "height": probe["height"],
             "frames": int(probe["nb_read_frames"]),
             "duration_seconds": float(probe["duration"]),
-            "bytes": animation.stat().st_size, "repeat": False,
+            "bytes": animation.stat().st_size, "repeat": True,
+            "playback_rate": 2 / 3,
         },
         "reduced_motion": "walkthrough-poster.webp",
     }, indent=2) + "\n", encoding="utf-8")

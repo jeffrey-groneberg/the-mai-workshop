@@ -100,7 +100,7 @@ def test_checkpoint_screenshots_match_the_workshop_steps():
             assert 1024 < len(data) < 512 * 1024
 
 
-def test_walkthrough_is_small_finite_and_has_a_reduced_motion_alternative():
+def test_walkthrough_is_slow_looping_and_has_a_reduced_motion_alternative():
     directory = ROOT / "docs/assets/workshop"
     data = (directory / "app-walkthrough.gif").read_bytes()
     manifest = json.loads((directory / "manifest.json").read_text())
@@ -109,7 +109,9 @@ def test_walkthrough_is_small_finite_and_has_a_reduced_motion_alternative():
     assert len(data) == details["bytes"] < 3 * 1024 * 1024
     assert int.from_bytes(data[6:8], "little") == details["width"] == 880
     assert int.from_bytes(data[8:10], "little") == details["height"] == 644
-    assert b"NETSCAPE2.0" not in data  # No animation loop extension: play once.
+    assert data.count(b"\x21\xff\x0bNETSCAPE2.0\x03\x01\x00\x00\x00") == 1
+    assert details["repeat"] is True
+    assert details["playback_rate"] == pytest.approx(2 / 3)
 
     cursor = 13 + (3 * (2 ** ((data[10] & 7) + 1)) if data[10] & 128 else 0)
     frames = hundredths = 0
@@ -133,13 +135,29 @@ def test_walkthrough_is_small_finite_and_has_a_reduced_motion_alternative():
         cursor += 1
     assert frames == details["frames"] > 20
     assert hundredths / 100 == pytest.approx(details["duration_seconds"])
-    assert 10 <= hundredths / 100 <= 30
+    assert 24 <= hundredths / 100 <= 35
     assert (directory / "walkthrough-poster.webp").is_file()
     home = (ROOT / "docs/index.md").read_text()
     assert 'media="(prefers-reduced-motion: reduce)"' in home
     assert 'srcset="assets/workshop/walkthrough-poster.webp"' in home
     assert "<details open>" in home and "<summary>See the app in action</summary>" in home
     assert "example model responses" in home
+    assert "Loops at a slower pace" in home
+
+
+def test_media_regeneration_changes_only_timing_and_loop_metadata(tmp_path):
+    from workshop_media import set_walkthrough_playback
+
+    header = b"GIF89a\x01\x00\x01\x00\x80\x00\x00\x00\x00\x00\xff\xff\xff"
+    control = b"\x21\xf9\x04\x00\x14\x00\x00\x00"
+    frame = b"\x2c\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x44\x01\x00\x3b"
+    path = tmp_path / "capture.gif"
+    path.write_bytes(header + control + frame)
+    set_walkthrough_playback(path)
+    expected_loop = b"\x21\xff\x0bNETSCAPE2.0\x03\x01\x00\x00\x00"
+    assert path.read_bytes() == header + expected_loop + control.replace(b"\x14", b"\x1e") + frame
+    with pytest.raises(ValueError, match="non-looping"):
+        set_walkthrough_playback(path)
 
 
 def test_explanatory_diagrams_have_reviewed_revision_provenance():

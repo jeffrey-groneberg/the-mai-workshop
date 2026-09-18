@@ -98,7 +98,7 @@ practice panel using the app-panel radius. Native Zensical shapes are independen
   provenance. Use them as supporting content with alt text and AI-generated
   captions, not a replacement for instructions or live model results.
 - **Walkthrough media:** checkpoint WebP captures follow each run check.
-  The opening GIF plays once inside a collapsible native disclosure; a
+  The opening GIF loops at a slower pace inside a collapsible native disclosure; a
   `prefers-reduced-motion` picture source shows a static preview instead.
   Media uses labeled example responses and adds no custom theme.
 - **Explanatory diagrams:** MAI-rendered, white-ground technical illustrations
