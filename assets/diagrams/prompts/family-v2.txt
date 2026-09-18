@@ -1,0 +1,16 @@
+Correct one spelling error in this reference diagram. Preserve the composition, illustrations, colors, six model groups, their model names, specialities, and access labels.
+
+Redraw ONLY the single footer sentence below the thin bottom rule. It must read EXACTLY:
+Microsoft Frontier Tuning: model customization, not a separate model.
+
+Spell Frontier as F r o n t i e r. The fifth character is a lowercase t with a clear crossbar, NOT a rounded lowercase d. Use sharp, unambiguous professional sans-serif lettering on a clean background. Keep the footer comfortably inside the frame and large enough to read.
+
+The access labels "Foundry preview" elsewhere are already correct: do not change Foundry into Frontier. The six exact model names must remain:
+MAI-Voice-2
+MAI-Transcribe-2
+MAI-Image-2.6
+MAI-Thinking-1
+MAI-Code-1.1-Flash
+MAI-Cyber-1-Flash
+
+Keep the title "The MAI model family" and subtitle "Currently featured families / September 2026". No new text, no new arrows, no cropped labels, no decorative changes. Preserve the landscape framing. This is a surgical correction to one footer word.

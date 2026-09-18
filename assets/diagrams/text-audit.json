@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-09-18",
+  "method": "Apple Vision accurate English OCR with language correction disabled, plus enlarged visual inspection of labels and arrows.",
+  "language_correction": false,
+  "correction": "The prior family footer rendered Frondier. MAI reference-image editing changed it to Frontier; all final WebP assets were rescanned.",
+  "images": [
+    {
+      "file": "request-loop.webp",
+      "sha256": "e2f32cbc6cb6e3f10e3202856d7dd6878929c178c9e3a00f9c4851c17d7813aa",
+      "width": 1360,
+      "height": 768,
+      "observed_lines": [
+        "One click, four components",
+        "Request",
+        "Request",
+        "Request",
+        "Response",
+        "Response",
+        "Response",
+        "Browser",
+        "Flask",
+        "APIM",
+        "MAI models",
+        "Buttons + audio",
+        "Python routes",
+        "Gateway",
+        "Voice + Transcribe",
+        "Codespaces or local Python",
+        "Image + Thinking",
+        "Browser calls Flask. Flask calls MAI through APIM."
+      ]
+    },
+    {
+      "file": "audio-path.webp",
+      "sha256": "9d1d55f7702428f0316c57b4bbe435841249277ad6164ee476afd953ab80b7d2",
+      "width": 1344,
+      "height": 768,
+      "observed_lines": [
+        "From microphone to words",
+        "In your browser",
+        "Model request",
+        "WAV",
+        "Send",
+        "101/100",
+        "\"pomme\"",
+        "Record",
+        "Convert",
+        "Preview",
+        "Transcribe",
+        "MediaRecorder",
+        "Decode + resample",
+        "Listen locally",
+        "MAI-Transcribe-2",
+        "16 kHz / mono",
+        "via Flask + APIM",
+        "16-bit PCM"
+      ],
+      "non_text_ocr": [
+        {
+          "text": "101/100",
+          "reason": "Enlarged pixel inspection shows waveform bars inside the WAV icon, not a written number or score."
+        }
+      ]
+    },
+    {
+      "file": "answer-matching.webp",
+      "sha256": "5f82b676148940e6dc829c1e37006af20dd0dc2a6ccefc8d008f5f9ac6df1591",
+      "width": 1344,
+      "height": 768,
+      "observed_lines": [
+        "A word match, not a pronunciation score",
+        "JavaScript in the browser / no model call",
+        "Transcript",
+        "Normalize",
+        "POMME!",
+        "pomme",
+        "Compare",
+        "whole strings",
+        "Match",
+        "Saved answer",
+        "Normalize",
+        "pomme",
+        "pomme",
+        "Ignore case, edge",
+        "Keep accents and",
+        "Different strings?",
+        "punctuation, extra spaces",
+        "internal punctuation",
+        "Try again."
+      ]
+    },
+    {
+      "file": "image-flow.webp",
+      "sha256": "779a85ac6ae2296db081ebbe1077ec72a23041bdb0df38ed81206205d0c7f885",
+      "width": 1344,
+      "height": 768,
+      "observed_lines": [
+        "Turn a word into a visual cue",
+        "Build the prompt",
+        "MAI Image",
+        "base64 PNG",
+        "Show in the browser",
+        "via Flask + APIM",
+        "Decode in Flask",
+        "1024 x 1024 source",
+        "English word",
+        "apple",
+        "+",
+        "Scene",
+        "wearing a crown",
+        "The scene guides the meaning. The image helps you remember."
+      ]
+    },
+    {
+      "file": "feature-model-map.webp",
+      "sha256": "97f2322a8eb5a36ac80b21f3c808f4a0db7689565fe9201d7ed2cda87a91cfa2",
+      "width": 1344,
+      "height": 768,
+      "observed_lines": [
+        "Which model does what?",
+        "APP FEATURE",
+        "MAI MODEL",
+        "Hear English + translation MAI-Voice-2-Flash",
+        "Transcribe your answer",
+        "MAI-Transcribe-2",
+        "Create a memory image",
+        "→ MAI-Image-2.6-Flash",
+        "Suggest a mnemonic (Optional) →",
+        "MAI-Thinking-1",
+        "Save words + match answers",
+        "JavaScript / no model"
+      ]
+    },
+    {
+      "file": "mai-family.webp",
+      "sha256": "e4e10e5605ea27df188fdb8c0523ba997fd6e73fa8376fe983dfa2e8f0df8ace",
+      "width": 1360,
+      "height": 768,
+      "observed_lines": [
+        "The MAI model family",
+        "Currently featured families / September 2026",
+        "MAI-Voice-2",
+        "MAI-Transcribe-2",
+        "MAI-Image-2.6",
+        "Speech synthesis",
+        "Audio to text",
+        "Image generation + edits",
+        "Also: Flash variant",
+        "Speech preview",
+        "Also: Flash variant",
+        "• Speech preview",
+        "Foundry preview",
+        "MAI-Thinking-1",
+        "MAI-Code-1.1-Flash",
+        "MAI-Cyber-1-Flash",
+        "Reasoning, math + code",
+        "Agentic coding",
+        "Defensive vulnerability work",
+        "• Foundry preview",
+        "• GitHub Copilot",
+        "Restricted MDASH",
+        "Microsoft Frontier Tuning: model customization, not a separate model."
+      ]
+    }
+  ]
+}
