@@ -1269,6 +1269,8 @@ audio by text/locale; <code>playSpeech</code> plays it.</p>
 </span></code></pre></div>
 <p><strong>Run:</strong> restart Flask, reload, and press <strong>Hear English</strong>.
 Network should show <code>POST /speak</code> with <code>text</code> and an <code>audio/wav</code> response.</p>
+<p><img alt="The learner app with the English speaker button and generated-audio player." loading="lazy" src="../../assets/workshop/02-english-speech.webp" width="960" /></p>
+<p><em>Captured with an example audio response.</em></p>
 <h3 id="3-extend-that-route-to-the-target-language">3. Extend that route to the target language<a class="headerlink" href="#3-extend-that-route-to-the-target-language" title="Permanent link">&para;</a></h3>
 <p>In <strong><code>starter/app.py</code></strong>, inside <code>speak</code>, <strong>replace only</strong>
 <code>locale = "en-US"</code> with:</p>
@@ -1305,6 +1307,8 @@ The API reads supplied text; it does not translate it.</p>
 <p><strong>Run:</strong> restart Flask and reload. Play both languages and compare their
 <code>text</code>/<code>locale</code> fields in Network. Download a short synthetic WAV and keep it
 for lesson 3.</p>
+<p><img alt="English and translation playback buttons, the synthetic WAV download, and the audio player." loading="lazy" src="../../assets/workshop/02-bilingual-speech.webp" width="960" /></p>
+<p><em>Captured with example audio responses.</em></p>
 <h2 id="try-one">Try one<a class="headerlink" href="#try-one" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Add a short phrase and compare its playback with an isolated word.</li>
