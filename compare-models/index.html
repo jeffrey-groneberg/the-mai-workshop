@@ -1004,6 +1004,8 @@ without a confirmed tariff. The baseline is ordinary Azure OpenAI <code>tts</cod
 GPT Image 1 medium uses <strong>1,056 output tokens/image</strong> at
 $40/million, plus an assumed <strong>100 prompt tokens/image</strong> at $5/million:
 <code>100 × (100 × 5 + 1056 × 40) / 1,000,000 = $4.274</code>.
+For MAI, independently assume <strong>10,000 text-input tokens (100 per image)</strong>,
+costing $0.0175. Identical prompts need not tokenize identically across models.
 MAI costs <code>$0.0175 + 19 × Q / 1,000,000</code>, where <strong>Q is its actual total image-output
 tokens</strong>. No verified MAI pixel-to-token formula or equivalent <code>medium</code> setting
 was found, so Q is not guessed.
@@ -1029,6 +1031,8 @@ The older comparators remain listed; they are not presented as the latest models
 <li>Compare <strong>cost per useful result</strong>, not just price per request. Keep voice,
    quality, deployment, region, and settings in your notes.</li>
 </ol>
+<p>If the MAI voice tariff or actual image-output token count is unavailable,
+record cost as <strong>unverified</strong> rather than ranking it.</p>
 <p>Storage and answer matching make no model call. Gateway, hosting, and Codespaces
 costs are separate.</p>
 
