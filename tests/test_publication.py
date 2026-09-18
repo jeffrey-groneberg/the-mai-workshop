@@ -212,3 +212,42 @@ def test_comparison_price_math_and_unverified_totals():
     assert "model-specific tariff not verified" in text
     assert "record cost as **unverified** rather than ranking it." in text
     assert "not measured app runs" in text
+
+
+def test_observed_diagram_text_is_bound_to_final_image_bytes():
+    root = ROOT / "docs/assets/diagrams"
+    provenance = json.loads((root / "provenance.json").read_text())
+    audit = json.loads((root / provenance["text_audit"]).read_text())
+    assert audit["language_correction"] is False
+    records = {row["file"]: row for row in audit["images"]}
+    assert set(records) == {row["file"] for row in provenance["images"]}
+    for image in provenance["images"]:
+        observed = records[image["file"]]
+        assert observed["sha256"] == image["sha256"]
+        assert observed["sha256"] == hashlib.sha256((root / image["file"]).read_bytes()).hexdigest()
+        assert (observed["width"], observed["height"]) == (image["width"], image["height"])
+        assert "frondier" not in " ".join(observed["observed_lines"]).lower()
+
+    family = "\n".join(records["mai-family.webp"]["observed_lines"])
+    assert "Microsoft Frontier Tuning: model customization, not a separate model." in family
+    family_url = f"assets/diagrams/mai-family.webp?v={records['mai-family.webp']['sha256'][:8]}"
+    assert (ROOT / "docs/compare-models.md").read_text().count(family_url) == 2
+    for name in ("MAI-Voice-2", "MAI-Transcribe-2", "MAI-Image-2.6",
+                 "MAI-Thinking-1", "MAI-Code-1.1-Flash", "MAI-Cyber-1-Flash"):
+        assert name in family
+    assert family.count("Foundry preview") == 2
+    assert family.count("Speech preview") == 2
+    assert "GitHub Copilot" in family and "Restricted MDASH" in family
+    loop = records["request-loop.webp"]["observed_lines"]
+    assert loop.count("Request") == loop.count("Response") == 3
+    audio = records["audio-path.webp"]["observed_lines"]
+    assert all(text in audio for text in ("MediaRecorder", "16 kHz / mono", "16-bit PCM", "MAI-Transcribe-2"))
+    matching = records["answer-matching.webp"]["observed_lines"]
+    assert matching.count("Normalize") == 2
+    assert "JavaScript in the browser / no model call" in matching
+    image_flow = records["image-flow.webp"]["observed_lines"]
+    assert all(text in image_flow for text in ("base64 PNG", "Decode in Flask", "1024 x 1024 source"))
+    mapping = "\n".join(records["feature-model-map.webp"]["observed_lines"])
+    for name in ("MAI-Voice-2-Flash", "MAI-Transcribe-2", "MAI-Image-2.6-Flash", "MAI-Thinking-1"):
+        assert name in mapping
+    assert "JavaScript / no model" in mapping

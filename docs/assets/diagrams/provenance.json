@@ -1,6 +1,7 @@
 {
   "model": "MAI-Image-2.6",
   "reviewed_on": "2026-09-18",
+  "text_audit": "text-audit.json",
   "delivery": "Original PNG generations and reference-image edits, converted to WebP at quality 94.",
   "scope": "Instructional diagrams, not screenshots or evidence of live participant gateway output.",
   "images": [
@@ -90,9 +91,9 @@
     },
     {
       "file": "mai-family.webp",
-      "width": 1344,
+      "width": 1360,
       "height": 768,
-      "sha256": "f51f0f1ac270f2d18de963314018de94f1184ed0349e41a08df3f383658c4843",
+      "sha256": "e4e10e5605ea27df188fdb8c0523ba997fd6e73fa8376fe983dfa2e8f0df8ace",
       "purpose": "Show the six currently featured MAI families and their roles; distinguish Flash variants, restricted/product access and Frontier Tuning.",
       "source": "https://microsoft.ai/models/",
       "families": [
@@ -109,7 +110,14 @@
           "operation": "generate",
           "prompt": "prompts/family-v1.txt",
           "png_sha256": "d3c3e6e3e9228feb024af0ab9869e92d3bbf7c3429d1752dc247e1acab33cf66",
-          "verdict": "Accepted: six featured families are distinguished from variants and tuning; Code/Cyber access is not presented as a general workshop API."
+          "verdict": "Superseded: the prior review missed Frondier in the rendered footer. Pixel-level OCR with language correction disabled confirmed the spelling error."
+        },
+        {
+          "operation": "edit",
+          "prompt": "prompts/family-v2.txt",
+          "input_sha256": "d3c3e6e3e9228feb024af0ab9869e92d3bbf7c3429d1752dc247e1acab33cf66",
+          "png_sha256": "b0e9052529221ad1447ffe901c5e2be3e438484b6e80b87380f914b14248a708",
+          "verdict": "Accepted: the final WebP reads Microsoft Frontier Tuning exactly. OCR and enlarged footer inspection confirm the correction; all six names, specialities and access labels were rechecked."
         }
       ]
     }

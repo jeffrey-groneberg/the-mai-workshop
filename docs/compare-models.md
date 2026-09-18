@@ -5,9 +5,9 @@ The [app's feature map](index.md#which-models-you-use) shows its four model choi
 
 ## The MAI family
 
-![Six featured MAI families: Voice for speech synthesis, Transcribe for audio to text, Image for generation and edits, Thinking for reasoning, Code for agentic coding through Copilot, and Cyber for defensive work through restricted MDASH. Frontier Tuning customizes models.](assets/diagrams/mai-family.webp){ width="960" height="549" loading="lazy" }
+![Six featured MAI families: Voice for speech synthesis, Transcribe for audio to text, Image for generation and edits, Thinking for reasoning, Code for agentic coding through Copilot, and Cyber for defensive work through restricted MDASH. Frontier Tuning customizes models.](assets/diagrams/mai-family.webp?v=e4e10e56){ width="960" height="542" loading="lazy" }
 
-*MAI-generated diagram. [Full size](assets/diagrams/mai-family.webp) · [Prompts and revisions](assets/diagrams/provenance.json).*
+*MAI-generated diagram. [Full size](assets/diagrams/mai-family.webp?v=e4e10e56) · [Prompts and revisions](assets/diagrams/provenance.json).*
 
 These are the [currently featured families](https://microsoft.ai/models/),
 checked **18 September 2026**, not every historical version.
