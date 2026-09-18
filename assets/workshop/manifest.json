@@ -28,9 +28,10 @@
     "width": 880,
     "height": 644,
     "frames": 89,
-    "duration_seconds": 17.8,
-    "bytes": 2512130,
-    "repeat": false
+    "duration_seconds": 26.7,
+    "bytes": 2512149,
+    "repeat": true,
+    "playback_rate": 0.6666666666666666
   },
   "reduced_motion": "walkthrough-poster.webp"
 }
