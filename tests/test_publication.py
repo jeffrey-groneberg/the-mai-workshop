@@ -201,9 +201,14 @@ def test_comparison_price_math_and_unverified_totals():
     assert "18 September 2026" in text
     gpt_image = Decimal(100) * (100 * 5 + 1056 * 40) / 1_000_000
     assert f"**${gpt_image}**" in text
+    mai_prompt_cost = Decimal(10_000) * Decimal("1.75") / 1_000_000
+    assert f"costing ${mai_prompt_cost}" in text
+    assert "**10,000 text-input tokens (100 per image)**" in text
+    assert "Identical prompts need not tokenize identically" in text
     assert "**Q is its actual total image-output\ntokens**" in text
     assert "tokens**. No verified MAI pixel-to-token formula" in text
     for value in (Decimal(2) + Decimal("0.1") * 8, Decimal("0.25") + Decimal("0.1") * 2):
         assert f"**${money(value)}**" in text
     assert "model-specific tariff not verified" in text
+    assert "record cost as **unverified** rather than ranking it." in text
     assert "not measured app runs" in text
