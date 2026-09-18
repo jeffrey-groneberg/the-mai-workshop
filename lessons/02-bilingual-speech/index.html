@@ -759,6 +759,33 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compare-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Compare models and cost
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -966,8 +993,10 @@
 
 <h1 id="hear-both-languages">Hear both languages<a class="headerlink" href="#hear-both-languages" title="Permanent link">&para;</a></h1>
 <p>Add English playback, then reuse the route for the translation.</p>
-<p><strong>Flow:</strong> button → <code>fetch("/speak")</code> → Flask → gateway <code>/speech/tts</code> →
-MAI Voice → WAV → browser playback.</p>
+<p><img alt="Model requests travel right from Browser to Flask to APIM to MAI models; responses return left through the same components. Flask runs in Codespaces or locally." height="542" loading="lazy" src="../../assets/diagrams/request-loop.webp" width="960" /></p>
+<p><em>MAI-generated diagram. <a href="../../assets/diagrams/request-loop.webp">Full size</a>.</em></p>
+<p>For speech, the button calls Flask <code>/speak</code>, which calls gateway <code>/speech/tts</code>;
+the response is WAV audio.</p>
 <p><a href="https://learn.microsoft.com/azure/ai-services/speech-service/mai-voices">MAI Voice</a>
 accepts SSML: text plus a voice selection. We request 16 kHz mono PCM WAV,
 which the next lesson can also upload. <a href="../../reference/#requests">Gateway contract</a>.</p>

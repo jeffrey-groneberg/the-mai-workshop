@@ -737,6 +737,33 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compare-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Compare models and cost
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -922,8 +949,9 @@
 
 <h1 id="make-a-visual-memory-cue">Make a visual memory cue<a class="headerlink" href="#make-a-visual-memory-cue" title="Permanent link">&para;</a></h1>
 <p>Generate a picture that helps you remember a word.</p>
-<p><strong>Flow:</strong> button → Flask <code>/image</code> → MAI Image → base64 PNG → browser image.
-The request uses deployment <code>mai-image-flash</code>, an English prompt, and
+<p><img alt="Combine the English word apple with the scene wearing a crown, send the prompt through Flask and APIM to MAI Image, decode its base64 PNG in Flask, and display the image in the browser." height="549" loading="lazy" src="../../assets/diagrams/image-flow.webp" width="960" /></p>
+<p><em>MAI-generated diagram. <a href="../../assets/diagrams/image-flow.webp">Full size</a>.</em></p>
+<p>The <code>/image</code> request uses deployment <code>mai-image-flash</code>, an English prompt, and
 1024 × 1024 dimensions. Flask decodes <code>data[0].b64_json</code>.
 <a href="https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-image">API details</a>.</p>
 <h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">&para;</a></h2>
@@ -1062,7 +1090,8 @@ the picture returns. Reloading clears images, not the word list.</p>
 <p>Generate both versions and keep the more useful prompt. Each Generate click
 makes a new request.</p>
 <p><strong>Finish:</strong> use the full loop—select, listen, record or upload, check, and picture.
-Then try <a href="../../extensions/mnemonics/">optional mnemonics</a>.</p>
+Then try <a href="../../extensions/mnemonics/">optional mnemonics</a> or
+<a href="../../compare-models/">compare models and cost</a>.</p>
 
 
 

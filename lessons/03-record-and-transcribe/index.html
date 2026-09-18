@@ -759,6 +759,33 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compare-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Compare models and cost
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -966,8 +993,8 @@
 
 <h1 id="speak-and-see-what-was-heard">Speak and see what was heard<a class="headerlink" href="#speak-and-see-what-was-heard" title="Permanent link">&para;</a></h1>
 <p>Record an answer, convert it to WAV, and display what MAI heard.</p>
-<p><strong>Flow:</strong> microphone → <code>MediaRecorder</code> → WAV conversion → preview →
-Flask <code>/transcribe</code> → MAI-Transcribe-2 → text.</p>
+<p><img alt="Record with MediaRecorder, decode and resample to mono 16 kHz 16-bit PCM WAV, and preview locally. Send then calls MAI-Transcribe-2 through Flask and APIM to return text." height="549" loading="lazy" src="../../assets/diagrams/audio-path.webp" width="960" /></p>
+<p><em>MAI-generated diagram. <a href="../../assets/diagrams/audio-path.webp">Full size</a>.</em></p>
 <h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">&para;</a></h2>
 <h3 id="1-receive-and-validate-audio-in-flask">1. Receive and validate audio in Flask<a class="headerlink" href="#1-receive-and-validate-audio-in-flask" title="Permanent link">&para;</a></h3>
 <p>In <strong><code>starter/app.py</code>, add <code>import json</code> to the imports</strong>, then <strong>append</strong>:</p>

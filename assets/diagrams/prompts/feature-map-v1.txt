@@ -1,0 +1,19 @@
+Create an original, visually appealing developer-workshop mapping diagram, landscape1344x768, white background. A sophisticated editorial infographic with tactile cut-paper illustrated icons, very readable dark navy sans-serif lettering, pastel teal, sage, powder blue, and apricot. Subtle texture inside icons only. No logos, no watermark, no URLs or code. This diagram teaches which model performs each feature; factual clarity is more important than decoration.
+
+Exact large title: "Which model does what?"
+
+Two column headers: left "APP FEATURE", right "MAI MODEL".
+FOUR clean, spacious aligned mapping rows with a single right-pointing arrow in each row. Small charming icons on the left, large EXACT wording:
+Row1: speaker icon; left text "Hear English + translation"; right text "MAI-Voice-2-Flash".
+Row2: microphone and waveform icon; left text "Transcribe your answer"; right text "MAI-Transcribe-2".
+Row3: red apple wearing a tiny crown in a picture frame; left text "Create a memory image"; right text "MAI-Image-2.6-Flash".
+Row4: small notebook and idea icon; left text "Suggest a mnemonic"; right text "MAI-Thinking-1". Next to the LEFT feature text include one clearly legible small tag "Optional".
+
+At the bottom, separated from these four AI rows by a thin rule, add a calm neutral band:
+left exact text "Save words + match answers"
+one right-pointing arrow
+right exact text "JavaScript / no model".
+
+No arrow may connect one row to another. There is NO pronunciation score and NO LLM grading. The rows must show speech synthesis, transcription, image generation, optional reasoning, and ordinary local code as distinct functions. Model identifiers must be spelled EXACTLY, with correct version and Flash suffix. Do not shorten or invent model names.
+
+Use generous row spacing; no text smaller than32px, with model names at least36px. Keep all text sharply legible when the full diagram is displayed at700px width. No extra prose or unrequested claims.

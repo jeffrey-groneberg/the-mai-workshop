@@ -720,6 +720,33 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compare-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  Compare models and cost
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -889,6 +916,8 @@
 <h1 id="check-your-answer">Check your answer<a class="headerlink" href="#check-your-answer" title="Permanent link">&para;</a></h1>
 <p>Compare the transcript with the saved translation and show match/retry feedback.
 JavaScript handles this in <code>showTranscript</code>; no extra model call is needed.</p>
+<p><img alt="JavaScript normalizes transcript POMME! and saved answer pomme separately, compares the resulting whole strings, and returns Match. Accents and internal punctuation remain significant." height="549" loading="lazy" src="../../assets/diagrams/answer-matching.webp" width="960" /></p>
+<p><em>MAI-generated diagram. <a href="../../assets/diagrams/answer-matching.webp">Full size</a>.</em></p>
 <h2 id="build">Build<a class="headerlink" href="#build" title="Permanent link">&para;</a></h2>
 <p>In <strong><code>starter/static/app.js</code>, replace the entire <code>showTranscript(heard, word)</code>
 function</strong>, including its closing <code>}</code>, with this block. Keep the Send handler

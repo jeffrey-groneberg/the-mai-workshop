@@ -1,0 +1,14 @@
+Create an original, visually delightful but exact developer-workshop diagram, landscape1344x768 on white. Elegant clean sans-serif navy typography, soft tactile paper-cut objects in sage, muted teal, apricot and powder blue. Subtle material texture on objects only. Plenty of whitespace. No logo, watermark, fictional API, URL, key, or dense code blocks.
+
+Exact large title: "Turn a word into a visual cue".
+
+Use a SIMPLE LEFT-TO-RIGHT sequence with four distinct steps connected by three clearly right-pointing arrows:
+
+FIRST: two small paper notes above one another, labelled "English word" with exact value "apple" and labelled "Scene" with exact value "wearing a crown". A plus sign visually combines the two notes. Below them the heading "Build the prompt".
+SECOND: a softly illustrated generative model tile, heading "MAI Image". Subtitle "via Flask + APIM".
+THIRD: a compact file tile. Heading "base64 PNG". Subtitle "Decode in Flask".
+FOURTH: a beautiful small watercolor illustration of a red apple wearing a tiny gold crown, framed as a vocabulary image. Heading "Show in the browser". Subtitle "1024 x 1024 source".
+
+The file-decoding stage must be between the model and the displayed illustration. Do not put base64 text into the browser screenshot. The arrows must not cross text. At bottom one exact caption: "The scene guides the meaning. The image helps you remember."
+
+Large labels and high contrast, no text smaller than30px. All provided wording must be correct and readable at700px display width. Do not add extra paragraphs or text. Keep this genuinely a diagram that teaches a sequence, not four decorative product cards.

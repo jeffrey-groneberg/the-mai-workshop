@@ -1,0 +1,5 @@
+Revise this diagram with one precise correction. Preserve the title, four illustrated components, palette, positions, all request/response arrows, all headings, and all captions. Preserve the landscape framing.
+
+Inside the Flask code-window illustration ONLY, remove ALL code characters, especially the invented @app.route("/ask"), def ask(): and return text. Replace them with three short clean horizontal navy/teal bars that merely suggest code lines. Do not write any route name, code, letters, or numbers inside that window. The label BELOW the window must still read exactly "Flask", with "Python routes" and "Codespaces or local Python" unchanged.
+
+This is a factual correction: there is no /ask endpoint in the workshop. Do not introduce a different endpoint. Keep everything else as close to the reference as possible, with sharp readable text.

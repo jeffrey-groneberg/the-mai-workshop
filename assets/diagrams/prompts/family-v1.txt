@@ -1,0 +1,43 @@
+Create an original attractive technical model-family infographic, landscape1344x768, clean white background. Precise large dark navy sans-serif lettering, elegant editorial cut-paper illustrations with subtle texture, pastel teal, sage, powder blue and warm apricot. It should be easy to scan at700px wide. No logo, watermark, benchmarks, prices, URLs, arrows, or invented models.
+
+Exact large title: "The MAI model family"
+Exact subtitle: "Currently featured families / September 2026"
+
+SIX equally legible compact groups in a 3-column by2-row grid, reading order left-to-right top-to-bottom. Each group has one refined small illustrated icon, an exact bold model name, its speciality, and a smaller clearly readable access line. No connecting arrows: these are separate families, not a processing pipeline.
+
+TOP LEFT: speaker icon.
+Model name "MAI-Voice-2"
+Speciality "Speech synthesis"
+Next line "Also: Flash variant"
+Access line "Speech preview"
+
+TOP MIDDLE: microphone with waveform becoming text icon.
+Model name "MAI-Transcribe-2"
+Speciality "Audio to text"
+Access line "Speech preview"
+
+TOP RIGHT: image frame with colorful original apple illustration.
+Model name "MAI-Image-2.6"
+Speciality "Image generation + edits"
+Next line "Also: Flash variant"
+Access line "Foundry preview"
+
+BOTTOM LEFT: abstract connected reasoning puzzle icon.
+Model name "MAI-Thinking-1"
+Speciality "Reasoning, math + code"
+Access line "Foundry preview"
+
+BOTTOM MIDDLE: code editor with only abstract code bars, no actual code characters.
+Model name "MAI-Code-1.1-Flash"
+Speciality "Agentic coding"
+Access line "GitHub Copilot"
+
+BOTTOM RIGHT: tasteful defensive shield with a tiny bug symbol, not a weapon.
+Model name "MAI-Cyber-1-Flash"
+Speciality "Defensive vulnerability work"
+Access line "Restricted MDASH"
+
+At the bottom, clearly separated from the six model groups by a thin line, a plain text note, not a seventh model card:
+"Microsoft Frontier Tuning: model customization, not a separate model."
+
+Exact model spelling matters, especially Code-1.1 and Image-2.6. Do not replace hyphens with different characters. Do not imply all six are ordinary public APIs or connected to the workshop runtime. Give all headings ample room, main model names at least34px and secondary text at least28px. Clear alignment and whitespace matter more than big icons.

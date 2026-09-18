@@ -1,0 +1,117 @@
+{
+  "model": "MAI-Image-2.6",
+  "reviewed_on": "2026-09-18",
+  "delivery": "Original PNG generations and reference-image edits, converted to WebP at quality 94.",
+  "scope": "Instructional diagrams, not screenshots or evidence of live participant gateway output.",
+  "images": [
+    {
+      "file": "request-loop.webp",
+      "width": 1360,
+      "height": 768,
+      "sha256": "e2f32cbc6cb6e3f10e3202856d7dd6878929c178c9e3a00f9c4851c17d7813aa",
+      "purpose": "Model requests pass from the browser through Flask and APIM; results return through the same components.",
+      "revisions": [
+        {
+          "operation": "generate",
+          "prompt": "prompts/overview-v1.txt",
+          "png_sha256": "125a9862ce7a2cb1908a5e64fd734a1b4af5ce98874a42035f5116296c06af43",
+          "verdict": "Revise: the illustrated code window invented an /ask route."
+        },
+        {
+          "operation": "edit",
+          "prompt": "prompts/overview-v2.txt",
+          "input_sha256": "125a9862ce7a2cb1908a5e64fd734a1b4af5ce98874a42035f5116296c06af43",
+          "png_sha256": "d0c5ef85155525393615a5abe7429674537423d687383a565ce503b2bae49a55",
+          "verdict": "Accepted: fictional code removed; labels and request/response arrows preserved."
+        }
+      ]
+    },
+    {
+      "file": "audio-path.webp",
+      "width": 1344,
+      "height": 768,
+      "sha256": "9d1d55f7702428f0316c57b4bbe435841249277ad6164ee476afd953ab80b7d2",
+      "purpose": "Record, convert to mono 16 kHz 16-bit PCM WAV, and preview in the browser before sending for transcription.",
+      "revisions": [
+        {
+          "operation": "generate",
+          "prompt": "prompts/audio-v1.txt",
+          "png_sha256": "7b955975dea44279b0cd3be3e8c7186114b6cdca19dd4e3acb0b2df603651e1a",
+          "verdict": "Accepted: local stages, Send boundary, model name and example transcript are correct."
+        }
+      ]
+    },
+    {
+      "file": "answer-matching.webp",
+      "width": 1344,
+      "height": 768,
+      "sha256": "5f82b676148940e6dc829c1e37006af20dd0dc2a6ccefc8d008f5f9ac6df1591",
+      "purpose": "Normalize both strings before equality comparison in JavaScript, without another model call or pronunciation score.",
+      "revisions": [
+        {
+          "operation": "generate",
+          "prompt": "prompts/matching-v1.txt",
+          "png_sha256": "d3e0152ec935cdc361871ee9523336130eeb709ef04969259e1199e30e152a01",
+          "verdict": "Accepted: both input lanes normalize to pomme before comparison; meaningful accents remain significant."
+        }
+      ]
+    },
+    {
+      "file": "image-flow.webp",
+      "width": 1344,
+      "height": 768,
+      "sha256": "779a85ac6ae2296db081ebbe1077ec72a23041bdb0df38ed81206205d0c7f885",
+      "purpose": "Combine the English word and scene; request an image through Flask/APIM; decode base64 PNG in Flask; display it in the browser.",
+      "revisions": [
+        {
+          "operation": "generate",
+          "prompt": "prompts/image-v1.txt",
+          "png_sha256": "ab485d533361adf8ee8c3a82f535b651ba88d4623335951883ba5df31ec52b98",
+          "verdict": "Accepted: prompt composition and decode-before-display order are correct; 1024x1024 labels the image source."
+        }
+      ]
+    },
+    {
+      "file": "feature-model-map.webp",
+      "width": 1344,
+      "height": 768,
+      "sha256": "97f2322a8eb5a36ac80b21f3c808f4a0db7689565fe9201d7ed2cda87a91cfa2",
+      "purpose": "Map synthesis, transcription, image generation and optional mnemonics to the deployed model variants; separate ordinary JavaScript operations.",
+      "models": ["MAI-Voice-2-Flash", "MAI-Transcribe-2", "MAI-Image-2.6-Flash", "MAI-Thinking-1"],
+      "no_model": ["Save words", "Match answers"],
+      "revisions": [
+        {
+          "operation": "generate",
+          "prompt": "prompts/feature-map-v1.txt",
+          "png_sha256": "9d21a70373f4f4287e9dd8a097a03d635f482737128a557c45a638c08dc00484",
+          "verdict": "Accepted: all four model identifiers and feature mappings are correct; mnemonics are optional and matching uses no model."
+        }
+      ]
+    },
+    {
+      "file": "mai-family.webp",
+      "width": 1344,
+      "height": 768,
+      "sha256": "f51f0f1ac270f2d18de963314018de94f1184ed0349e41a08df3f383658c4843",
+      "purpose": "Show the six currently featured MAI families and their roles; distinguish Flash variants, restricted/product access and Frontier Tuning.",
+      "source": "https://microsoft.ai/models/",
+      "families": [
+        {"name": "MAI-Voice-2", "speciality": "Speech synthesis", "access": "Speech preview", "source": "https://learn.microsoft.com/azure/ai-services/speech-service/mai-voices"},
+        {"name": "MAI-Transcribe-2", "speciality": "Audio to text", "access": "Speech preview", "source": "https://learn.microsoft.com/azure/ai-services/speech-service/mai-transcribe"},
+        {"name": "MAI-Image-2.6", "speciality": "Image generation and edits", "access": "Foundry preview", "source": "https://microsoft.ai/models/mai-image-2-6/"},
+        {"name": "MAI-Thinking-1", "speciality": "Reasoning, math and code", "access": "Foundry preview", "source": "https://microsoft.ai/models/mai-thinking-1/"},
+        {"name": "MAI-Code-1.1-Flash", "speciality": "Agentic coding", "access": "GitHub Copilot", "source": "https://microsoft.ai/models/mai-code-1-flash/"},
+        {"name": "MAI-Cyber-1-Flash", "speciality": "Defensive vulnerability work", "access": "Restricted MDASH", "source": "https://microsoft.ai/models/mai-cyber-1-flash/"}
+      ],
+      "not_a_separate_model": "Microsoft Frontier Tuning",
+      "revisions": [
+        {
+          "operation": "generate",
+          "prompt": "prompts/family-v1.txt",
+          "png_sha256": "d3c3e6e3e9228feb024af0ab9869e92d3bbf7c3429d1752dc247e1acab33cf66",
+          "verdict": "Accepted: six featured families are distinguished from variants and tuning; Code/Cyber access is not presented as a general workshop API."
+        }
+      ]
+    }
+  ]
+}
