@@ -18,6 +18,7 @@ nav = [
   ] },
   { "Go further" = [
     { "Optional mnemonics" = "extensions/mnemonics.md" },
+    { "Compare models and cost" = "compare-models.md" },
   ] },
   { "Reference" = "reference.md" },
 ]

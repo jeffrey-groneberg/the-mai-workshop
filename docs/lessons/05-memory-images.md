@@ -2,8 +2,11 @@
 
 Generate a picture that helps you remember a word.
 
-**Flow:** button → Flask `/image` → MAI Image → base64 PNG → browser image.
-The request uses deployment `mai-image-flash`, an English prompt, and
+![Combine the English word apple with the scene wearing a crown, send the prompt through Flask and APIM to MAI Image, decode its base64 PNG in Flask, and display the image in the browser.](../assets/diagrams/image-flow.webp){ width="960" height="549" loading="lazy" }
+
+*MAI-generated diagram. [Full size](../assets/diagrams/image-flow.webp).*
+
+The `/image` request uses deployment `mai-image-flash`, an English prompt, and
 1024 × 1024 dimensions. Flask decodes `data[0].b64_json`.
 [API details](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-image).
 
@@ -154,4 +157,5 @@ Generate both versions and keep the more useful prompt. Each Generate click
 makes a new request.
 
 **Finish:** use the full loop—select, listen, record or upload, check, and picture.
-Then try [optional mnemonics](../extensions/mnemonics.md).
+Then try [optional mnemonics](../extensions/mnemonics.md) or
+[compare models and cost](../compare-models.md).

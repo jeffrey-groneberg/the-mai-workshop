@@ -3,6 +3,10 @@
 Compare the transcript with the saved translation and show match/retry feedback.
 JavaScript handles this in `showTranscript`; no extra model call is needed.
 
+![JavaScript normalizes transcript POMME! and saved answer pomme separately, compares the resulting whole strings, and returns Match. Accents and internal punctuation remain significant.](../assets/diagrams/answer-matching.webp){ width="960" height="549" loading="lazy" }
+
+*MAI-generated diagram. [Full size](../assets/diagrams/answer-matching.webp).*
+
 ## Build
 
 In **`starter/static/app.js`, replace the entire `showTranscript(heard, word)`

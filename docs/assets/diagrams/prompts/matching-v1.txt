@@ -1,0 +1,17 @@
+Create an original beautifully composed instructional diagram for a developer workshop, landscape 1344x768, white background. Crisp precise infographic blended with charming tactile cut-paper illustrations. Muted teal, sage, powder blue and a little warm apricot; very dark navy sans-serif text. Subtle texture belongs in illustrated cards, never behind lettering. Generous whitespace. No branding, watermark, dashboards, meters, or decorative icons with no meaning.
+
+Exact title at top: "A word match, not a pronunciation score".
+Under the title in smaller clear letters: "JavaScript in the browser / no model call".
+
+The content is a clear TWO-LANE transformation followed by one comparison:
+
+LEFT: two vertically stacked illustrated text cards. Top card label "Transcript" and large exact value "POMME!". Bottom card label "Saved answer" and large exact value "pomme".
+MIDDLE: each card has its own arrow pointing RIGHT into its own small box labelled "Normalize". Each box outputs the exact lowercase value "pomme" on its right. The two normalized values then connect to ONE shared comparison node on the RIGHT, clearly labelled "Compare whole strings".
+RIGHT: from that comparison node there is ONE rightward arrow to a pale sage result card with a subtle check symbol and exact label "Match". For this example both strings are equal, so do NOT show a simultaneous failure result or an arrow to failure.
+
+Along the bottom, display a short, aligned rule strip with three exact lines, comfortably spaced:
+"Ignore case, edge punctuation, extra spaces"
+"Keep accents and internal punctuation"
+"Different strings? Try again."
+
+The arrows must make the ordering unambiguous: two original values -> normalization separately -> equality comparison -> match. Never compare raw values first. Main labels at least38px; values52px; rule text at least30px. Content needs to remain legible at700px display width. Spell everything exactly. Do not draw a microphone, cloud, grading scale, numeric score, or model icon: this operation is plain JavaScript.

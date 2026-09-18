@@ -101,6 +101,11 @@ practice panel using the app-panel radius. Native Zensical shapes are independen
   The opening GIF plays once inside a collapsible native disclosure; a
   `prefers-reduced-motion` picture source shows a static preview instead.
   Media uses labeled example responses and adds no custom theme.
+- **Explanatory diagrams:** MAI-rendered, white-ground technical illustrations
+  use large labels, restrained color, and explicit arrow direction. Keep text
+  descriptions/alt text and full-size links alongside them. Diagrams explain
+  the real implementation; generated route names or capabilities must be
+  corrected before publication. Preserve prompts and edit lineage.
 
 ## Do's and Don'ts
 

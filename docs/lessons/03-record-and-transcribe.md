@@ -2,8 +2,9 @@
 
 Record an answer, convert it to WAV, and display what MAI heard.
 
-**Flow:** microphone → `MediaRecorder` → WAV conversion → preview →
-Flask `/transcribe` → MAI-Transcribe-2 → text.
+![Record with MediaRecorder, decode and resample to mono 16 kHz 16-bit PCM WAV, and preview locally. Send then calls MAI-Transcribe-2 through Flask and APIM to return text.](../assets/diagrams/audio-path.webp){ width="960" height="549" loading="lazy" }
+
+*MAI-generated diagram. [Full size](../assets/diagrams/audio-path.webp).*
 
 ## Build
 

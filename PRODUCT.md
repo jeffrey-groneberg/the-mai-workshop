@@ -73,6 +73,13 @@ Checkpoint screenshots show the actual learner app produced by the lesson
 edits. A short GIF introduces the completed flow. Media uses labeled example
 model responses and includes a static alternative for reduced motion.
 
+MAI-generated explanatory diagrams cover request flow, audio conversion,
+local matching, image creation, feature/model mapping, and the currently
+featured model family. Their labels are checked against code and official
+sources; prompts and revision history accompany the assets. A single optional
+comparison chapter grounds model-cost claims in cited, dated rates and explicit
+workload assumptions rather than assumed quality parity.
+
 ## Accessibility
 
 Keyboard-operable controls, clear permission/error states, reduced motion,

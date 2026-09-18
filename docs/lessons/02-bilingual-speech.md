@@ -2,8 +2,12 @@
 
 Add English playback, then reuse the route for the translation.
 
-**Flow:** button → `fetch("/speak")` → Flask → gateway `/speech/tts` →
-MAI Voice → WAV → browser playback.
+![Model requests travel right from Browser to Flask to APIM to MAI models; responses return left through the same components. Flask runs in Codespaces or locally.](../assets/diagrams/request-loop.webp){ width="960" height="542" loading="lazy" }
+
+*MAI-generated diagram. [Full size](../assets/diagrams/request-loop.webp).*
+
+For speech, the button calls Flask `/speak`, which calls gateway `/speech/tts`;
+the response is WAV audio.
 
 [MAI Voice](https://learn.microsoft.com/azure/ai-services/speech-service/mai-voices)
 accepts SSML: text plus a voice selection. We request 16 kHz mono PCM WAV,

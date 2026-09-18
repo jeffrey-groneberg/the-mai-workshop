@@ -27,8 +27,14 @@ try one of its experiments.
 
 Next: [add MAI-Thinking mnemonics](extensions/mnemonics.md).
 
+## Which models you use
+
+![Speech playback uses MAI-Voice-2-Flash; transcription uses MAI-Transcribe-2; images use MAI-Image-2.6-Flash; optional mnemonics use MAI-Thinking-1. Saving words and matching answers use JavaScript, not a model.](assets/diagrams/feature-model-map.webp){ width="960" height="549" loading="lazy" }
+
+*MAI-generated diagram. [Full size](assets/diagrams/feature-model-map.webp) · [Prompts and revisions](assets/diagrams/provenance.json).*
+
+Speech reads your saved text; it does not translate it.
+
+[Explore the MAI family and compare costs](compare-models.md).
+
 [Local setup](local-setup.md) · [API and troubleshooting](reference.md)
-
-![An apple, notebook, and sound waves leading toward a landscape.](assets/images/vocabulary-journey.webp){ width="640" height="366" loading="lazy" }
-
-*MAI-generated illustration. [Prompts](assets/images/provenance.json).*

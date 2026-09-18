@@ -1,7 +1,9 @@
+import hashlib
 import json
 import re
 import subprocess
 import tomllib
+from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
 import pytest
@@ -138,3 +140,70 @@ def test_walkthrough_is_small_finite_and_has_a_reduced_motion_alternative():
     assert 'srcset="assets/workshop/walkthrough-poster.webp"' in home
     assert "<details open>" in home and "<summary>See the app in action</summary>" in home
     assert "example model responses" in home
+
+
+def test_explanatory_diagrams_have_reviewed_revision_provenance():
+    directory = ROOT / "docs/assets/diagrams"
+    provenance = json.loads((directory / "provenance.json").read_text())
+    assert provenance["model"] == "MAI-Image-2.6"
+    assert len(provenance["images"]) == 6
+    for image in provenance["images"]:
+        data = (directory / image["file"]).read_bytes()
+        assert data[:4] == b"RIFF" and data[8:12] == b"WEBP"
+        assert hashlib.sha256(data).hexdigest() == image["sha256"]
+        assert 1024 < len(data) < 300 * 1024
+        assert image["width"] * image["height"] <= 1_048_576
+        assert image["revisions"][-1]["verdict"].startswith("Accepted:")
+        for index, revision in enumerate(image["revisions"]):
+            assert (directory / revision["prompt"]).is_file()
+            assert len(revision["png_sha256"]) == 64
+            if revision["operation"] == "edit":
+                assert index > 0
+                assert revision["input_sha256"] == image["revisions"][index - 1]["png_sha256"]
+    mapping = next(image for image in provenance["images"] if image["file"] == "feature-model-map.webp")
+    assert mapping["models"] == [
+        "MAI-Voice-2-Flash", "MAI-Transcribe-2", "MAI-Image-2.6-Flash", "MAI-Thinking-1",
+    ]
+    assert mapping["no_model"] == ["Save words", "Match answers"]
+    family = next(image for image in provenance["images"] if image["file"] == "mai-family.webp")
+    assert len(family["families"]) == 6
+    assert family["not_a_separate_model"] == "Microsoft Frontier Tuning"
+    by_name = {item["name"]: item for item in family["families"]}
+    assert by_name["MAI-Code-1.1-Flash"]["access"] == "GitHub Copilot"
+    assert by_name["MAI-Cyber-1-Flash"]["access"] == "Restricted MDASH"
+    embeddings = {
+        "index.md": "feature-model-map.webp",
+        "lessons/02-bilingual-speech.md": "request-loop.webp",
+        "lessons/03-record-and-transcribe.md": "audio-path.webp",
+        "lessons/04-check-your-answer.md": "answer-matching.webp",
+        "lessons/05-memory-images.md": "image-flow.webp",
+        "compare-models.md": "mai-family.webp",
+    }
+    for page, image in embeddings.items():
+        text = (ROOT / "docs" / page).read_text()
+        assert f"assets/diagrams/{image}" in text
+        assert "MAI-generated diagram" in text
+        assert "Full size" in text
+
+
+def test_comparison_price_math_and_unverified_totals():
+    text = (ROOT / "docs/compare-models.md").read_text()
+    money = lambda value: value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    mai_transcribe = Decimal(1000) / 60 * Decimal("0.10")
+    whisper = Decimal(1000) / 60 * Decimal("0.396")
+    savings = ((whisper - mai_transcribe) / whisper * 100).quantize(
+        Decimal("0.1"), rounding=ROUND_HALF_UP
+    )
+    assert f"**${money(mai_transcribe)}**" in text
+    assert f"**${money(whisper)}**" in text
+    assert f"**{savings}% lower if the MAI promotion applies.**" in text
+    assert "31 December 2026" in text
+    assert "18 September 2026" in text
+    gpt_image = Decimal(100) * (100 * 5 + 1056 * 40) / 1_000_000
+    assert f"**${gpt_image}**" in text
+    assert "**Q is its actual total image-output\ntokens**" in text
+    assert "tokens**. No verified MAI pixel-to-token formula" in text
+    for value in (Decimal(2) + Decimal("0.1") * 8, Decimal("0.25") + Decimal("0.1") * 2):
+        assert f"**${money(value)}**" in text
+    assert "model-specific tariff not verified" in text
+    assert "not measured app runs" in text

@@ -1,0 +1,13 @@
+Create an original, beautifully art-directed technical explainer diagram for a concise developer workshop. Landscape 1344 by 768. This is the FINAL DIAGRAM, not a screenshot or mood board. White background matching a clean documentation page, generous margins. Soft tactile editorial illustration: small cut-paper / lightly dimensional objects, crisp edges, subtle watercolor texture inside the objects only, absolutely no background texture behind text. Palette: deep navy text, muted teal, powder blue, warm apricot, and sage. Sophisticated, friendly, very legible. No branding, no watermark, no gradients over text, no extraneous decorative arrows.
+
+The diagram must accurately explain a request/response chain with FOUR clearly separated stages in ONE horizontal row. From LEFT TO RIGHT:
+1. A beautifully drawn laptop/browser window with a small word card and speaker icon. Large exact label "Browser". Small exact label "Buttons + audio".
+2. A compact code-window illustration with three clear lines. Large exact label "Flask". Small exact label "Python routes".
+3. A simple illustrated gateway arch, NOT a firewall or security shield. Large exact label "APIM". Small exact label "Gateway".
+4. Four tiny visual model symbols grouped together (speaker, sound wave, image frame, idea). Large exact label "MAI models". Two smaller exact lines "Voice + Transcribe" and "Image + Thinking".
+
+Between EVERY neighboring pair, draw TWO separate horizontal arrows: an upper navy arrow pointing RIGHT for the request and a lower teal arrow pointing LEFT for the response. Never draw an arrow that bypasses a stage. Label the upper direction once "Request" and the lower direction once "Response", large enough to read at half-size. The arrows must stop at the edges of each stage, not cross labels or icons.
+
+At the top, the large exact title "One click, four components". At the bottom, one exact caption "Browser calls Flask. Flask calls MAI through APIM." In a smaller but readable line beneath the Flask stage only: "Codespaces or local Python". Leave enough vertical space for that label and the caption; no overlaps.
+
+All lettering must be accurate professional sans-serif, dark navy, readable with the entire image displayed at 700 pixels wide. Main labels at least 44 pixels, smaller labels at least 30 pixels. All essential meaning is in labels and arrows. No URLs, no keys, no code snippets, no invented model names. Do not add any words other than the exact labels specified.

@@ -1,0 +1,14 @@
+Create an original visually compelling, technically correct infographic for experienced developers. Landscape 1344 by 768. Clean white background, ample whitespace, no branding/watermarks. Style: sophisticated lightly dimensional cut-paper editorial illustration with subtle texture ONLY in the icons, flat crisp large sans-serif navy lettering. Palette powder blue, muted teal, sage, and warm apricot. Match a modern readable documentation page, not a marketing poster.
+
+Exact large title at top: "From microphone to words".
+
+Four steps in a single clear horizontal row, left to right, joined by three simple navy arrows pointing right:
+
+1. Large illustrated microphone with a short waveform. Exact heading "Record"; exact subtitle "MediaRecorder".
+2. A beautifully illustrated file labelled "WAV" with a tiny waveform. Exact heading "Convert"; exact subtitle "Decode + resample". Below this subtitle use TWO short precise lines: "16 kHz / mono" and "16-bit PCM".
+3. A small audio-player illustration with an obvious play triangle. Exact heading "Preview"; exact subtitle "Listen locally".
+4. An abstract model illustration, NOT a person. Exact heading "Transcribe"; exact subtitle "MAI-Transcribe-2". A second short line "via Flask + APIM". Below this a speech bubble containing the exact example text "pomme".
+
+The first THREE steps sit under a thin bracket labelled "In your browser". The fourth sits under its own label "Model request". On the connecting arrow FROM Preview TO Transcribe, put the exact large label "Send" above the arrow. This arrow is the ONLY transition from local work to the model request.
+
+No arrow should imply that the raw microphone stream goes directly to the model. No direct microphone-to-cloud connection. No scoring/checkmarks/quality claims. The text bubble is a transcript, not a grade. Use generous gaps so no arrow crosses text or a box. Every main label must be at least44px, every subtitle at least30px, readable when the diagram is displayed at700px width. No other text.

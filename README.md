@@ -35,4 +35,5 @@ python -m flask --app solution/app.py run --host 0.0.0.0 --port 5051
 | [05 — Images](docs/lessons/05-memory-images.md) | Generate a visual cue for a word. |
 
 [Optional: mnemonics](docs/extensions/mnemonics.md) ·
+[Compare models and cost](docs/compare-models.md) ·
 [Local setup](docs/local-setup.md) · [API and troubleshooting](docs/reference.md)
