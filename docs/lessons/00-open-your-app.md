@@ -59,7 +59,8 @@ JavaScript for interactions.
 
 Fell behind or broke something? `python checkpoints/restore.py 02` copies a
 lesson's finished files over yours, after backing yours up to
-`.checkpoint-backups/`.
+`.checkpoint-backups/`; `python checkpoints/restore.py undo` brings yours back.
+Flask reloads on its own either way.
 
 ## Try one
 
