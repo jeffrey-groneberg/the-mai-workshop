@@ -1,25 +1,25 @@
+"""Your vocabulary app.
+
+The imports cover every lesson, so later steps only replace the marker
+comments at the bottom of this file.
+"""
+
 import base64
 import binascii
-import io
 import json
 import os
-import struct
-import wave
-from pathlib import Path
-from urllib.parse import urlsplit
 from xml.sax.saxutils import escape
 
 import httpx
-from dotenv import load_dotenv
-from flask import Flask, Response, abort, jsonify, render_template, request
-from werkzeug.exceptions import HTTPException
+from flask import Response, abort, jsonify, render_template, request
 
-load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=False)
-app = Flask(__name__)
-app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024
-TIMEOUT = httpx.Timeout(120, connect=10)
+from workshop import (
+    TIMEOUT, check_png, check_wav, create_app, gateway, json_body,
+    optional_text, text_field, upstream_json,
+)
 
-# Published MAI-Voice-2-Flash voices; STT takes a language code, not a voice locale.
+app = create_app(__name__)
+
 LANGUAGES = {
     "en-US": {"label": "English (US)", "stt": "en", "voice": "en-US-Harper:MAI-Voice-2-Flash"},
     "zh-CN": {"label": "Chinese (Simplified Mandarin)", "stt": "zh", "voice": "zh-CN-Mei:MAI-Voice-2-Flash"},
@@ -40,74 +40,6 @@ LANGUAGES = {
     "tr-TR": {"label": "Turkish", "stt": "tr", "voice": "tr-TR-Elif:MAI-Voice-2-Flash"},
 }
 
-codespace_hosts = set()
-if os.getenv("CODESPACES") == "true":
-    name = os.getenv("CODESPACE_NAME", "")
-    domain = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN", "")
-    if name and domain:
-        codespace_hosts = {f"{name}-{port}.{domain}" for port in (5050, 5051)}
-app.config["TRUSTED_HOSTS"] = ["localhost", "127.0.0.1", *codespace_hosts]
-
-
-@app.before_request
-def require_same_origin():
-    if request.method == "POST":
-        scheme = "https" if request.host in codespace_hosts else "http"
-        if request.headers.get("Origin") != f"{scheme}://{request.host}":
-            abort(403, "Open the app in its own browser tab and send requests from there.")
-
-
-@app.after_request
-def browser_headers(response):
-    response.headers["Cache-Control"] = "no-store"
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["Permissions-Policy"] = "microphone=(self), camera=()"
-    response.headers["Content-Security-Policy"] = (
-        "default-src 'self'; script-src 'self'; style-src 'self'; "
-        "img-src 'self' blob:; media-src 'self' blob:; font-src 'self'; "
-        "connect-src 'self'; object-src 'none'; base-uri 'self'; "
-        "frame-ancestors 'none'; form-action 'self'"
-    )
-    return response
-
-
-def gateway_settings():
-    base = os.getenv("APIM_BASE_URL", "").strip().rstrip("/")
-    key = os.getenv("APIM_API_KEY", "").strip()
-    try:
-        parsed = urlsplit(base)
-        port = parsed.port
-        httpx.URL(base)
-    except (ValueError, httpx.InvalidURL):
-        abort(503, "The private gateway URL must be a valid HTTPS origin.")
-    if (
-        parsed.scheme != "https" or not parsed.hostname or parsed.path
-        or parsed.query or parsed.fragment or parsed.username or parsed.password
-        or not key or key in {"replace-me", "your-participant-key"}
-        or not key.isascii() or any(char.isspace() for char in key)
-        or port == 0
-    ):
-        abort(503, "Configure APIM_BASE_URL and APIM_API_KEY, then restart Flask.")
-    return base, {"api-key": key}
-
-
-def text_field(data, name, limit=120):
-    value = data.get(name)
-    if not isinstance(value, str) or not value.strip() or len(value) > limit:
-        abort(400, f"{name} must contain 1 to {limit} characters.")
-    if any(ord(char) < 32 and char not in "\t\n\r" for char in value):
-        abort(400, f"{name} contains unsupported control characters.")
-    if any(0xD800 <= ord(char) <= 0xDFFF for char in value):
-        abort(400, f"{name} must contain valid Unicode characters.")
-    return value.strip()
-
-
-def json_body():
-    data = request.get_json()
-    if not isinstance(data, dict):
-        abort(400, "Send a JSON object.")
-    return data
-
 
 def language_for(locale):
     if not isinstance(locale, str) or locale not in LANGUAGES:
@@ -115,67 +47,9 @@ def language_for(locale):
     return LANGUAGES[locale]
 
 
-def check_wav(audio, max_seconds=12, error_status=400):
-    try:
-        with wave.open(io.BytesIO(audio), "rb") as wav:
-            frames = wav.getnframes()
-            if (
-                wav.getnchannels() != 1 or wav.getsampwidth() != 2
-                or wav.getframerate() != 16000 or wav.getcomptype() != "NONE"
-                or not 0 < frames <= 16000 * max_seconds
-                or len(wav.readframes(frames)) != frames * 2
-            ):
-                raise ValueError("Invalid PCM parameters")
-    except (wave.Error, EOFError, ValueError):
-        abort(error_status, f"Use a complete mono, 16-bit, 16 kHz WAV of up to {max_seconds} seconds.")
-
-
-def upstream_json(response):
-    response.raise_for_status()
-    try:
-        data = response.json()
-    except ValueError:
-        abort(502, "The gateway returned an unreadable model response.")
-    if not isinstance(data, dict):
-        abort(502, "The gateway returned an unexpected model response.")
-    return data
-
-
-@app.errorhandler(HTTPException)
-def request_error(error):
-    app.logger.warning("Application request failed: HTTP %s", error.code)
-    return jsonify(error=error.description), error.code
-
-
-@app.errorhandler(httpx.HTTPStatusError)
-def gateway_error(error):
-    status = error.response.status_code
-    app.logger.warning("Gateway request failed: HTTP %s", status)
-    messages = {
-        400: "The model rejected this request. Check its settings and sample input.",
-        401: "Your participant key may be expired, rotated, or invalid. Check the workshop portal.",
-        403: "Access or content was blocked. Check your portal access and use approved sample content.",
-        404: "The gateway route or deployment was not found. Check the instructor's settings.",
-        429: "The gateway or model is rate limited. Wait before trying again.",
-    }
-    response = jsonify(error=messages.get(status, "The model service is unavailable. Try again later."))
-    response.status_code = status if status in messages else 502
-    retry_after = error.response.headers.get("Retry-After", "")
-    if status == 429 and retry_after.isdigit():
-        response.headers["Retry-After"] = str(min(int(retry_after), 300))
-    return response
-
-
-@app.errorhandler(httpx.RequestError)
-def connection_error(error):
-    app.logger.warning("Gateway connection failed: %s", type(error).__name__)
-    return jsonify(error="The gateway could not be reached in time. Check your connection and try again."), 504
-
-
 @app.get("/")
 def index():
-    configured = bool(os.getenv("APIM_BASE_URL") and os.getenv("APIM_API_KEY"))
-    return render_template("index.html", languages=LANGUAGES, configured=configured)
+    return render_template("index.html", languages=LANGUAGES)
 
 
 @app.post("/speak")
@@ -184,7 +58,7 @@ def speak():
     text = text_field(data, "text")
     locale = data.get("locale")
     language = language_for(locale)
-    base, headers = gateway_settings()
+    base, headers = gateway()
     ssml = (
         '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" '
         f'xml:lang="{locale}"><voice name="{language["voice"]}">'
@@ -207,10 +81,10 @@ def transcribe():
     language = language_for(request.form.get("locale"))
     upload = request.files.get("audio")
     if upload is None:
-        abort(400, "Choose or record a WAV before sending.")
+        abort(400, "Record or choose a WAV before sending.")
     audio = upload.read()
     check_wav(audio)
-    base, headers = gateway_settings()
+    base, headers = gateway()
     definition = {
         "enhancedMode": {"enabled": True, "model": "MAI-Transcribe-2"},
         "locales": [language["stt"]],
@@ -226,10 +100,10 @@ def transcribe():
     if not isinstance(phrases, list) or not all(
         isinstance(item, dict) and isinstance(item.get("text"), str) for item in phrases
     ):
-        abort(502, "The model did not return a usable transcript.")
+        abort(502, "The model returned no usable transcript.")
     text = " ".join(item["text"].strip() for item in phrases).strip()
     if not text:
-        abort(422, "No words were recognized. Listen to your sample or try recording again.")
+        abort(422, "No words were recognized. Preview the sample or try again.")
     return jsonify(text=text)
 
 
@@ -237,13 +111,8 @@ def transcribe():
 def image():
     data = json_body()
     word = text_field(data, "word")
-    detail = data.get("detail", "")
-    if (
-        not isinstance(detail, str) or len(detail) > 360
-        or any(ord(char) < 32 or 0xD800 <= ord(char) <= 0xDFFF for char in detail)
-    ):
-        abort(400, "The optional scene must be text of up to 360 characters.")
-    base, headers = gateway_settings()
+    detail = optional_text(data, "detail", limit=360)
+    base, headers = gateway()
     response = httpx.post(
         f"{base}/mai/v1/images/generations", headers=headers,
         json={
@@ -263,31 +132,31 @@ def image():
     if not isinstance(encoded, str) or len(encoded) > 24 * 1024 * 1024:
         abort(502, "The image model returned an invalid image payload.")
     try:
-        image_bytes = base64.b64decode(encoded, validate=True)
+        png = base64.b64decode(encoded, validate=True)
     except (binascii.Error, ValueError):
         abort(502, "The image model returned invalid base64.")
-    if (
-        len(image_bytes) < 33 or image_bytes[:8] != b"\x89PNG\r\n\x1a\n"
-        or image_bytes[12:16] != b"IHDR"
-        or struct.unpack(">II", image_bytes[16:24]) != (1024, 1024)
-    ):
-        abort(502, "The image model did not return the requested PNG.")
-    return Response(image_bytes, mimetype="image/png")
+    check_png(png)
+    return Response(png, mimetype="image/png")
 
 
 @app.post("/mnemonic")
 def mnemonic():
     data = json_body()
     word = text_field(data, "word")
-    base, headers = gateway_settings()
+    target = text_field(data, "target")
+    language = language_for(data.get("locale"))
+    base, headers = gateway()
+    prompt = (
+        f"Write one short, imaginative mnemonic that helps an English speaker remember "
+        f"that the {language['label']} word {target!r} means {word!r}. Link the sound "
+        f"or spelling of {target!r} to that meaning. Use at most two sentences of plain "
+        f"text without Markdown. Do not claim that it is a verified fact."
+    )
     response = httpx.post(
         f"{base}/mai/v1/chat/completions", headers=headers,
         json={
             "model": os.getenv("MAI_THINKING_DEPLOYMENT", "mai-thinking"),
-            "messages": [{"role": "user", "content": (
-                f"Write one short, imaginative English mnemonic for the English word "
-                f"{word!r}. Use at most two sentences. Do not claim that it is a verified fact."
-            )}],
+            "messages": [{"role": "user", "content": prompt}],
             "max_completion_tokens": 2048,
         }, timeout=TIMEOUT,
     )
@@ -298,5 +167,5 @@ def mnemonic():
     message = choices[0].get("message")
     text = message.get("content") if isinstance(message, dict) else None
     if not isinstance(text, str) or not text.strip():
-        abort(502, "No text suggestion was returned. The model may have exhausted its output budget.")
+        abort(502, "No text suggestion was returned. The model may have used its whole output budget.")
     return jsonify(text=text.strip())

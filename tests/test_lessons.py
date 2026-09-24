@@ -1,11 +1,9 @@
 """Replay the published learner edits only in tmp_path, with no model traffic."""
 
 import base64
-import importlib.util
 import io
 import json
 import os
-import re
 import shutil
 import struct
 import sys
@@ -20,24 +18,12 @@ from xml.etree import ElementTree
 import httpx
 from playwright.sync_api import expect, sync_playwright
 from werkzeug.serving import make_server
-from workshop_media import checkpoint, example_image, walkthrough
+from app_loader import load_app as load_learner_app
+from lesson_replay import apply_lesson
+from workshop_media import RECORDED_MNEMONIC, checkpoint, example_image, walkthrough
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCS = ROOT / "docs"
-START = "// Start the page.\n"
-
-
-def blocks(page, language):
-    text = (DOCS / page).read_text(encoding="utf-8")
-    return [
-        code + "\n"
-        for code in re.findall(
-            rf'^```{language} title="starter/[^"]+"\n(.*?)\n```',
-            text,
-            re.MULTILINE | re.DOTALL,
-        )
-    ]
 
 
 def replace_once(path, old, new):
@@ -46,20 +32,9 @@ def replace_once(path, old, new):
     path.write_text(text.replace(old, new, 1), encoding="utf-8")
 
 
-def append(path, code):
-    path.write_text(path.read_text(encoding="utf-8") + "\n\n" + code, encoding="utf-8")
-
-
-def insert_js(path, code):
-    replace_once(path, START, code + "\n" + START)
-
-
 def load_app(path, name, monkeypatch):
-    spec = importlib.util.spec_from_file_location(name, path)
-    module = importlib.util.module_from_spec(spec)
-    monkeypatch.setitem(sys.modules, name, module)
-    # Compile the current edit, not a same-second bytecode cache from the prior step.
-    exec(compile(path.read_text(encoding="utf-8"), str(path), "exec"), module.__dict__)
+    module, helpers = load_learner_app(path, name, monkeypatch)
+    module.helpers = helpers
     module.app.config["TESTING"] = True
     return module
 
@@ -92,9 +67,9 @@ def png_bytes():
 def test_documented_sequence(tmp_path, monkeypatch, caplog):
     work = tmp_path / "learner"
     shutil.copytree(ROOT / "starter", work / "starter")
-    python = work / "starter/app.py"
-    javascript = work / "starter/static/app.js"
-    html = work / "starter/templates/index.html"
+    app_dir = work / "starter"
+    python = app_dir / "app.py"
+    javascript = app_dir / "static/app.js"
     monkeypatch.setenv("APIM_BASE_URL", "https://gateway.example.test")
     monkeypatch.setenv("APIM_API_KEY", "fixture-only-not-a-real-key")
     for variable in ("CODESPACES", "CODESPACE_NAME", "GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN"):
@@ -107,7 +82,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
     wav = wav_bytes(frames=32000 if media_image else 4000)
     png = media_image or png_bytes()
     calls = []
-    state = {"status": 200, "text": "pomme", "override": None, "timeout": False}
+    state = {"status": 200, "text": "Pomme.", "override": None, "timeout": False}
 
     def upstream(url, *, headers, timeout, **kwargs):
         assert url.startswith("https://gateway.example.test/")
@@ -123,7 +98,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
         if state["status"] != 200:
             return httpx.Response(
                 state["status"], json={"error": "upstream-body-must-not-leak"},
-                headers={"Retry-After": "7"}, request=request,
+                headers={"retry-after-ms": "6500"}, request=request,
             )
         if state["override"] is not None:
             value = state["override"]
@@ -168,10 +143,8 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             assert body["model"] == "mai-thinking"
             assert body["max_completion_tokens"] == 2048
             assert body["messages"][0]["role"] == "user"
-            text = (
-                "Picture a pomme resting in your palm: an apple ready to eat."
-                if state.get("demo") else "<b>A sample mnemonic.</b>"
-            )
+            assert "French word 'pomme' means 'apple'" in body["messages"][0]["content"]
+            text = RECORDED_MNEMONIC if state.get("demo") else "<b>A sample mnemonic.</b>"
             return httpx.Response(
                 200, json={"choices": [{"message": {"content": text}}]},
                 request=request,
@@ -208,10 +181,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             assert calls == []
             checkpoint(page, "00-open-app", ".app-shell")
 
-            lesson = "lessons/01-word-list.md"
-            python.write_text(blocks(lesson, "python")[0], encoding="utf-8")
-            html.write_text(blocks(lesson, "html")[0], encoding="utf-8")
-            javascript.write_text(blocks(lesson, "javascript")[0], encoding="utf-8")
+            apply_lesson(app_dir, "01-word-list")
             module = load_app(python, "lesson_words", monkeypatch)
             server.app = module.app
             page.reload()
@@ -229,23 +199,14 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             page.get_by_role("button", name="summer / fr-FR", exact=True).click()
             page.locator("#reveal-answer").click()
             expect(page.locator("#saved-translation")).to_have_text("été")
+            expect(page.locator("#reveal-answer")).to_have_text("Hide translation")
             page.get_by_role("button", name="Remove summer", exact=True).click()
             expect(page.locator("#practice-word")).to_have_text("apple")
             assert calls == [] and errors == []
             checkpoint(page, "01-word-list", ".workspace")
 
-            lesson = "lessons/02-bilingual-speech.md"
-            py = blocks(lesson, "python")
-            js = blocks(lesson, "javascript")
-            markup = blocks(lesson, "html")
-            assert (len(py), len(js), len(markup)) == (4, 3, 2)
-            replace_once(python, "from flask import Flask, render_template\n", py[0])
-            replace_once(python, '@app.get("/")', py[1] + '\n\n@app.get("/")')
-            append(python, py[2])
-            replace_once(html, "<!-- Add speech controls here. -->", markup[0])
-            insert_js(javascript, js[0])
-            replace_once(javascript, "function selectWord(id) {\n", "function selectWord(id) {\n" + js[1])
-            module = load_app(python, "lesson_english", monkeypatch)
+            apply_lesson(app_dir, "02-speech")
+            module = load_app(python, "lesson_speech", monkeypatch)
             server.app = module.app
             page.reload()
             page.locator("#speak-english").click()
@@ -253,19 +214,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             expect(page.locator("#speak-english")).to_be_enabled()
             assert len(calls) == 1
             assert b"en-US-Harper:MAI-Voice-2-Flash" in calls[-1][2]["content"]
-            assert page.locator("#speak-target").count() == 0
-            assert errors == []
-            checkpoint(page, "02-english-speech", ".workspace")
-
-            replace_once(python, '    locale = "en-US"\n', py[3])
-            replace_once(javascript, "jsonOptions({text})", "jsonOptions({text, locale})")
-            replace_once(html, "<!-- Add target playback here. -->", markup[1])
-            insert_js(javascript, js[2])
-            module = load_app(python, "lesson_bilingual", monkeypatch)
-            server.app = module.app
-            page.reload()
-            page.locator("#speak-english").click()
-            expect(page.locator("#speak-english")).to_be_enabled()
+            assert json.loads(page.evaluate("JSON.stringify([...speechCache.keys()])")) == ['["apple","en-US"]']
             page.locator("#speak-target").click()
             expect(page.locator("#speak-target")).to_be_enabled()
             assert b"fr-FR-Soleil:MAI-Voice-2-Flash" in calls[-1][2]["content"]
@@ -280,16 +229,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             assert errors == []
             checkpoint(page, "02-bilingual-speech", ".workspace")
 
-            lesson = "lessons/03-record-and-transcribe.md"
-            python.write_text("import json\n" + python.read_text(encoding="utf-8"), encoding="utf-8")
-            append(python, blocks(lesson, "python")[0])
-            replace_once(html, "<!-- Add answer controls here. -->", blocks(lesson, "html")[0])
-            js = blocks(lesson, "javascript")
-            insert_js(javascript, js[0])
-            replace_once(
-                javascript, "  stopPlayback();\n  selectedId = id;",
-                "  stopPlayback();\n" + js[1] + "  selectedId = id;",
-            )
+            apply_lesson(app_dir, "03-transcription")
             module = load_app(python, "lesson_transcribe", monkeypatch)
             server.app = module.app
             page.reload()
@@ -333,7 +273,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             assert len(calls) == before_record
             page.locator("#audio-preview").evaluate("audio => audio.play()")
             page.locator("#send-answer").click()
-            expect(page.locator("#answer-result")).to_have_text("I heard: pomme")
+            expect(page.locator("#answer-result")).to_have_text("I heard: Pomme.")
             assert len(calls) == before_record + 1
             checkpoint(page, "03-transcription", ".practice-step")
             assert json.loads(calls[-1][2]["data"]["definition"])["locales"] == ["fr"]
@@ -367,18 +307,13 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             assert len(calls) == before_record + 1
             page.locator("#audio-consent").check()
             page.locator("#send-answer").click()
-            expect(page.locator("#answer-result")).to_have_text("I heard: pomme")
+            expect(page.locator("#answer-result")).to_have_text("I heard: Pomme.")
             assert calls[-1][2]["files"]["audio"][1] == wav
             page.locator("#audio-consent").uncheck()
             expect(page.locator("#recording-review")).to_be_hidden()
             assert_pending_permission_fallback(page, sample, calls, state)
 
-            lesson = "lessons/04-check-your-answer.md"
-            old = re.search(
-                r"function showTranscript\(heard, word\) \{.*?\n\}",
-                javascript.read_text(encoding="utf-8"), re.DOTALL,
-            ).group(0)
-            replace_once(javascript, old, blocks(lesson, "javascript")[0].rstrip())
+            apply_lesson(app_dir, "04-matching")
             page.reload()
             page.locator("#audio-consent").check()
             page.locator("#audio-file").set_input_files(str(sample))
@@ -395,7 +330,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             page.locator("#send-answer").click()
             expect(page.locator("#app-error")).to_contain_text("No words were recognized")
             expect(page.locator("#answer-result")).to_be_hidden()
-            state["text"] = "pomme"
+            state["text"] = "Pomme."
             cases = [
                 (" POMME! ", "pomme", "fr-FR", True),
                 ("e\u0301te\u0301", "été", "fr-FR", True),
@@ -415,16 +350,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
                 ) is matches
             assert errors == []
 
-            lesson = "lessons/05-memory-images.md"
-            py = blocks(lesson, "python")
-            python.write_text(py[0] + python.read_text(encoding="utf-8"), encoding="utf-8")
-            append(python, py[1])
-            replace_once(html, "<!-- Add memory controls here. -->", blocks(lesson, "html")[0])
-            insert_js(javascript, blocks(lesson, "javascript")[0])
-            replace_once(
-                javascript, '  renderList();\n}\n\n$("#word-form")',
-                '  renderMemory();\n  renderList();\n}\n\n$("#word-form")',
-            )
+            apply_lesson(app_dir, "05-images")
             module = load_app(python, "lesson_image", monkeypatch)
             server.app = module.app
             page.reload()
@@ -455,16 +381,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             expect(page.locator("#memory-figure")).to_be_hidden()
             assert errors == []
 
-            lesson = "extensions/mnemonics.md"
-            append(python, blocks(lesson, "python")[0])
-            replace_once(html, "<!-- Add mnemonic controls here. -->", blocks(lesson, "html")[0])
-            insert_js(javascript, blocks(lesson, "javascript")[0])
-            replace_once(
-                javascript,
-                '  discardRecording();\n  $("#answer-result").hidden = true;\n  $("#record-status").textContent = "";',
-                '  discardRecording();\n  $("#answer-result").hidden = true;\n'
-                '  $("#mnemonic-result").textContent = "";\n  $("#record-status").textContent = "";',
-            )
+            apply_lesson(app_dir, "06-mnemonics")
             module = load_app(python, "lesson_mnemonic", monkeypatch)
             server.app = module.app
             page.reload()
@@ -562,7 +479,7 @@ def assert_pending_permission_fallback(page, sample, calls, state):
             gate.set()
             state.pop("transcribe_gate")
             state.pop("transcribe_started")
-        expect(page.locator("#answer-result")).to_have_text("I heard: pomme")
+        expect(page.locator("#answer-result")).to_have_text("I heard: Pomme.")
         expect(page.locator("#audio-file")).to_be_enabled()
         assert len(calls) == before + 1
         assert calls[-1][2]["files"]["audio"][1] == sample.read_bytes()
@@ -581,7 +498,7 @@ def assert_gateway_failures(module, wav, png, state, calls, monkeypatch):
             headers=headers,
         )
 
-    assert module.gateway_settings()[0] == "https://gateway.example.test"
+    assert module.helpers.gateway_settings()[0] == "https://gateway.example.test"
     assert len(module.LANGUAGES) == 17
     assert module.LANGUAGES["ko-KR"]["voice"] == "ko-KR-Haena:MAI-Voice-2-Flash"
     assert "ja-JP" not in module.LANGUAGES
@@ -631,7 +548,7 @@ def assert_gateway_failures(module, wav, png, state, calls, monkeypatch):
         assert response.status_code == (status if status != 500 else 502)
         assert "error" in response.json and "upstream-body-must-not-leak" not in response.text
         if status == 429:
-            assert response.headers["Retry-After"] == "7"
+            assert response.headers["Retry-After"] == "7"  # from retry-after-ms: 6500
     state["status"] = 200
     state["timeout"] = True
     assert speak().status_code == 504
@@ -661,7 +578,9 @@ def assert_gateway_failures(module, wav, png, state, calls, monkeypatch):
         assert client.post("/image", json={"word": "apple", "detail": detail}, headers=headers).status_code == 400
     for payload in ({}, {"choices": []}, {"choices": [{"message": {"content": None}}]}):
         state["override"] = payload
-        assert client.post("/mnemonic", json={"word": "apple"}, headers=headers).status_code == 502
+        assert client.post(
+            "/mnemonic", json={"word": "apple", "target": "pomme", "locale": "fr-FR"}, headers=headers,
+        ).status_code == 502
     state["override"] = None
 
 

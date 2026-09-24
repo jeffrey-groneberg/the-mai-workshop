@@ -18,9 +18,11 @@ guide. Port **5051** runs the solution; **8000** optionally previews documentati
 | Images | `POST /mai/v1/images/generations`; JSON with `model: "mai-image-flash"`, English `prompt`, `width: 1024`, `height: 1024` | `data[0].b64_json` — base64 PNG |
 | Mnemonics | `POST /mai/v1/chat/completions`; JSON with `model: "mai-thinking"` and `messages` | `choices[0].message.content` — text |
 
-`mai-image-flash` and `mai-thinking` are deployment names. The solution supports
-`MAI_IMAGE_DEPLOYMENT` and `MAI_THINKING_DEPLOYMENT` overrides; lesson code uses
-explicit names. Both image and thinking offerings are preview.
+`mai-image-flash` and `mai-thinking` are deployment names. The routes read
+`MAI_IMAGE_DEPLOYMENT` and `MAI_THINKING_DEPLOYMENT` from the environment and
+fall back to those names; the workshop gateway also offers `mai-image`
+(MAI-Image-2.6). Both image and thinking offerings are preview. Image responses
+include a `usage` object with token counts.
 
 Provider contract:
 [catalog](https://github.com/jeffrey-groneberg/mai-llm-hax-provider/blob/9d2fa8d6d2214764ea02c281498ef243e3420d29/config/models.yaml),
@@ -31,6 +33,61 @@ Microsoft APIs:
 [Transcribe](https://learn.microsoft.com/azure/ai-services/speech-service/mai-transcribe),
 [Image](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-image),
 [Thinking](https://learn.microsoft.com/azure/foundry/foundry-models/how-to/use-foundry-models-mai-thinking).
+
+## Provided helpers
+
+You call these from your own files; you do not edit `workshop.py` or
+`workshop.js`.
+
+**`starter/workshop.py`**
+
+| Helper | What it does |
+| --- | --- |
+| `create_app(__name__)` | Creates the Flask app: POST requests only from the app's own page, security headers (CSP), a 2 MiB request limit, template auto-reload, readable JSON errors, and `gateway_configured` for templates. |
+| `gateway()` | Returns `(base, {"api-key": key})` from `APIM_BASE_URL` and `APIM_API_KEY`, or answers `503`. |
+| `json_body()` | The request's JSON object, or `400`/`415`. |
+| `text_field(data, name, limit=120)` | A required, trimmed text field, or `400`. |
+| `optional_text(data, name, limit)` | An optional, trimmed text field; missing means `""`. |
+| `check_wav(audio, max_seconds=12, error_status=400)` | Stops unless the bytes are complete mono, 16-bit, 16 kHz PCM WAV. |
+| `upstream_json(response)` | Raises gateway errors, then returns the JSON object body, or `502`. |
+| `check_png(image, width=1024, height=1024)` | Stops with `502` unless the bytes are a PNG of that size. |
+| `TIMEOUT` | 10 s to connect, 120 s to read. |
+
+Gateway errors become short messages: `401` (key), `403` (access or content),
+`404` (route or deployment), `429` (rate limit), timeouts as `504`, and
+anything else as `502`. For `429`, the wait from the gateway's `Retry-After` or
+`retry-after-ms` header is passed on as `Retry-After` in seconds.
+
+**`starter/static/workshop.js`**
+
+| Helper | What it does |
+| --- | --- |
+| `$(selector)`, `showError(message)` | Find an element; show or clear the error banner. |
+| `runAction(message, action)` | Runs one async action at a time: shows the status, disables controls, and shows thrown errors. |
+| `isBusy()` | True while an action runs; `selectWord` then refuses to switch words. |
+| `jsonOptions(body)`, `callApp(path, options)`, `appJSON(response)` | POST JSON to Flask, turn failures (including `Retry-After`) into errors, and read JSON replies. |
+| `playAudio(player, blob)`, `stopAudio(player)`, `downloadBlob(blob, filename)` | Play, stop, or save audio. |
+| `setupAnswerRecorder({onNewAudio})` | Wires consent, Record/Stop, the WAV picker, preview, and Discard. Returns `{audio(), discard()}`. |
+| `encodeWav(samples)`, `recordingToWav(blob)` | Write 16-bit PCM WAV; convert a `MediaRecorder` recording to mono 16 kHz WAV. |
+
+Your `app.js` adds `onWordChange(hook)`: hooks run after each selection, so
+lessons clear old results without editing `selectWord`.
+
+## Catch up with checkpoints
+
+`checkpoints/01-word-list` to `checkpoints/05-images` hold your three files
+(`app.py`, `templates/index.html`, `static/app.js`) as they are after each
+lesson; `solution/` is the finished app, including the mnemonic extension.
+All of them are generated from these pages, so they match the reference
+solutions exactly.
+
+```sh
+python checkpoints/restore.py 03
+```
+
+This copies a checkpoint over your starter files after saving yours to
+`.checkpoint-backups/<time>/`. Use it to catch up, or to compare: open your file
+next to the checkpoint's.
 
 ## Languages and voices
 
@@ -75,14 +132,15 @@ code. Changing the menu does not translate existing entries.
 
 | Symptom | Fix |
 | --- | --- |
-| Old code appears | Save, restart Flask after Python/HTML edits, then reload. JS/CSS need reload only. Check port 5050, not 5051. |
-| Flask will not start | Check the terminal error, indentation, and insertion point. Keep `// Start the page.` last in JavaScript. |
+| Old code appears | Save and reload the browser. Without `--reload`, restart Flask after Python edits. Check port 5050, not 5051. |
+| Flask will not start or the page shows a traceback | Read the terminal error; with `--reload`, fixing the file recovers on its own. Check that you replaced the whole marker line, and keep `// Start the page.` last in JavaScript. |
+| `501` *Lesson N: finish the … route* | The skeleton's last line is still there: finish the TODOs, or compare with the reference solution. |
 | Connection failure or HTML instead of JSON/audio | Restart Flask or reopen the Codespaces port and sign in again. |
-| `503` | Check both settings and environment-over-`.env` precedence; restart Flask. |
+| `503` or *No gateway settings yet* | Check both settings and environment-over-`.env` precedence; restart Flask (the reloader does not watch `.env`). |
 | `401` | Obtain a current participant key; keys expire 24 hours after issuance or earlier if revoked. |
 | `403` | Use the Flask app tab; check the displayed message and gateway access with the instructor. |
 | `404` | Check the gateway origin and deployment name. |
-| `429` or timeout | Follow `Retry-After`, then retry deliberately; check shared capacity with the instructor. |
+| `429` or timeout | Wait the seconds the app shows, then retry once. Image bursts from one key are limited first; check shared capacity with the instructor. |
 | Microphone unavailable or prompt unanswered | Open the HTTPS app in a normal tab. Press **Stop recording** to cancel; choose a downloaded synthetic WAV instead. |
 | WAV rejected or `413` | Use a short 16 kHz mono PCM WAV. Check duration, channels, and file size. |
 | No words / `422` | Preview the audio and check the selected language. |

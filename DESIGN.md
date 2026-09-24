@@ -110,7 +110,7 @@ practice panel using the app-panel radius. Native Zensical shapes are independen
 ## Do's and Don'ts
 
 - **Do** prioritize reading and code in the workshop guide.
-- **Do** keep the four-main-file apps visually appealing and independent.
+- **Do** keep the apps visually appealing and independent.
 - **Do** preserve teaching outcomes, experimentation, and private configuration.
 - **Don't** reintroduce guide-specific CSS, custom fonts, or marketing layouts
   without a new user request.

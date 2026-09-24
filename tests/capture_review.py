@@ -1,10 +1,8 @@
 """Capture the built guide and unconfigured reference UI; never call a model."""
 
-import importlib.util
 import json
 import os
 import shutil
-import sys
 import tempfile
 import threading
 from functools import partial
@@ -14,6 +12,8 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 from werkzeug.serving import make_server
 
+from app_loader import load_app
+
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "test-results/visual"
 
@@ -22,10 +22,7 @@ def main():
     os.environ["APIM_BASE_URL"] = ""
     os.environ["APIM_API_KEY"] = ""
     os.environ.pop("CODESPACES", None)
-    spec = importlib.util.spec_from_file_location("review_reference", ROOT / "solution/app.py")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
+    module, _ = load_app(ROOT / "solution/app.py", "review_reference")
     OUTPUT.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as temporary:
         shutil.copytree(ROOT / "site", Path(temporary) / "the-mai-workshop")

@@ -7,7 +7,7 @@ import pytest
 from playwright.sync_api import expect, sync_playwright
 from werkzeug.serving import make_server
 
-from test_app import backend, png_bytes, wav_bytes
+from test_app import backend, helpers, png_bytes, wav_bytes
 
 
 @pytest.fixture
@@ -21,7 +21,8 @@ def server(monkeypatch):
         calls.append((url, kwargs))
         req = httpx.Request("POST", url)
         if state["failure"]:
-            return httpx.Response(state["failure"], json={"error": "private detail"}, request=req)
+            headers = {"retry-after-ms": "16427"} if state["failure"] == 429 else None
+            return httpx.Response(state["failure"], json={"error": "private detail"}, headers=headers, request=req)
         if url.endswith("/speech/tts"):
             return httpx.Response(200, content=wav_bytes(), request=req)
         if url.endswith("/speech/transcribe"):
@@ -116,17 +117,17 @@ def test_synthetic_upload_match_mismatch_and_no_words(page, server):
     })
     expect(page.locator("#audio-preview")).to_be_visible()
     assert not calls
-    page.get_by_role("button", name="Send and check").click()
+    page.get_by_role("button", name="Send for transcription").click()
     expect(page.locator("#app-error")).to_contain_text("Choose whether")
     assert not calls
     page.locator("#audio-consent").check()
-    page.get_by_role("button", name="Send and check").click()
+    page.get_by_role("button", name="Send for transcription").click()
     expect(page.locator("#answer-result")).to_contain_text("That matches")
     state["transcript"] = "Birne."
-    page.get_by_role("button", name="Send and check").click()
+    page.get_by_role("button", name="Send for transcription").click()
     expect(page.locator("#answer-result")).to_contain_text("Not a match")
     state["transcript"] = ""
-    page.get_by_role("button", name="Send and check").click()
+    page.get_by_role("button", name="Send for transcription").click()
     expect(page.locator("#app-error")).to_contain_text("No words were recognized")
     expect(page.locator("#answer-result")).to_be_hidden()
 
@@ -142,14 +143,14 @@ def test_real_browser_recording_emits_pcm_wav(page, server):
     page.get_by_role("button", name="Stop recording").click()
     expect(page.locator("#recording-review")).to_be_visible(timeout=15000)
     assert not calls
-    page.get_by_role("button", name="Send and check").click()
+    page.get_by_role("button", name="Send for transcription").click()
     expect(page.locator("#answer-result")).to_contain_text("That matches")
     audio = calls[0][1]["files"]["audio"][1]
-    backend.check_wav(audio)
+    helpers.check_wav(audio)
     assert audio[:4] == b"RIFF"
 
 
-def test_discard_invalidates_in_flight_transcript(page, server):
+def test_withdrawing_consent_discards_an_in_flight_transcript(page, server):
     url, calls, state = server
     page.goto(url)
     add_word(page)
@@ -159,12 +160,37 @@ def test_discard_invalidates_in_flight_transcript(page, server):
     })
     gate = threading.Event()
     state["response_gate"] = gate
-    page.get_by_role("button", name="Send and check").click()
-    page.get_by_role("button", name="Discard recording").click()
+    page.get_by_role("button", name="Send for transcription").click()
+    expect(page.locator("#discard-recording")).to_be_disabled()
+    expect(page.locator("#audio-consent")).to_be_enabled()
+    page.locator("#audio-consent").uncheck()
     gate.set()
-    expect(page.locator("#record-status")).to_have_text("Recording discarded.")
+    expect(page.locator("#record-status")).to_have_text("Local recording discarded.")
+    expect(page.locator("#model-status")).to_be_empty()
     expect(page.locator("#answer-result")).to_be_hidden()
     expect(page.locator("#recording-review")).to_be_hidden()
+    assert len(calls) == 1
+
+
+def test_word_switching_waits_for_the_current_action(page, server):
+    url, calls, state = server
+    page.goto(url)
+    add_word(page)
+    add_word(page, "pear", "Birne")
+    page.locator("#audio-consent").check()
+    page.locator("#audio-file").set_input_files({
+        "name": "answer.wav", "mimeType": "audio/wav", "buffer": wav_bytes(),
+    })
+    gate = threading.Event()
+    state["response_gate"] = gate
+    state["transcript"] = "Birne."
+    page.get_by_role("button", name="Send for transcription").click()
+    expect(page.get_by_role("button", name="apple / de-DE", exact=True)).to_be_disabled()
+    assert page.evaluate("selectWord(words[0].id) ?? document.querySelector('#app-error').textContent") \
+        == "Wait for the current action to finish."
+    gate.set()
+    expect(page.locator("#answer-result")).to_contain_text("That matches")
+    expect(page.locator("#practice-word")).to_have_text("pear")
 
 
 def test_permission_denied_and_late_permission_cleanup(page, server):
@@ -243,6 +269,7 @@ def test_rate_limit_and_changed_selection(page, server):
     state["failure"] = 429
     page.get_by_role("button", name="Hear English", exact=True).click()
     expect(page.locator("#app-error")).to_contain_text("rate limited")
+    expect(page.locator("#app-error")).to_contain_text("Retry after 17 seconds.")
     expect(page.locator("#speak-english")).to_be_enabled()
     assert len(calls) == 1
     state["failure"] = None
@@ -286,8 +313,8 @@ def test_wav_encoder_shape_and_mobile_layout(page, server):
 
 def test_corrupt_storage_is_explicit(page, server):
     page.goto(server[0])
-    page.evaluate("localStorage.setItem('mai-vocabulary-v1', '{broken')")
+    page.evaluate("localStorage.setItem('mai-learner-words-v1', '{broken')")
     page.reload()
-    expect(page.locator("#app-error")).to_contain_text("Nothing has been overwritten")
-    assert page.evaluate("localStorage.getItem('mai-vocabulary-v1')") == "{broken"
+    expect(page.locator("#app-error")).to_contain_text("Nothing was overwritten")
+    assert page.evaluate("localStorage.getItem('mai-learner-words-v1')") == "{broken"
     expect(page.locator("#reset-storage")).to_be_visible()

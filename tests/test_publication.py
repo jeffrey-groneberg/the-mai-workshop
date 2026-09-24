@@ -81,7 +81,7 @@ def test_checkpoint_screenshots_match_the_workshop_steps():
     pages = {
         "lessons/00-open-your-app.md": ["00-open-app.webp"],
         "lessons/01-word-list.md": ["01-word-list.webp"],
-        "lessons/02-bilingual-speech.md": ["02-english-speech.webp", "02-bilingual-speech.webp"],
+        "lessons/02-bilingual-speech.md": ["02-bilingual-speech.webp"],
         "lessons/03-record-and-transcribe.md": ["03-transcription.webp"],
         "lessons/04-check-your-answer.md": ["04-answer-match.webp"],
         "lessons/05-memory-images.md": ["05-memory-image.webp"],
@@ -269,3 +269,29 @@ def test_observed_diagram_text_is_bound_to_final_image_bytes():
     for name in ("MAI-Voice-2-Flash", "MAI-Transcribe-2", "MAI-Image-2.6-Flash", "MAI-Thinking-1"):
         assert name in mapping
     assert "JavaScript / no model" in mapping
+
+
+def test_reference_solutions_render_folded_with_copyable_titled_code(tmp_path):
+    import html
+    import shutil
+
+    from lesson_replay import LESSONS, replayable_blocks, skeleton_blocks
+
+    zensical = shutil.which("zensical")
+    if zensical is None:
+        pytest.skip("zensical is not installed")
+    shutil.copytree(ROOT / "docs", tmp_path / "docs")
+    shutil.copy(ROOT / "zensical.toml", tmp_path / "zensical.toml")
+    subprocess.run([zensical, "build", "--clean", "--strict"], cwd=tmp_path, check=True, capture_output=True)
+    for page, _ in LESSONS.values():
+        rendered = (tmp_path / "site" / page.removesuffix(".md") / "index.html").read_text(encoding="utf-8")
+        folded = re.findall(r'<details class="success">\s*<summary>Reference solution</summary>(.*?)</details>',
+                            rendered, re.S)
+        titles = re.findall(r'<span class="filename">([^<]+)</span>', rendered)
+        expected = [f"starter/{file}" for file, _ in replayable_blocks(page)]
+        assert [title for title in titles if not title.startswith("Your turn")] == expected, page
+        assert len(folded) == len(skeleton_blocks(page)), page
+        for body in folded:
+            assert body.count('<span class="filename">starter/') == 1 and "<code" in body, page
+            text = html.unescape(re.sub(r"<[^>]+>", "", body))
+            assert "@app.post" in text or "function showTranscript" in text, page

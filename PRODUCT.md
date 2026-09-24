@@ -10,7 +10,9 @@ web
 
 Zensical documentation and small Flask applications with directly served HTML,
 CSS, and JavaScript. GitHub Codespaces is the primary environment; local Python
-is the fallback. Each application has four main source files.
+is the fallback. Participants edit three files (`app.py`,
+`templates/index.html`, `static/app.js`); provided `workshop.py` and
+`static/workshop.js` hold the plumbing, next to the shared stylesheet.
 
 ## Users and purpose
 
@@ -22,14 +24,22 @@ transcription, and image APIs. The instructor provides gateway access.
 The participant edits `starter/`; `solution/` is an independently runnable,
 complete reference. The starter has a styled sample vocabulary view, not
 completed word-list or recording functionality. The fixed workshop slot is two
-hours with environment readiness as pre-work. Its pacing requires a learner pilot.
+hours with environment readiness as pre-work. Learner pilots (walkthrough
+reports) shaped the current pacing.
+
+The lesson pages are the single source of truth: `tests/lesson_replay.py`
+generates `checkpoints/` (the three learner files after each lesson) and
+`solution/` from them, and the tests fail on drift.
 
 Participants start from the repository's default `main` branch. No development
 branch is part of the workshop instructions. `gh-pages` contains generated
 documentation only, not a participant workspace.
 
-Each lesson states the result, explains the relevant mechanism, gives exact
-edits, and ends with a run check and an experiment. Remove repeated workshop
+Each lesson states the result and explains the mechanism. Edits replace one
+unique marker line placed by lesson 1; no edit is a partial-line change. Each
+model lesson has the participant write the MAI call from a contract table and a
+skeleton, with a folded reference solution. Every lesson ends with a run check
+and concrete experiments. Remove repeated workshop
 process, facilitator commentary, and privacy guidance from the written guide;
 the instructor handles that briefing. App controls and credential handling
 remain unchanged.

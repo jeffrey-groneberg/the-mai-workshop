@@ -8,6 +8,12 @@ from pathlib import Path
 from playwright.sync_api import expect
 
 ROOT = Path(__file__).resolve().parents[1]
+# Live MAI-Thinking-1 answer to the reference /mnemonic prompt for apple / pomme (French),
+# recorded once and replayed offline for screenshots.
+RECORDED_MNEMONIC = (
+    "Imagine taking a big bite of a juicy pomme and going \u201cmmm\u201d\u2014that satisfied "
+    "sound is all the reminder you need that it's an apple!"
+)
 
 
 def output_directory():
@@ -103,7 +109,7 @@ def walkthrough(browser, origin, state):
     if directory is None:
         return
     state["demo"] = True
-    state["text"] = "pomme"
+    state["text"] = "Pomme."
     context = browser.new_context(
         viewport={"width": 1120, "height": 820},
         permissions=["microphone"],
@@ -156,7 +162,7 @@ def walkthrough(browser, origin, state):
 
         page.locator(".extension summary").click()
         page.locator("#generate-mnemonic").click()
-        expect(page.locator("#mnemonic-result")).to_contain_text("palm")
+        expect(page.locator("#mnemonic-result")).to_have_text(RECORDED_MNEMONIC)
         page.locator(".extension").scroll_into_view_if_needed()
         checkpoint(page, "06-mnemonic", ".extension")
         page.wait_for_timeout(1800)
@@ -190,6 +196,7 @@ def walkthrough(browser, origin, state):
         "The silent GIF records that completed learner app, including optional mnemonics.\n"
         "Playback loops and runs at two-thirds speed, without re-encoding its image frames.\n"
         "Model responses and microphone input are offline fixtures, not live model calls.\n"
+        "The transcript (Pomme.) and the mnemonic are recorded live responses, replayed offline.\n"
         "The image fixture is an apple crop (320:320:30:220) of the existing MAI-generated\n"
         "docs/assets/images/vocabulary-journey.webp. No endpoint or key is captured.\n",
         encoding="utf-8",
@@ -202,7 +209,7 @@ def walkthrough(browser, origin, state):
         "image_source": "../images/vocabulary-journey.webp",
         "image_crop": {"width": 320, "height": 320, "x": 30, "y": 220},
         "screenshots": [
-            "00-open-app.webp", "01-word-list.webp", "02-english-speech.webp",
+            "00-open-app.webp", "01-word-list.webp",
             "02-bilingual-speech.webp", "03-transcription.webp",
             "04-answer-match.webp", "05-memory-image.webp", "06-mnemonic.webp",
         ],

@@ -75,7 +75,12 @@ Use the app and the comparator's existing playground—no new adapter needed.
    Reuse the same WAV for
    transcription, text/language for speech, or prompt and requested size for images.
 2. Run each model three times. Record useful results, errors, total latency,
-   and its actual billable units. For text, include reasoning tokens.
+   and its actual billable units. For text, include reasoning tokens. MAI image
+   responses carry a `usage` object (for example `num_output_tokens`); log it
+   as [lesson 5 shows](lessons/05-memory-images.md#try-one). To compare
+   MAI-Image-2.6 with Flash, set `MAI_IMAGE_DEPLOYMENT=mai-image` and restart
+   Flask; for MAI-Voice-2, change a voice's `:MAI-Voice-2-Flash` suffix to
+   `:MAI-Voice-2`.
 3. Compare **cost per useful result**, not just price per request. Keep voice,
    quality, deployment, region, and settings in your notes.
 

@@ -22,3 +22,6 @@ test-results/
 /*.wav
 
 .DS_Store
+
+# Local backups made by checkpoints/restore.py.
+.checkpoint-backups/

@@ -1,9 +1,7 @@
 import base64
-import importlib.util
 import io
 import json
 import struct
-import sys
 import wave
 import zlib
 from pathlib import Path
@@ -11,11 +9,10 @@ from pathlib import Path
 import httpx
 import pytest
 
+from app_loader import load_app
+
 ROOT = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location("workshop_solution", ROOT / "solution/app.py")
-backend = importlib.util.module_from_spec(spec)
-sys.modules[spec.name] = backend
-spec.loader.exec_module(backend)
+backend, helpers = load_app(ROOT / "solution/app.py", "workshop_solution")
 
 
 def wav_bytes(seconds=0.1, rate=16000):
@@ -78,15 +75,13 @@ def test_page_does_not_expose_credentials(client):
     assert response.status_code == 200
     assert b"test-key-not-a-real-credential" not in response.data
     assert b"workshop.example.test" not in response.data
-    assert b"Model access is checked when you use a feature" in response.data
+    assert b"FINISHED SOLUTION" in response.data
+    assert b"No gateway settings yet" not in response.data
     assert "frame-ancestors 'none'" in response.headers["Content-Security-Policy"]
 
 
 def test_starter_runs_without_completed_features():
-    starter_spec = importlib.util.spec_from_file_location("workshop_starter", ROOT / "starter/app.py")
-    starter = importlib.util.module_from_spec(starter_spec)
-    sys.modules[starter_spec.name] = starter
-    starter_spec.loader.exec_module(starter)
+    starter, _ = load_app(ROOT / "starter/app.py", "workshop_starter")
     starter_client = starter.app.test_client()
     response = starter_client.get("/")
     assert response.status_code == 200
@@ -95,12 +90,15 @@ def test_starter_runs_without_completed_features():
     assert starter_client.get("/static/style.css").status_code == 200
     script = starter_client.get("/static/app.js").data
     assert b"MediaRecorder" not in script and b"localStorage" not in script
-    assert starter_client.post("/speak").status_code == 404
+    assert starter_client.post("/speak", headers={"Origin": "http://localhost"}).status_code == 404
+    assert starter_client.get("/static/workshop.js").status_code == 200
 
 
 def test_missing_configuration_is_not_fake_success(client, monkeypatch):
     monkeypatch.delenv("APIM_API_KEY")
-    assert client.get("/").status_code == 200
+    page = client.get("/")
+    assert page.status_code == 200
+    assert b"No gateway settings yet" in page.data
     response = post(client, "/speak", json={"text": "apple", "locale": "en-US"})
     assert response.status_code == 503
     assert "Configure" in response.json["error"]
@@ -141,7 +139,7 @@ def test_cross_origin_and_missing_origin_are_denied(client):
 @pytest.mark.parametrize("port", [5050, 5051])
 def test_exact_codespaces_origin(client, monkeypatch, port):
     host = f"learning-space-{port}.app.github.dev"
-    monkeypatch.setattr(backend, "codespace_hosts", {host})
+    monkeypatch.setitem(backend.app.config, "CODESPACE_HOSTS", {host})
     monkeypatch.setitem(backend.app.config, "TRUSTED_HOSTS", [host])
     upstream(monkeypatch, content=wav_bytes())
     response = client.post(
@@ -242,6 +240,13 @@ def test_image_contract_and_binary_response(client, monkeypatch):
     assert not {"size", "quality", "n", "response_format"} & options["json"].keys()
 
 
+def test_image_deployment_can_be_switched(client, monkeypatch):
+    monkeypatch.setenv("MAI_IMAGE_DEPLOYMENT", "mai-image")
+    calls = upstream(monkeypatch, payload={"data": [{"b64_json": base64.b64encode(png_bytes()).decode()}]})
+    assert post(client, "/image", json={"word": "apple"}).status_code == 200
+    assert calls[0][1]["json"]["model"] == "mai-image"
+
+
 @pytest.mark.parametrize("payload", [
     {}, {"data": []}, {"data": [None]}, {"data": [{"b64_json": "not base64!"}]},
     {"data": [{"b64_json": base64.b64encode(b"not a PNG").decode()}]},
@@ -251,19 +256,26 @@ def test_invalid_images_are_errors(client, monkeypatch, payload):
     assert post(client, "/image", json={"word": "apple"}).status_code == 502
 
 
-def test_optional_mnemonic_is_plain_text(client, monkeypatch):
-    calls = upstream(monkeypatch, payload={"choices": [{"message": {"content": "An apple a daydream."}}]})
-    response = post(client, "/mnemonic", json={"word": "apple"})
-    assert response.json == {"text": "An apple a daydream."}
+def test_bilingual_mnemonic_is_plain_text(client, monkeypatch):
+    calls = upstream(monkeypatch, payload={"choices": [{"message": {"content": "A pomme is an apple."}}]})
+    response = post(client, "/mnemonic", json={"word": "apple", "target": "pomme", "locale": "fr-FR"})
+    assert response.json == {"text": "A pomme is an apple."}
     assert calls[0][0].endswith("/mai/v1/chat/completions")
-    assert calls[0][1]["json"]["model"] == "mai-thinking"
-    assert "response_format" not in calls[0][1]["json"]
+    body = calls[0][1]["json"]
+    assert body["model"] == "mai-thinking" and body["max_completion_tokens"] == 2048
+    prompt = body["messages"][0]["content"]
+    assert "French word 'pomme' means 'apple'" in prompt and "plain" in prompt
+    assert "response_format" not in body
+    monkeypatch.setenv("MAI_THINKING_DEPLOYMENT", "mai-thinking-alt")
+    post(client, "/mnemonic", json={"word": "apple", "target": "pomme", "locale": "fr-FR"})
+    assert calls[1][1]["json"]["model"] == "mai-thinking-alt"
+    assert post(client, "/mnemonic", json={"word": "apple", "locale": "fr-FR"}).status_code == 400
 
 
 @pytest.mark.parametrize("payload", [{}, {"choices": []}, {"choices": [{"message": {"content": ""}}]}])
 def test_empty_mnemonic_is_not_success(client, monkeypatch, payload):
     upstream(monkeypatch, payload=payload)
-    assert post(client, "/mnemonic", json={"word": "apple"}).status_code == 502
+    assert post(client, "/mnemonic", json={"word": "apple", "target": "pomme", "locale": "fr-FR"}).status_code == 502
 
 
 @pytest.mark.parametrize("status", [400, 401, 403, 404, 429, 500])
@@ -276,6 +288,17 @@ def test_gateway_errors_are_visible_and_redacted(client, monkeypatch, status):
     assert len(calls) == 1
     if status == 429:
         assert response.headers["Retry-After"] == "9"
+
+
+@pytest.mark.parametrize("headers,expected", [
+    ({"retry-after-ms": "16427"}, "17"), ({"retry-after-ms": "999999"}, "300"),
+    ({"Retry-After": "4", "retry-after-ms": "16427"}, "4"), ({}, None), ({"Retry-After": "soon"}, None),
+])
+def test_rate_limit_wait_reaches_the_browser(client, monkeypatch, headers, expected):
+    upstream(monkeypatch, status=429, payload={"error": "busy"}, headers=headers)
+    response = post(client, "/speak", json={"text": "apple", "locale": "en-US"})
+    assert response.status_code == 429
+    assert response.headers.get("Retry-After") == expected
 
 
 def test_gateway_timeout(client, monkeypatch):
