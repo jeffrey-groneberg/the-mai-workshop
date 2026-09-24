@@ -5,5 +5,6 @@ Screenshots show the actual app produced by the published lesson edits.
 The silent GIF records that completed learner app, including optional mnemonics.
 Playback loops and runs at two-thirds speed, without re-encoding its image frames.
 Model responses and microphone input are offline fixtures, not live model calls.
+The transcript (Pomme.) and the mnemonic are recorded live responses, replayed offline.
 The image fixture is an apple crop (320:320:30:220) of the existing MAI-generated
 docs/assets/images/vocabulary-journey.webp. No endpoint or key is captured.

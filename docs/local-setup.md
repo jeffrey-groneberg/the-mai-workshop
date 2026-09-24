@@ -29,8 +29,9 @@ On Windows, use `.\.venv\Scripts\python.exe` wherever a lesson says `python`.
 ## Configure
 
 Copy `.env.example` to a root `.env`. Fill in `APIM_BASE_URL` with the
-instructor's HTTPS gateway origin, without an API path, and `APIM_API_KEY`
-with your participant key. Existing environment variables override `.env`.
+**Shared gateway** origin, without an API path, and `APIM_API_KEY` with your
+participant key; [Get your gateway values](getting-ready.md#get-your-gateway-values)
+shows where to find both. Existing environment variables override `.env`.
 
 ## Start
 
@@ -38,19 +39,19 @@ Run these in separate terminals. On macOS/Linux, activate the environment
 in each terminal first.
 
 ```sh
-python -m flask --app starter/app.py run --host 127.0.0.1 --port 5050
+python -m flask --app starter/app.py run --reload --host 127.0.0.1 --port 5050
 ```
 
 ```sh
-python -m flask --app solution/app.py run --host 127.0.0.1 --port 5051
+python -m flask --app solution/app.py run --reload --host 127.0.0.1 --port 5051
 ```
 
 Open [your app](http://127.0.0.1:5050) and the
 [solution](http://127.0.0.1:5051). Follow [lesson 00](lessons/00-open-your-app.md)
 using these local commands.
 
-After Python or HTML edits, restart Flask and reload the browser.
-JavaScript/CSS edits need a browser reload.
+With `--reload`, saving a Python or HTML file refreshes Flask on its own;
+reload the browser afterwards. Restart Flask yourself after changing `.env`.
 
 ## Preview the guide
 

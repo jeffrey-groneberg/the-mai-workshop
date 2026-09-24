@@ -8,7 +8,7 @@
     "overview": "The workshop guide uses native Zensical styling and ordinary Markdown for readable prose and code. The Flask apps retain their warm Microsoft AI companion styling. App tokens are defined in DESIGN.md and the app stylesheets; they do not style the guide.",
     "dos": [
       "Use native documentation navigation, code blocks, copy controls and tables.",
-      "Keep the four-main-file Flask app styling unchanged.",
+      "Keep the Flask app styling unchanged.",
       "Retain useful AI-generated teaching images with attribution and provenance."
     ],
     "donts": [

@@ -3,6 +3,21 @@
 Use a GitHub account with Codespaces access and the gateway values supplied
 by the instructor. Python dependencies install automatically.
 
+## Get your gateway values
+
+Your instructor shows an event page with a QR code, a link, and an admission
+code.
+
+1. Open the link **on the computer you will code on**. The key is 32
+   characters; copying it from a phone is error-prone.
+2. Enter the admission code and choose **Join**.
+3. On the model page, scroll to **Your shared API key** and choose
+   **Get shared key**.
+4. Copy **Shared gateway** as `APIM_BASE_URL` and the key as `APIM_API_KEY`.
+
+The key lasts 24 hours from when you first retrieve it. On a second day, get it
+again and update your secret or `.env`, then restart the Codespace or Flask.
+
 ## Create the Codespace
 
 Use the default **`main`** branch.
@@ -15,8 +30,8 @@ Use the default **`main`** branch.
 
 | Setting | Value |
 | --- | --- |
-| `APIM_BASE_URL` | The instructor's HTTPS gateway origin, without a path such as `/speech` or `/mai/v1`. |
-| `APIM_API_KEY` | Your participant key. |
+| `APIM_BASE_URL` | The **Shared gateway** origin, without a path such as `/speech` or `/mai/v1`. |
+| `APIM_API_KEY` | Your participant key from **Get shared key**. |
 
 If the creation page does not prompt for them, add
 [account-specific Codespaces secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-your-account-specific-secrets-for-github-codespaces)
@@ -28,12 +43,13 @@ existing Codespace after changing them.
 Wait for container setup, then run from the repository root:
 
 ```sh
-python -m flask --app starter/app.py run --host 0.0.0.0 --port 5050
+python -m flask --app starter/app.py run --reload --host 0.0.0.0 --port 5050
 ```
 
 In **Ports**, open **Your app — 5050** with **Open in Browser**. Use the normal
 HTTPS browser tab for microphone support. Leave forwarding at its default
-settings; the Flask server itself uses HTTP.
+settings; the Flask server itself uses HTTP. If the page says
+*No gateway settings yet*, check the secrets and restart the Codespace.
 
 Continue to [Open your app](lessons/00-open-your-app.md).
 

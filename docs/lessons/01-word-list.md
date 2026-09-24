@@ -2,20 +2,42 @@
 
 Add word pairs, select one to practise, and keep the list after reload.
 Flask supplies the language menu; JavaScript renders the list and saves it in
-`localStorage`. No model call is needed.
+`localStorage`. No model call yet.
+
+This is the only lesson that replaces whole files. The new files contain a
+**marker comment for every later edit**, and `app.py` already imports what later
+lessons need, so every later step replaces one marker line.
 
 ## Build
 
 ### 1. Supply the language menu
 
-**Replace all of `starter/app.py`.** Each entry maps a label to a
-[documented voice and transcription code](../reference.md#languages-and-voices).
-The next lessons use those fields.
+**Replace all of `starter/app.py`.** Each `LANGUAGES` entry maps a menu label to
+a [documented MAI voice](../reference.md#languages-and-voices) (lesson 2) and a
+transcription language code (lesson 3). `language_for` rejects anything else.
 
 ```python title="starter/app.py"
-from flask import Flask, render_template
+"""Your vocabulary app.
 
-app = Flask(__name__)
+The imports cover every lesson, so later steps only replace the marker
+comments at the bottom of this file.
+"""
+
+import base64
+import binascii
+import json
+import os
+from xml.sax.saxutils import escape
+
+import httpx
+from flask import Response, abort, jsonify, render_template, request
+
+from workshop import (
+    TIMEOUT, check_png, check_wav, create_app, gateway, json_body,
+    optional_text, text_field, upstream_json,
+)
+
+app = create_app(__name__)
 
 LANGUAGES = {
     "en-US": {"label": "English (US)", "stt": "en", "voice": "en-US-Harper:MAI-Voice-2-Flash"},
@@ -38,15 +60,34 @@ LANGUAGES = {
 }
 
 
+def language_for(locale):
+    if not isinstance(locale, str) or locale not in LANGUAGES:
+        abort(400, "Choose a language from the supported list.")
+    return LANGUAGES[locale]
+
+
 @app.get("/")
 def index():
     return render_template("index.html", languages=LANGUAGES)
+
+
+# Lesson 2: add the /speak route here.
+
+
+# Lesson 3: add the /transcribe route here.
+
+
+# Lesson 5: add the /image route here.
+
+
+# Extension: add the /mnemonic route here.
 ```
 
 ### 2. Give the list and practice card a home
 
-**Replace all of `starter/templates/index.html`.** Keep the existing CSS.
-The comments mark where later controls will go.
+**Replace all of `starter/templates/index.html`.** It loads the provided
+`workshop.js` before your `app.js`. If the gateway settings are missing, the
+page tells you; the word list works without them.
 
 ```html title="starter/templates/index.html"
 <!doctype html>
@@ -56,6 +97,7 @@ The comments mark where later controls will go.
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My words | MAI Workshop</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='workshop.js') }}" defer></script>
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </head>
 <body>
@@ -68,6 +110,9 @@ The comments mark where later controls will go.
     <section class="intro">
       <h1>A little vocabulary.<br>A world to explore.</h1>
       <p class="intro-copy">Choose a language. Keep a word. Make it yours.</p>
+      {% if not gateway_configured %}
+      <p class="connection-note"><strong>No gateway settings yet.</strong> Your word list works now. Add APIM_BASE_URL and APIM_API_KEY, then restart Flask, before lesson 2.</p>
+      {% endif %}
     </section>
     <p id="app-error" class="notice error-notice" role="alert" hidden></p>
     <div class="workspace">
@@ -82,8 +127,8 @@ The comments mark where later controls will go.
             {% endfor %}
           </select>
           <div class="input-pair">
-            <div><label for="english-word">English word</label><input id="english-word" maxlength="120" placeholder="apple" required></div>
-            <div><label for="target-word">Your translation</label><input id="target-word" maxlength="120" placeholder="Your word" required></div>
+            <div><label for="english-word">English word</label><input id="english-word" maxlength="120" placeholder="apple" autocomplete="off" required></div>
+            <div><label for="target-word">Your translation</label><input id="target-word" maxlength="120" placeholder="Your word" autocomplete="off" required></div>
           </div>
           <button class="button primary" type="submit">Add to my words</button>
         </form>
@@ -93,20 +138,24 @@ The comments mark where later controls will go.
         <button id="reset-storage" class="text-button" type="button" hidden>Clear unreadable saved data</button>
       </section>
       <section class="panel practice-panel" aria-label="Practise your selected word">
-        <div id="practice-empty" class="empty-state"><h2>Start with a word.</h2><p>Add a pair, then choose it in your list.</p></div>
+        <div id="practice-empty" class="empty-state">
+          <div class="word-orbit" aria-hidden="true"><span>a</span><span>A</span><span>?</span></div>
+          <h2>Start with a word.</h2>
+          <p>Add a pair, then choose it in your list.</p>
+        </div>
         <div id="practice-content" hidden>
           <div class="word-heading">
             <p id="practice-language" class="eyebrow"></p>
             <h2 id="practice-word" lang="en"></h2>
-            <button id="reveal-answer" class="text-button" type="button">Show / hide translation</button>
+            <button id="reveal-answer" class="text-button" type="button">Reveal translation</button>
             <p id="saved-translation" class="translation" hidden></p>
           </div>
-          <!-- Add speech controls here. -->
-          <!-- Add answer controls here. -->
-          <!-- Add memory controls here. -->
-          <!-- Add mnemonic controls here. -->
+          <!-- Lesson 2: add speech controls here. -->
+          <!-- Lesson 3: add answer controls here. -->
+          <!-- Lesson 5: add memory controls here. -->
+          <!-- Extension: add mnemonic controls here. -->
         </div>
-        <p id="model-status" class="status" role="status"></p>
+        <p id="model-status" class="status model-status" role="status" aria-live="polite"></p>
       </section>
     </div>
   </main>
@@ -115,28 +164,31 @@ The comments mark where later controls will go.
 </html>
 ```
 
-### 3. Implement saving, selection, and rendering
+### 3. Save, select, and render words
 
-**Replace all of `starter/static/app.js`.** The form handler creates a pair;
-`renderList` draws it; `saveWords` persists it. `textContent` displays entered
-words as text.
+**Replace all of `starter/static/app.js`.** `saveWords` persists the list,
+`renderList` draws it with `textContent` (entered words stay plain text), and
+`selectWord` shows a pair. Later lessons react to a new selection by
+registering `onWordChange(...)` hooks, so they never edit `selectWord`.
+`$`, `showError`, and `isBusy` come from `workshop.js`.
 
 ```javascript title="starter/static/app.js"
 "use strict";
+// Your browser code. workshop.js loads first and provides $, showError,
+// runAction, callApp, and the other helpers listed in the reference.
 
-const $ = (selector) => document.querySelector(selector);
 const STORAGE_KEY = "mai-learner-words-v1";
+const wordChangeHooks = [];
 let words = [];
 let selectedId = null;
 let storageReadable = true;
 
-function showError(message) {
-  $("#app-error").textContent = message;
-  $("#app-error").hidden = !message;
-}
-
 function selectedWord() {
   return words.find((word) => word.id === selectedId);
+}
+
+function onWordChange(hook) {
+  wordChangeHooks.push(hook);
 }
 
 function loadWords() {
@@ -193,7 +245,8 @@ function renderList() {
     remove.setAttribute("aria-label", `Remove ${word.english}`);
     remove.addEventListener("click", () => {
       if (!saveWords(words.filter((item) => item.id !== word.id))) return;
-      selectWord(word.id === selectedId ? words[0]?.id ?? null : selectedId);
+      if (word.id === selectedId) selectWord(words[0]?.id ?? null);
+      else renderList();
     });
     row.append(pick, remove);
     $("#word-list").append(row);
@@ -203,6 +256,10 @@ function renderList() {
 }
 
 function selectWord(id) {
+  if (isBusy()) {
+    showError("Wait for the current action to finish.");
+    return;
+  }
   selectedId = id;
   const word = selectedWord();
   $("#practice-empty").hidden = Boolean(word);
@@ -212,9 +269,11 @@ function selectWord(id) {
     $("#saved-translation").textContent = word.target;
     $("#saved-translation").lang = word.locale;
     $("#saved-translation").hidden = true;
+    $("#reveal-answer").textContent = "Reveal translation";
     $("#practice-language").textContent = [...$("#target-locale").options]
       .find((option) => option.value === word.locale).textContent;
   }
+  wordChangeHooks.forEach((hook) => hook(word));
   renderList();
 }
 
@@ -237,8 +296,11 @@ $("#word-form").addEventListener("submit", (event) => {
 });
 
 $("#reveal-answer").addEventListener("click", () => {
-  $("#saved-translation").hidden = !$("#saved-translation").hidden;
+  const hidden = !$("#saved-translation").hidden;
+  $("#saved-translation").hidden = hidden;
+  $("#reveal-answer").textContent = hidden ? "Reveal translation" : "Hide translation";
 });
+
 $("#reset-storage").addEventListener("click", () => {
   if (!confirm("Clear this app's unreadable saved vocabulary?")) return;
   try {
@@ -253,19 +315,30 @@ $("#reset-storage").addEventListener("click", () => {
   }
 });
 
+// Lesson 2: add speech here.
+
+// Lesson 3: add recording here.
+
+// Lesson 5: add memory images here.
+
+// Extension: add mnemonics here.
+
 // Start the page.
 loadWords();
 selectWord(words[0]?.id ?? null);
 ```
 
-Keep `// Start the page.` and its calls **last** so initialization runs after
-all state and handlers are defined.
+Keep `// Start the page.` and its two calls **last**: every later lesson adds
+code above it, so the page starts only after all handlers exist.
 
-**Run:** restart Flask and reload. Add two pairs, select each, reveal the
-translation, then reload again. Both pairs should remain. Remove one.
+**Run:** save all three files and reload the browser. Add two pairs, select
+each, reveal the translation, then reload again. Both pairs remain. Remove one.
 To correct a pair, remove it and add it again.
 
 ![A saved apple and pomme word pair selected in the learner's vocabulary list.](../assets/workshop/01-word-list.webp){ width="960" loading="lazy" }
+
+**Catch up:** `python checkpoints/restore.py 01` copies this lesson's finished
+files over yours, after backing yours up.
 
 ## Try one
 

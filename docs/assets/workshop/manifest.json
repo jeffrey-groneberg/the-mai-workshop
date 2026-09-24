@@ -16,7 +16,6 @@
   "screenshots": [
     "00-open-app.webp",
     "01-word-list.webp",
-    "02-english-speech.webp",
     "02-bilingual-speech.webp",
     "03-transcription.webp",
     "04-answer-match.webp",
@@ -29,7 +28,7 @@
     "height": 644,
     "frames": 89,
     "duration_seconds": 26.7,
-    "bytes": 2512149,
+    "bytes": 2365506,
     "repeat": true,
     "playback_rate": 0.6666666666666666
   },

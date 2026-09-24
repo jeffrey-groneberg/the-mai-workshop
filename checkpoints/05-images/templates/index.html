@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My words | MAI Workshop</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='workshop.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to your words</a>
+  <header class="site-header">
+    <a class="brand" href="/">MAI <span>WORKSHOP</span></a>
+    <span class="eyebrow">YOUR APP</span>
+  </header>
+  <main id="main" class="app-shell">
+    <section class="intro">
+      <h1>A little vocabulary.<br>A world to explore.</h1>
+      <p class="intro-copy">Choose a language. Keep a word. Make it yours.</p>
+      {% if not gateway_configured %}
+      <p class="connection-note"><strong>No gateway settings yet.</strong> Your word list works now. Add APIM_BASE_URL and APIM_API_KEY, then restart Flask, before lesson 2.</p>
+      {% endif %}
+    </section>
+    <p id="app-error" class="notice error-notice" role="alert" hidden></p>
+    <div class="workspace">
+      <section class="panel vocabulary-panel" aria-labelledby="list-title">
+        <h2 id="list-title">Words worth keeping.</h2>
+        <form id="word-form">
+          <label for="target-locale">I want to practise</label>
+          <select id="target-locale" required>
+            <option value="">Choose a target language</option>
+            {% for locale, language in languages.items() %}
+            {% if locale != 'en-US' %}<option value="{{ locale }}">{{ language.label }}</option>{% endif %}
+            {% endfor %}
+          </select>
+          <div class="input-pair">
+            <div><label for="english-word">English word</label><input id="english-word" maxlength="120" placeholder="apple" autocomplete="off" required></div>
+            <div><label for="target-word">Your translation</label><input id="target-word" maxlength="120" placeholder="Your word" autocomplete="off" required></div>
+          </div>
+          <button class="button primary" type="submit">Add to my words</button>
+        </form>
+        <div class="list-heading"><span class="eyebrow">YOUR WORDS</span><span id="word-count" class="count">0</span></div>
+        <ul id="word-list" class="word-list" aria-label="Saved vocabulary"></ul>
+        <p id="list-empty" class="muted">Your list stays in this browser, at this app address.</p>
+        <button id="reset-storage" class="text-button" type="button" hidden>Clear unreadable saved data</button>
+      </section>
+      <section class="panel practice-panel" aria-label="Practise your selected word">
+        <div id="practice-empty" class="empty-state">
+          <div class="word-orbit" aria-hidden="true"><span>a</span><span>A</span><span>?</span></div>
+          <h2>Start with a word.</h2>
+          <p>Add a pair, then choose it in your list.</p>
+        </div>
+        <div id="practice-content" hidden>
+          <div class="word-heading">
+            <p id="practice-language" class="eyebrow"></p>
+            <h2 id="practice-word" lang="en"></h2>
+            <button id="reveal-answer" class="text-button" type="button">Reveal translation</button>
+            <p id="saved-translation" class="translation" hidden></p>
+          </div>
+          <div class="listen-actions">
+            <button id="speak-english" class="button secondary" type="button">Hear English</button>
+            <button id="speak-target" class="button secondary" type="button">Hear translation</button>
+            <button id="download-sample" class="text-button" type="button">Download synthetic WAV</button>
+          </div>
+          <audio id="speech-audio" controls hidden aria-label="Generated speech"></audio>
+          <section class="practice-step" aria-labelledby="voice-title">
+            <div class="step-title"><span class="step-number">01</span><h3 id="voice-title">Say it in your language.</h3></div>
+            <p class="muted">Preview locally before sending through Flask and the workshop gateway to MAI. This app does not save recordings. Use synthetic audio unless the instructor has approved microphone guidance.</p>
+            <label class="consent-label"><input id="audio-consent" type="checkbox"> I choose to send sample audio under the instructor's approved guidance.</label>
+            <div class="record-actions">
+              <button id="record-answer" class="button primary" type="button">Record answer</button>
+              <button id="stop-recording" class="button secondary" type="button" hidden>Stop recording</button>
+              <label class="file-label" for="audio-file">Or choose a synthetic WAV<input id="audio-file" type="file" accept=".wav,audio/wav"></label>
+            </div>
+            <p id="record-status" class="status" role="status" aria-live="polite"></p>
+            <audio id="audio-preview" controls hidden aria-label="Local audio, not yet sent"></audio>
+            <div id="recording-review" class="record-actions" hidden>
+              <button id="send-answer" class="button primary" type="button">Send for transcription</button>
+              <button id="discard-recording" class="text-button" type="button">Discard recording</button>
+            </div>
+            <div id="answer-result" class="answer-result" role="status" hidden></div>
+            <p class="fine-print">Recognized text is not a pronunciation score.</p>
+          </section>
+          <section class="practice-step" aria-labelledby="image-title">
+            <div class="step-title"><span class="step-number">02</span><h3 id="image-title">Give the word a picture.</h3></div>
+            <label for="image-detail">A scene or style, in English</label>
+            <input id="image-detail" maxlength="360" placeholder="A tiny apple wearing a crown">
+            <button id="generate-image" class="button secondary" type="button">Make a memory image</button>
+            <p id="image-status" class="status" role="status" aria-live="polite"></p>
+            <figure id="memory-figure" class="memory-figure" hidden>
+              <div id="image-mount"></div>
+              <figcaption>A generated visual cue, not a verified definition.</figcaption>
+            </figure>
+          </section>
+          <!-- Extension: add mnemonic controls here. -->
+        </div>
+        <p id="model-status" class="status model-status" role="status" aria-live="polite"></p>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer"><span>MAI Workshop</span><p>Use sample data only.</p></footer>
+</body>
+</html>
