@@ -86,8 +86,10 @@ python checkpoints/restore.py 03
 ```
 
 This copies a checkpoint over your starter files after saving yours to
-`.checkpoint-backups/<time>/`. Use it to catch up, or to compare: open your file
-next to the checkpoint's.
+`.checkpoint-backups/<time>/`; `python checkpoints/restore.py undo` puts your
+latest backup back. Both give the files a fresh timestamp, so a running
+`flask run --reload` restarts on its own. Use it to catch up, or to compare:
+open your file next to the checkpoint's.
 
 ## Languages and voices
 

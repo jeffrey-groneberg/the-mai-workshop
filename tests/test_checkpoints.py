@@ -114,6 +114,14 @@ def test_restore_copies_a_checkpoint_and_backs_up_the_learner_files(tmp_path):
     assert (tmp_path / "starter/app.py").stat().st_mtime_ns > learner_mtime
     (backup,) = (tmp_path / ".checkpoint-backups").iterdir()
     assert (backup / "app.py").read_text(encoding="utf-8") == "# my own work\n"
+    (tmp_path / "starter/app.py").write_text("# checkpoint edited\n", encoding="utf-8")
+    before_undo = (tmp_path / "starter/app.py").stat().st_mtime_ns
+    undo = subprocess.run(
+        [sys.executable, str(tmp_path / "checkpoints/restore.py"), "undo"], capture_output=True, text=True, check=True,
+    )
+    assert "your files" in undo.stdout
+    assert (tmp_path / "starter/app.py").read_text(encoding="utf-8") == "# my own work\n"
+    assert (tmp_path / "starter/app.py").stat().st_mtime_ns > before_undo
     ambiguous = subprocess.run(
         [sys.executable, str(tmp_path / "checkpoints/restore.py"), "0"], capture_output=True, text=True,
     )
