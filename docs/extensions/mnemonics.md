@@ -32,11 +32,14 @@ plain text.
 | --- | --- |
 | Flask receives | `POST /mnemonic` with JSON `{"word": "apple", "target": "pomme", "locale": "fr-FR"}` |
 | Gateway request | `POST {base}/mai/v1/chat/completions` |
+| Headers | `api-key` from `gateway()`; `json=` sets the JSON content type |
 | Body | `{"model": os.getenv("MAI_THINKING_DEPLOYMENT", "mai-thinking"), "messages": [{"role": "user", "content": prompt}], "max_completion_tokens": 2048}` |
 | Flask returns | `{"text": ...}` from `choices[0].message.content` |
 
 `max_completion_tokens` caps the output *including* the model's hidden
-reasoning, so keep it generous. The content is plain text, not JSON.
+reasoning, so keep it generous. The content is plain text, not JSON. Thinking
+takes 5–20 seconds, while httpx waits only 5 seconds by default, so pass
+`timeout=TIMEOUT` as in the earlier lessons.
 
 ```python title="Your turn: starter/app.py"
 @app.post("/mnemonic")
@@ -47,7 +50,8 @@ def mnemonic():
     language = language_for(data.get("locale"))
     base, headers = gateway()
     prompt = "TODO: ask for a mnemonic that links target to word in language['label']."
-    # TODO 1: httpx.post the contract's JSON body to f"{base}/mai/v1/chat/completions".
+    # TODO 1: httpx.post the contract's JSON body to f"{base}/mai/v1/chat/completions"
+    #         with json=..., headers=headers, and timeout=TIMEOUT.
     # TODO 2: payload = upstream_json(response); read choices[0].message.content.
     # TODO 3: abort(502, ...) if it is missing or empty; else return jsonify(text=text.strip()).
     abort(501, "Extension: finish the /mnemonic route.")

@@ -71,10 +71,11 @@ def image():
 
     ```json
     {
-      "created": 1790280000,
+      "created": 1790283468,
+      "data": [{"b64_json": "iVBORw0KGgoA..."}],
       "model": "mai-image-flash",
-      "data": [{"b64_json": "iVBORw0KGgo..."}],
-      "usage": {"num_output_tokens": 1024, "num_input_text_tokens": 31, "num_input_image_tokens": 0}
+      "size": "1024x1024",
+      "usage": {"num_output_tokens": 1024, "num_input_text_tokens": 22, "num_input_image_tokens": 0}
     }
     ```
 
@@ -197,13 +198,15 @@ Each Generate click is a new model request.
   `A single apple on a picnic blanket, soft watercolor`.
 - For `bank`, compare `A river bank with reeds, no buildings` with
   `A bank building on a city street`. Which matches your saved translation?
-- **Flash versus the full model.** Add `MAI_IMAGE_DEPLOYMENT=mai-image` to
-  `.env`, restart Flask (the reloader does not watch `.env`), and generate the
-  same prompt. In our test MAI-Image-2.6 took about 32 seconds, Flash about 13.
-  Remove the line afterwards.
+- **Flash versus the full model.** In `.env`, change `MAI_IMAGE_DEPLOYMENT` to
+  `mai-image` (add the line if it is missing), restart Flask (the reloader does
+  not watch `.env`), and generate the same prompt. In our tests MAI-Image-2.6
+  took about 30 seconds, Flash about 13. Change it back to `mai-image-flash`
+  afterwards.
 - **See what you used.** Add `app.logger.warning("usage: %s", payload.get("usage"))`
-  after `payload = upstream_json(response)`. The Flask terminal shows the token
-  counts, such as `num_output_tokens: 1024`. Compare them with the
+  after `payload = upstream_json(response)`. In the Flask terminal, find the
+  line with `WARNING in app: usage:` and its token counts, such as
+  `num_output_tokens: 1024`. Compare them with the
   [cost page](../compare-models.md).
 
 **Finish:** use the full loop: select, listen, record or upload, check, and

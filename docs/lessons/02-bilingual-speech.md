@@ -155,6 +155,8 @@ window.addEventListener("pagehide", () => stopAudio($("#speech-audio")));
 browser, then press **Hear English** and **Hear translation**. Network shows
 `POST /speak` with `text` and `locale`, answered by `audio/wav` in about a
 second. Press **Download synthetic WAV** and keep the file for lesson 3.
+Speech varies a little per request: a one-word sample plays for under a second.
+If it lasts about 2 seconds, it contains extra words; download it again.
 
 Still seeing *Lesson 2: finish the /speak route.*? The skeleton's last line is
 still in place.
@@ -172,8 +174,8 @@ The app caches audio per page, so reload the page after each change.
 
 - **Slow it down for learners.** In your SSML, wrap the escaped text in
   `<prosody rate="-30%">…</prosody>`. Save a short phrase such as
-  `Je voudrais une pomme, s'il vous plaît.` and compare: the audio is about 40%
-  longer.
+  `Je voudrais une pomme, s'il vous plaît.` and compare: the audio gets
+  noticeably longer (30–60% in our tests).
 - **Compare two voices.** Add `apple` / `manzana` for Spanish (Spain) and
   Spanish (Mexico) to hear Marta and Valeria.
 - **Compare two models.** In `LANGUAGES`, change

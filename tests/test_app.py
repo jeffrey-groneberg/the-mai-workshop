@@ -308,3 +308,21 @@ def test_gateway_timeout(client, monkeypatch):
     response = post(client, "/speak", json={"text": "apple", "locale": "en-US"})
     assert response.status_code == 504
     assert b"private upstream" not in response.data
+
+
+@pytest.mark.parametrize("read,hint", [(5.0, "Pass timeout=TIMEOUT"), (120.0, "did not answer in time")])
+def test_timeouts_explain_a_short_client_timeout(client, monkeypatch, read, hint):
+    def timeout(url, **kwargs):
+        request = httpx.Request("POST", url, extensions={"timeout": {"connect": 5.0, "read": read}})
+        raise httpx.ReadTimeout("private upstream details", request=request)
+    monkeypatch.setattr(backend.httpx, "post", timeout)
+    response = post(client, "/speak", json={"text": "apple", "locale": "en-US"})
+    assert response.status_code == 504 and hint in response.json["error"]
+
+
+def test_unreachable_gateway_is_not_called_a_timeout(client, monkeypatch):
+    def unreachable(url, **kwargs):
+        raise httpx.ConnectError("private upstream details", request=httpx.Request("POST", url))
+    monkeypatch.setattr(backend.httpx, "post", unreachable)
+    response = post(client, "/speak", json={"text": "apple", "locale": "en-US"})
+    assert response.status_code == 504 and "could not be reached" in response.json["error"]

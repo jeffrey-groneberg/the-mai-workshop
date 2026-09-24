@@ -150,6 +150,21 @@ def test_real_browser_recording_emits_pcm_wav(page, server):
     assert audio[:4] == b"RIFF"
 
 
+def test_second_stop_during_conversion_keeps_the_recording(page, server):
+    url, calls, _ = server
+    page.goto(url)
+    add_word(page)
+    page.locator("#audio-consent").check()
+    page.get_by_role("button", name="Record answer", exact=True).click()
+    expect(page.locator("#record-status")).to_contain_text("Recording locally")
+    page.wait_for_timeout(350)
+    page.evaluate("() => { const stop = document.querySelector('#stop-recording'); stop.click(); stop.click(); }")
+    expect(page.locator("#recording-review")).to_be_visible(timeout=15000)
+    expect(page.locator("#record-status")).to_contain_text("Ready to preview locally")
+    expect(page.locator("#stop-recording")).to_be_hidden()
+    assert not calls
+
+
 def test_withdrawing_consent_discards_an_in_flight_transcript(page, server):
     url, calls, state = server
     page.goto(url)

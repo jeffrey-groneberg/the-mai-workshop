@@ -189,23 +189,27 @@ Network shows multipart `audio` and `locale`; the card shows
 
 **No microphone?** Choose the synthetic WAV you downloaded in lesson 2 and use
 the same Send button. If a permission prompt hangs, **Stop recording** unlocks
-the file picker. Keep samples under the 12-second limit.
+the file picker. Keep samples under the 12-second limit. A one-word sample
+should preview for under a second; about 2 seconds means speech added words,
+so download it again.
 
 **Catch up:** `python checkpoints/restore.py 03` copies this lesson's finished
 files over yours, after backing yours up.
 
 ## Try one
 
-- **Language hint on and off.** Delete the line `"locales": [language["stt"]],`,
+- **Language hint on and off.** Remove the `locales` entry from `definition`,
   save, and send the same WAV. Clean samples of common words usually come back
   unchanged. Very short words show the difference: add `tree` / `fa` in
   Hungarian, download its WAV, and send it with and without the hint. In our
-  test it came back as `Phó` without the hint and `Fa.` with it. Restore the line.
+  tests it came back as another word without the hint (`Phó`, `Pa.`) and as
+  `Fa.` with it. Restore the entry.
 - **Look at the detected language.** Add
   `app.logger.warning("transcription: %s", payload)` after
-  `payload = upstream_json(response)` and send a one-word sample. The Flask
-  terminal shows `phrases[].locale`, which is often wrong for single words (we
-  saw `sk` for French `Pomme.`). That is why the hint helps.
+  `payload = upstream_json(response)` and send a one-word sample. In the Flask
+  terminal, find the line with `WARNING in app:`: `phrases[].locale` is often
+  wrong for single words (we saw `sk` for French `Pomme.`). That is why the hint
+  helps.
 - **Word versus phrase.** Compare an isolated word with a short phrase in the
   same language. Does the added context change the transcript?
 
