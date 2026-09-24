@@ -119,7 +119,8 @@ files over yours, after backing yours up.
   longer matches `pomme`. Restore normalization.
 - **Accents count.** Save `summer` / `été` and `summer` / `ete` in French,
   download the `été` WAV, and send it to both: only the accented entry matches.
-  Speech varies per download; if the transcript gains a word (we once got
-  `en été.`), download a fresh sample.
+  First check that the preview plays for under a second. About one in five
+  one-word downloads contains extra speech (we got a 1.9-second take that said
+  `un été. Été.`, which matches neither entry); download it again if so.
 
 [Next: generate a memory image](05-memory-images.md).

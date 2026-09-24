@@ -206,4 +206,17 @@ def gateway_error(error):
 
 def connection_error(error):
     current_app.logger.warning("Gateway connection failed: %s", type(error).__name__)
-    return jsonify(error="The gateway could not be reached in time. Check your connection and try again."), 504
+    if not isinstance(error, httpx.TimeoutException):
+        message = "The gateway could not be reached. Check your connection and APIM_BASE_URL."
+    elif _read_timeout(error) < TIMEOUT.read:
+        message = "The model needed longer than this request allows. Pass timeout=TIMEOUT to httpx.post."
+    else:
+        message = "The model did not answer in time. Try again in a moment."
+    return jsonify(error=message), 504
+
+
+def _read_timeout(error):
+    try:
+        return error.request.extensions.get("timeout", {}).get("read") or TIMEOUT.read
+    except RuntimeError:
+        return TIMEOUT.read

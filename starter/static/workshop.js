@@ -193,6 +193,11 @@ function setupAnswerRecorder({onNewAudio = () => {}} = {}) {
     previewUrl = null;
   }
 
+  function finishCapture() {
+    $("#stop-recording").hidden = true;
+    if (activeRecorder?.state === "recording") activeRecorder.stop();
+  }
+
   function review(blob) {
     clearPreview();
     pendingAudio = blob;
@@ -257,9 +262,7 @@ function setupAnswerRecorder({onNewAudio = () => {}} = {}) {
         });
         recorder.start();
         $("#record-status").textContent = `Recording locally; stops after ${MAX_SECONDS} seconds.`;
-        timer = setTimeout(() => {
-          if (recorder.state === "recording") recorder.stop();
-        }, MAX_SECONDS * 1000);
+        timer = setTimeout(finishCapture, MAX_SECONDS * 1000);
         recordingTimer = timer;
         await stopped;
         stream.getTracks().forEach((track) => track.stop());
@@ -290,7 +293,9 @@ function setupAnswerRecorder({onNewAudio = () => {}} = {}) {
 
   $("#record-answer").addEventListener("click", record);
   $("#stop-recording").addEventListener("click", () => {
-    if (activeRecorder?.state === "recording") activeRecorder.stop();
+    // Before recording starts (permission pending) Stop cancels; afterwards it only stops,
+    // so a second press during WAV conversion cannot discard the new recording.
+    if (activeRecorder) finishCapture();
     else cancel("Local recording discarded.");
   });
   $("#discard-recording").addEventListener("click", () => cancel("Local recording discarded."));

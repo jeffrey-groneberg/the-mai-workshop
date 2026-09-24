@@ -1,6 +1,7 @@
 """Keep lessons, checkpoints, and the generated solution consistent."""
 
 import io
+import os
 import re
 import shutil
 import subprocess
@@ -95,6 +96,11 @@ def test_restore_copies_a_checkpoint_and_backs_up_the_learner_files(tmp_path):
     shutil.copytree(ROOT / "starter", tmp_path / "starter")
     shutil.copytree(ROOT / "checkpoints", tmp_path / "checkpoints")
     (tmp_path / "starter/app.py").write_text("# my own work\n", encoding="utf-8")
+    learner_mtime = (tmp_path / "starter/app.py").stat().st_mtime_ns
+    old = learner_mtime - 3_600_000_000_000
+    for file in (tmp_path / "checkpoints/03-transcription").rglob("*"):
+        if file.is_file():
+            os.utime(file, ns=(old, old))  # A git checkout often leaves checkpoints older than your edits.
     result = subprocess.run(
         [sys.executable, str(tmp_path / "checkpoints/restore.py"), "03"],
         capture_output=True, text=True, check=True,
@@ -104,6 +110,8 @@ def test_restore_copies_a_checkpoint_and_backs_up_the_learner_files(tmp_path):
         assert (tmp_path / "starter" / file).read_bytes() == (
             tmp_path / "checkpoints/03-transcription" / file
         ).read_bytes()
+    # Werkzeug's stat reloader restarts only when a watched file's mtime increases.
+    assert (tmp_path / "starter/app.py").stat().st_mtime_ns > learner_mtime
     (backup,) = (tmp_path / ".checkpoint-backups").iterdir()
     assert (backup / "app.py").read_text(encoding="utf-8") == "# my own work\n"
     ambiguous = subprocess.run(

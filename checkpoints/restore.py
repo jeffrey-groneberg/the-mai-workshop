@@ -4,7 +4,8 @@
 
 Checkpoints hold the three files you edit (app.py, templates/index.html, and
 static/app.js) as they are after each lesson. Your current versions are first
-copied to .checkpoint-backups/<time>/, so nothing is lost.
+copied to .checkpoint-backups/<time>/, so nothing is lost. The restored files
+get a fresh modification time, so a running `flask run --reload` picks them up.
 """
 
 import shutil
@@ -31,8 +32,8 @@ def main(arguments):
             (backup / file).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(current, backup / file)
         current.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source / file, current)
-    print(f"starter/ now matches checkpoint {matches[0]}.")
+        shutil.copyfile(source / file, current)
+    print(f"starter/ now matches checkpoint {matches[0]}. Flask reloads; reload the browser.")
     print(f"Your previous files are in {backup.relative_to(ROOT)}/.")
     return 0
 
