@@ -34,8 +34,10 @@ generates `checkpoints/` (the three learner files after each lesson) and
 Participants start from the repository's default `main` branch. No development
 branch is part of the workshop instructions.
 
-Each lesson states the result and explains the mechanism. Edits replace one
-unique marker line placed by lesson 1; no edit is a partial-line change. Each
+Each lesson states the result and explains the mechanism. A build map shows the
+finished step with numbered outlines that match labelled, highlighted code
+lines, and every step has a short "why" callout. Edits replace one unique marker
+line placed by lesson 1; no edit is a partial-line change. Each
 model lesson has the participant write the MAI call from a contract table and a
 skeleton, with a folded reference solution. Every lesson ends with a run check
 and concrete experiments. Remove repeated workshop

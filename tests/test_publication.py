@@ -79,7 +79,6 @@ def test_generated_teaching_images_have_provenance():
 def test_checkpoint_screenshots_match_the_workshop_steps():
     directory = ROOT / "docs/assets/workshop"
     pages = {
-        "lessons/00-open-your-app.md": ["00-open-app.webp"],
         "lessons/01-word-list.md": ["01-word-list.webp"],
         "lessons/02-bilingual-speech.md": ["02-bilingual-speech.webp"],
         "lessons/03-record-and-transcribe.md": ["03-transcription.webp"],
@@ -295,3 +294,57 @@ def test_reference_solutions_render_folded_with_copyable_titled_code(tmp_path):
             assert body.count('<span class="filename">starter/') == 1 and "<code" in body, page
             text = html.unescape(re.sub(r"<[^>]+>", "", body))
             assert "@app.post" in text or "function showTranscript" in text, page
+
+
+BUILD_MAP_PAGES = {
+    "lessons/00-open-your-app.md": "00", "lessons/01-word-list.md": "01",
+    "lessons/02-bilingual-speech.md": "02", "lessons/03-record-and-transcribe.md": "03",
+    "lessons/04-check-your-answer.md": "04", "lessons/05-memory-images.md": "05",
+    "extensions/mnemonics.md": "06",
+}
+
+
+def test_build_maps_connect_each_outline_to_marked_code():
+    from lesson_replay import BUILD_MARKS, FENCE
+
+    directory = ROOT / "docs/assets/workshop"
+    manifest = json.loads((directory / "manifest.json").read_text())
+    maps = {entry["file"]: entry["marks"] for entry in manifest["build_maps"]}
+    assert list(maps) == [f"{number}-build-map.webp" for number in BUILD_MAP_PAGES.values()]
+    label = re.compile(rf"^[ \t]*(?:<!--|#|//)((?:[ \t]*[{BUILD_MARKS}])+)[ \t]*(?:-->)?[ \t]*$")
+    for page, number in BUILD_MAP_PAGES.items():
+        text = (ROOT / "docs" / page).read_text()
+        name = f"{number}-build-map.webp"
+        assert f"../assets/workshop/{name}" in text, page
+        data = (directory / name).read_bytes()
+        assert data[:4] == b"RIFF" and data[8:12] == b"WEBP" and 1024 < len(data) < 512 * 1024
+        legend = re.findall(rf"^- ([{BUILD_MARKS}]) \*\*", text, re.M)
+        assert legend == list(BUILD_MARKS[:maps[name]]), f"{page}: legend must number every outline in order"
+        used = set()
+        for block in FENCE.finditer(text):
+            lines = block.group("body").split("\n")
+            labels = {n for n, line in enumerate(lines, 1) if label.match(line)}
+            for n in labels:
+                used.update(mark for mark in label.match(lines[n - 1]).group(1) if mark in BUILD_MARKS)
+            found = re.search(r'hl_lines="([^"]*)"', block.group("attrs"))
+            highlighted = sorted(int(n) for n in found.group(1).split()) if found else []
+            where = f"{page}: block {block.group('attrs').strip()}"
+            assert labels <= set(highlighted), f"{where}: highlight every ❶ label line"
+            for n in labels:
+                assert n + 1 in highlighted and n + 1 not in labels, f"{where}: a label needs code under it"
+            for n in highlighted:
+                assert n in labels or n - 1 in highlighted, f"{where}: each highlighted band starts at a label"
+        assert used == set(legend), f"{page}: every outline needs labelled code, and every label an outline"
+
+
+def test_lesson_zero_excerpts_are_real_starter_lines():
+    from lesson_replay import FENCE, strip_build_marks
+
+    text = (ROOT / "docs/lessons/00-open-your-app.md").read_text()
+    excerpts = [block for block in FENCE.finditer(text) if "(excerpt)" in block.group("attrs")]
+    assert len(excerpts) == 3
+    for block in excerpts:
+        file = re.search(r'title="starter/([^" ]+) \(excerpt\)"', block.group("attrs")).group(1)
+        source = (ROOT / "starter" / file).read_text()
+        for line in strip_build_marks(block.group("body")).splitlines():
+            assert line.strip() in source, f"{file}: {line!r} is not in the starter"

@@ -14,7 +14,6 @@
     "y": 220
   },
   "screenshots": [
-    "00-open-app.webp",
     "01-word-list.webp",
     "02-bilingual-speech.webp",
     "03-transcription.webp",
@@ -22,13 +21,44 @@
     "05-memory-image.webp",
     "06-mnemonic.webp"
   ],
+  "build_maps": [
+    {
+      "file": "00-build-map.webp",
+      "marks": 2
+    },
+    {
+      "file": "01-build-map.webp",
+      "marks": 3
+    },
+    {
+      "file": "02-build-map.webp",
+      "marks": 3
+    },
+    {
+      "file": "03-build-map.webp",
+      "marks": 4
+    },
+    {
+      "file": "04-build-map.webp",
+      "marks": 1
+    },
+    {
+      "file": "05-build-map.webp",
+      "marks": 3
+    },
+    {
+      "file": "06-build-map.webp",
+      "marks": 2
+    }
+  ],
+  "build_map_color": "#4051b5",
   "animation": "app-walkthrough.gif",
   "animation_details": {
     "width": 880,
     "height": 644,
-    "frames": 89,
-    "duration_seconds": 26.7,
-    "bytes": 2365506,
+    "frames": 87,
+    "duration_seconds": 26.1,
+    "bytes": 2573758,
     "repeat": true,
     "playback_rate": 0.6666666666666666
   },

@@ -24,21 +24,46 @@ failures such as 401 or 429 become short messages in the app.
 
 ## Build
 
+**What you'll build.**
+
+![The practice card with three numbered outlines: 1 the Hear English and Hear translation buttons, 2 the Download synthetic WAV link, 3 the audio player.](../assets/workshop/02-build-map.webp){ width="608" loading="lazy" }
+
+- ❶ **Hear English / Hear translation**: buttons from step 1; step 3 sends their word to your `/speak` route from step 2.
+- ❷ **Download synthetic WAV**: saves the same cached audio as a file for lesson 3.
+- ❸ **Audio player**: plays the WAV that `/speak` returns.
+
+The same numbers mark the highlighted lines in the code below. Keep or delete
+those `❶` comments; they only link code to the picture.
+
 ### 1. Add the speech controls
+
+!!! question "Why paste the markup first?"
+
+    `app.js` finds elements by `id`. The ids are the contract between the page and
+    your script, so the elements must exist before step 3 wires them.
 
 In `starter/templates/index.html`, replace
 `<!-- Lesson 2: add speech controls here. -->` with:
 
-```html title="starter/templates/index.html"
+```html title="starter/templates/index.html" hl_lines="2 3 4 5 6 8 9"
 <div class="listen-actions">
+  <!-- ❶ -->
   <button id="speak-english" class="button secondary" type="button">Hear English</button>
   <button id="speak-target" class="button secondary" type="button">Hear translation</button>
+  <!-- ❷ -->
   <button id="download-sample" class="text-button" type="button">Download synthetic WAV</button>
 </div>
+<!-- ❸ -->
 <audio id="speech-audio" controls hidden aria-label="Generated speech"></audio>
 ```
 
 ### 2. Your turn: write `/speak`
+
+!!! question "Why a Flask route and not a call from the browser?"
+
+    The key must never reach the browser. Flask adds it on the server, checks the
+    text, and verifies the audio before passing it on. SSML names the voice, and the
+    voice name selects the model.
 
 In `starter/app.py`, replace `# Lesson 2: add the /speak route here.` with a
 route that follows this contract. Paste the skeleton and finish its TODOs, or
@@ -82,7 +107,8 @@ def speak():
 
 ??? success "Reference solution"
 
-    ```python title="starter/app.py"
+    ```python title="starter/app.py" hl_lines="1 2 23 24"
+    # ❶ ❷
     @app.post("/speak")
     def speak():
         data = json_body()
@@ -104,17 +130,23 @@ def speak():
         )
         response.raise_for_status()
         check_wav(response.content, max_seconds=60, error_status=502)
+        # ❸
         return Response(response.content, mimetype="audio/wav")
     ```
 
 ### 3. Wire the buttons
+
+!!! question "Why cache the audio?"
+
+    Every click would otherwise be a new model request. The cache makes replay and
+    the WAV download free, and lesson 3 reuses that WAV.
 
 In `starter/static/app.js`, replace `// Lesson 2: add speech here.` with the
 code below. `speechBlob` caches audio per text and locale, so replaying or
 downloading does not call the model again. `playAudio`, `stopAudio`, and
 `downloadBlob` come from `workshop.js`.
 
-```javascript title="starter/static/app.js"
+```javascript title="starter/static/app.js" hl_lines="15 16 19 20 23 24 27 28 31 32"
 const speechCache = new Map();
 
 async function speechBlob(text, locale) {
@@ -129,18 +161,23 @@ async function speechBlob(text, locale) {
   return speechCache.get(key);
 }
 
+// ❶
 $("#speak-english").addEventListener("click", () => {
   const word = selectedWord();
   runAction("Asking MAI Voice for English audio...", async () => {
+    // ❸
     await playAudio($("#speech-audio"), await speechBlob(word.english, "en-US"));
   });
 });
+// ❶
 $("#speak-target").addEventListener("click", () => {
   const word = selectedWord();
   runAction("Asking MAI Voice for your translation...", async () => {
+    // ❸
     await playAudio($("#speech-audio"), await speechBlob(word.target, word.locale));
   });
 });
+// ❷
 $("#download-sample").addEventListener("click", () => {
   const word = selectedWord();
   runAction("Preparing synthetic target-language audio...", async () => {

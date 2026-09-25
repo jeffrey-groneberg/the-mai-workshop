@@ -10,13 +10,30 @@ lessons need, so every later step replaces one marker line.
 
 ## Build
 
+**What you'll build.**
+
+![The word list page with three numbered outlines: 1 the language menu, 2 the practice card showing apple, 3 the saved word apple / fr-FR.](../assets/workshop/01-build-map.webp){ width="960" loading="lazy" }
+
+- ❶ **Language menu**: Flask fills it from `LANGUAGES` (step 1) through the template's `<select>` loop (step 2).
+- ❷ **Practice card**: markup from step 2; `selectWord` fills it when you pick a word (step 3).
+- ❸ **Your words**: `renderList` draws them from `localStorage` (step 3) into the list from step 2.
+
+The same numbers mark the highlighted lines in the code below. Keep or delete
+those `❶` comments; they only link code to the picture.
+
 ### 1. Supply the language menu
+
+!!! question "Why does Flask own the language list?"
+
+    Each entry pairs a voice (lesson 2) with a transcription code (lesson 3).
+    Keeping the list on the server means the browser can only pick combinations the
+    models support.
 
 **Replace all of `starter/app.py`.** Each `LANGUAGES` entry maps a menu label to
 a [documented MAI voice](../reference.md#languages-and-voices) (lesson 2) and a
 transcription language code (lesson 3). `language_for` rejects anything else.
 
-```python title="starter/app.py"
+```python title="starter/app.py" hl_lines="52 53"
 """Your vocabulary app.
 
 The imports cover every lesson, so later steps only replace the marker
@@ -68,6 +85,7 @@ def language_for(locale):
 
 @app.get("/")
 def index():
+    # ❶
     return render_template("index.html", languages=LANGUAGES)
 
 
@@ -85,11 +103,16 @@ def index():
 
 ### 2. Give the list and practice card a home
 
+!!! question "Why replace the whole page now?"
+
+    It adds a marker comment for every later lesson, so each later step replaces
+    one line and you never hunt for the right spot.
+
 **Replace all of `starter/templates/index.html`.** It loads the provided
 `workshop.js` before your `app.js`. If the gateway settings are missing, the
 page tells you; the word list works without them.
 
-```html title="starter/templates/index.html"
+```html title="starter/templates/index.html" hl_lines="31 32 45 46 50 51"
 <!doctype html>
 <html lang="en">
 <head>
@@ -120,6 +143,7 @@ page tells you; the word list works without them.
         <h2 id="list-title">Words worth keeping.</h2>
         <form id="word-form">
           <label for="target-locale">I want to practise</label>
+          <!-- ❶ -->
           <select id="target-locale" required>
             <option value="">Choose a target language</option>
             {% for locale, language in languages.items() %}
@@ -133,10 +157,12 @@ page tells you; the word list works without them.
           <button class="button primary" type="submit">Add to my words</button>
         </form>
         <div class="list-heading"><span class="eyebrow">YOUR WORDS</span><span id="word-count" class="count">0</span></div>
+        <!-- ❸ -->
         <ul id="word-list" class="word-list" aria-label="Saved vocabulary"></ul>
         <p id="list-empty" class="muted">Your list stays in this browser, at this app address.</p>
         <button id="reset-storage" class="text-button" type="button" hidden>Clear unreadable saved data</button>
       </section>
+      <!-- ❷ -->
       <section class="panel practice-panel" aria-label="Practise your selected word">
         <div id="practice-empty" class="empty-state">
           <div class="word-orbit" aria-hidden="true"><span>a</span><span>A</span><span>?</span></div>
@@ -166,13 +192,18 @@ page tells you; the word list works without them.
 
 ### 3. Save, select, and render words
 
+!!! question "Why localStorage and hooks?"
+
+    Your words survive a reload without a database. `onWordChange` lets later
+    lessons clear old results when you switch words, without touching `selectWord`.
+
 **Replace all of `starter/static/app.js`.** `saveWords` persists the list,
 `renderList` draws it with `textContent` (entered words stay plain text), and
 `selectWord` shows a pair. Later lessons react to a new selection by
 registering `onWordChange(...)` hooks, so they never edit `selectWord`.
 `$`, `showError`, and `isBusy` come from `workshop.js`.
 
-```javascript title="starter/static/app.js"
+```javascript title="starter/static/app.js" hl_lines="54 55 84 85"
 "use strict";
 // Your browser code. workshop.js loads first and provides $, showError,
 // runAction, callApp, and the other helpers listed in the reference.
@@ -226,6 +257,7 @@ function saveWords(nextWords) {
   }
 }
 
+// ❸
 function renderList() {
   $("#word-list").replaceChildren();
   for (const word of words) {
@@ -255,6 +287,7 @@ function renderList() {
   $("#list-empty").hidden = words.length > 0;
 }
 
+// ❷
 function selectWord(id) {
   if (isBusy()) {
     showError("Wait for the current action to finish.");
