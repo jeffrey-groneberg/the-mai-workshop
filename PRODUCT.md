@@ -32,8 +32,7 @@ generates `checkpoints/` (the three learner files after each lesson) and
 `solution/` from them, and the tests fail on drift.
 
 Participants start from the repository's default `main` branch. No development
-branch is part of the workshop instructions. `gh-pages` contains generated
-documentation only, not a participant workspace.
+branch is part of the workshop instructions.
 
 Each lesson states the result and explains the mechanism. Edits replace one
 unique marker line placed by lesson 1; no edit is a partial-line change. Each
@@ -76,8 +75,10 @@ They are labeled AI-generated and have prompt provenance in
 `docs/assets/images/provenance.json`. They are not evidence of a participant
 gateway's live behavior.
 
-The Zensical guide is published to GitHub Pages. Flask continues to run in
-Codespaces or locally, never on the static Pages site.
+The Zensical guide is published to GitHub Pages by the Check workflow: every
+push to `main` that passes the tests rebuilds and deploys it (Pages source:
+GitHub Actions; a manual run of the workflow on `main` redeploys too). Flask
+continues to run in Codespaces or locally, never on the static Pages site.
 
 Checkpoint screenshots show the actual learner app produced by the lesson
 edits. A short GIF introduces the completed flow. Media uses labeled example

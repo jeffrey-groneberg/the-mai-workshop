@@ -49,4 +49,6 @@ python -m flask --app solution/app.py run --reload --host 0.0.0.0 --port 5051
 
 The lesson pages are the source of truth. `python tests/lesson_replay.py`
 regenerates `checkpoints/` and `solution/` from them; the tests fail if either
-drifts. Media: `WORKSHOP_MEDIA_DIR=test-results/workshop-media python -m pytest -q tests/test_lessons.py`.
+drifts. Every push to `main` that passes the Check workflow rebuilds and
+publishes the guide to GitHub Pages; run the workflow manually on `main` to
+republish. Media: `WORKSHOP_MEDIA_DIR=test-results/workshop-media python -m pytest -q tests/test_lessons.py`.
