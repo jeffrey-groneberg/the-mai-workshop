@@ -9,6 +9,21 @@ This runs in JavaScript; no model call. You write the comparison.
 
 ## Your turn: normalize and compare
 
+**What you'll build.**
+
+![The answer section with one numbered outline around the green card That matches your saved translation.](../assets/workshop/04-build-map.webp){ width="578" loading="lazy" }
+
+- ❶ **Answer card**: your `normalizeAnswer` comparison decides between a match and a retry.
+
+The same numbers mark the highlighted lines in the code below. Keep or delete
+those `❶` comments; they only link code to the picture.
+
+!!! question "Why normalize instead of comparing strings?"
+
+    The model writes `Pomme.` with a capital and a full stop; a saved `pomme`
+    should still match. Accents and inner punctuation stay because they change the
+    word. Matching needs no model, so it is instant, free, and deterministic.
+
 Lesson 3 showed **I heard: Pomme.** for the saved answer `pomme`. A fair check
 ignores case, punctuation around the answer, and extra spaces, but keeps
 accents and punctuation inside it. It compares whole strings, not substrings.
@@ -67,7 +82,7 @@ function showTranscript(heard, word) {
 
 ??? success "Reference solution"
 
-    ```javascript title="starter/static/app.js"
+    ```javascript title="starter/static/app.js" hl_lines="11 12 17 18"
     function normalizeAnswer(text, locale) {
       return text.normalize("NFC").toLocaleLowerCase(locale).normalize("NFC").trim()
         .replace(/^[\p{P}\s]+|[\p{P}\s]+$/gu, "").replace(/\s+/gu, " ");
@@ -78,11 +93,13 @@ function showTranscript(heard, word) {
       const expected = normalizeAnswer(word.target, word.locale);
       if (!actual) throw new Error("The transcript contains no usable words. Try another sample.");
       if (!expected) throw new Error("Your saved translation needs words, not only punctuation.");
+      // ❶
       const matches = actual === expected;
       const result = $("#answer-result");
       result.className = `answer-result ${matches ? "matched" : "try-again"}`;
       result.removeAttribute("lang");
       const heading = document.createElement("strong");
+      // ❶
       heading.textContent = matches ? "That matches your saved translation." : "Not a match this time.";
       const transcript = document.createElement("p");
       transcript.textContent = `I heard: ${heard}`;

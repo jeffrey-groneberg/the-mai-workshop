@@ -101,6 +101,15 @@ practice panel using the app-panel radius. Native Zensical shapes are independen
   The opening GIF loops at a slower pace inside a collapsible native disclosure; a
   `prefers-reduced-motion` picture source shows a static preview instead.
   Media uses labeled example responses and adds no custom theme.
+- **Build maps:** each lesson opens with a capture of its finished step. Numbered
+  outlines in the guide's primary indigo (`#4051b5`) mark what the lesson
+  creates, and a legend repeats the numbers. In the code blocks, a comment line
+  such as `<!-- ❶ -->` sits directly above the line that creates or feeds that
+  element, and `hl_lines` highlights the pair, so a reader connects picture and
+  code at a glance. The overlay exists only in the capture, the labels are
+  ordinary comments, and lesson replay drops them; no guide CSS is involved.
+- **Why callouts:** each build step opens with a short `!!! question` admonition
+  that says why the step exists.
 - **Explanatory diagrams:** MAI-rendered, white-ground technical illustrations
   use large labels, restrained color, and explicit arrow direction. Keep text
   descriptions/alt text and full-size links alongside them. Diagrams explain

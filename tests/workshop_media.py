@@ -104,6 +104,86 @@ def checkpoint(page, name, selector):
     page.evaluate("position => scrollTo(position.x, position.y)", scroll)
 
 
+# The guide's own primary indigo, so the badges look like part of the docs.
+# It is used only in the capture; the app's styles stay untouched.
+BUILD_MAP_COLOR = "#4051b5"
+BUILD_MAPS = []
+
+
+def build_map(page, name, region, marks):
+    """Capture `region` with numbered outlines around the elements a lesson creates.
+
+    marks is a list; mark n (1-based) outlines the union of its selectors. A mark is either
+    a list of selectors (badge left of the outline) or {"select": [...], "badge": "right"}.
+    Badges sit outside the outline so they never cover the app's text. The overlay uses
+    CSSOM styles, which the app's Content-Security-Policy allows.
+    """
+    marks = [mark if isinstance(mark, dict) else {"select": mark, "badge": "left"} for mark in marks]
+    directory = output_directory()
+    if directory is None:
+        return
+    viewport = page.viewport_size
+    scroll = page.evaluate("({x: scrollX, y: scrollY})")
+    page.set_viewport_size({"width": 1120, "height": 820})
+    page.evaluate("document.fonts.ready")
+    if page.locator("#app-error").count():
+        expect(page.locator("#app-error")).to_be_hidden()
+    page.locator(region).scroll_into_view_if_needed()
+    clip = page.evaluate("""([region, marks, color]) => {
+        const pageBox = (elements) => {
+            const boxes = elements.map((element) => element.getBoundingClientRect())
+                .filter((box) => box.width && box.height);
+            if (!boxes.length) throw new Error("Build map target is not visible");
+            const left = Math.min(...boxes.map((box) => box.left)) + scrollX;
+            const top = Math.min(...boxes.map((box) => box.top)) + scrollY;
+            return {left, top,
+                    width: Math.max(...boxes.map((box) => box.right)) + scrollX - left,
+                    height: Math.max(...boxes.map((box) => box.bottom)) + scrollY - top};
+        };
+        const layer = document.createElement("div");
+        layer.id = "build-map-layer";
+        Object.assign(layer.style, {position: "absolute", left: "0", top: "0", zIndex: "2147483647",
+                                    pointerEvents: "none"});
+        document.body.append(layer);
+        marks.forEach((mark, index) => {
+            const elements = mark.select.flatMap((selector) => [...document.querySelectorAll(selector)]);
+            if (!elements.length) throw new Error(`No element for build map mark ${index + 1}`);
+            const box = pageBox(elements);
+            const frame = document.createElement("div");
+            Object.assign(frame.style, {position: "absolute", left: `${box.left - 7}px`, top: `${box.top - 7}px`,
+                                        width: `${box.width + 14}px`, height: `${box.height + 14}px`,
+                                        border: `3px solid ${color}`, borderRadius: "14px", boxSizing: "border-box",
+                                        boxShadow: "0 0 0 2px rgba(255, 255, 255, 0.85)"});
+            const badge = document.createElement("div");
+            badge.textContent = String(index + 1);
+            Object.assign(badge.style, {position: "absolute", [mark.badge === "right" ? "right" : "left"]: "-44px",
+                                        top: "-3px", width: "30px",
+                                        height: "30px", borderRadius: "50%", background: color, color: "#fff",
+                                        font: "700 16px/30px system-ui, -apple-system, sans-serif",
+                                        textAlign: "center", boxShadow: "0 0 0 3px #fff"});
+            frame.append(badge);
+            layer.append(frame);
+        });
+        const area = pageBox([document.querySelector(region), ...layer.querySelectorAll("div > div")]);
+        const padding = 20;
+        const left = Math.max(0, area.left - padding);
+        const top = Math.max(0, area.top - padding);
+        return {x: left, y: top,
+                width: Math.min(document.documentElement.scrollWidth - left, area.left - left + area.width + padding),
+                height: area.top - top + area.height + padding};
+    }""", [region, marks, BUILD_MAP_COLOR])
+    png = directory / f"{name}.png"
+    try:
+        page.screenshot(path=str(png), clip=clip, full_page=True, animations="disabled")
+    finally:
+        page.evaluate("document.querySelector('#build-map-layer')?.remove()")
+    save_webp(png, directory / f"{name}.webp")
+    png.unlink()
+    BUILD_MAPS.append({"file": f"{name}.webp", "marks": len(marks)})
+    page.set_viewport_size(viewport)
+    page.evaluate("position => scrollTo(position.x, position.y)", scroll)
+
+
 def walkthrough(browser, origin, state):
     directory = output_directory()
     if directory is None:
@@ -165,6 +245,7 @@ def walkthrough(browser, origin, state):
         expect(page.locator("#mnemonic-result")).to_have_text(RECORDED_MNEMONIC)
         page.locator(".extension").scroll_into_view_if_needed()
         checkpoint(page, "06-mnemonic", ".extension")
+        build_map(page, "06-build-map", ".extension", [["#generate-mnemonic"], ["#mnemonic-result"]])
         page.wait_for_timeout(1800)
     finally:
         context.close()
@@ -197,6 +278,8 @@ def walkthrough(browser, origin, state):
         "Playback loops and runs at two-thirds speed, without re-encoding its image frames.\n"
         "Model responses and microphone input are offline fixtures, not live model calls.\n"
         "The transcript (Pomme.) and the mnemonic are recorded live responses, replayed offline.\n"
+        "Build maps (NN-build-map.webp) add numbered blue outlines around what each lesson\n"
+        "creates; the overlay exists only in the capture, not in the app.\n"
         "The image fixture is an apple crop (320:320:30:220) of the existing MAI-generated\n"
         "docs/assets/images/vocabulary-journey.webp. No endpoint or key is captured.\n",
         encoding="utf-8",
@@ -209,10 +292,12 @@ def walkthrough(browser, origin, state):
         "image_source": "../images/vocabulary-journey.webp",
         "image_crop": {"width": 320, "height": 320, "x": 30, "y": 220},
         "screenshots": [
-            "00-open-app.webp", "01-word-list.webp",
+            "01-word-list.webp",
             "02-bilingual-speech.webp", "03-transcription.webp",
             "04-answer-match.webp", "05-memory-image.webp", "06-mnemonic.webp",
         ],
+        "build_maps": BUILD_MAPS,
+        "build_map_color": BUILD_MAP_COLOR,
         "animation": "app-walkthrough.gif",
         "animation_details": {
             "width": probe["width"], "height": probe["height"],

@@ -17,18 +17,37 @@ checks it and returns `image/png`. A picture takes about 10–15 seconds.
 
 ## Build
 
+**What you'll build.**
+
+![The image section with three numbered outlines: 1 the scene field and button, 2 the line Kept for this page only, 3 the generated watercolor apple.](../assets/workshop/05-build-map.webp){ width="578" loading="lazy" }
+
+- ❶ **Scene and button**: the button posts the word and your scene to `/image`.
+- ❷ **Status line**: says the picture is kept for this page.
+- ❸ **Picture**: the PNG that your `/image` route decoded.
+
+The same numbers mark the highlighted lines in the code below. Keep or delete
+those `❶` comments; they only link code to the picture.
+
 ### 1. Add the image controls
+
+!!! question "Why an English scene?"
+
+    The prompt is built in English, and the scene picks the meaning you want, such
+    as a river bank rather than a savings bank.
 
 In `starter/templates/index.html`, replace
 `<!-- Lesson 5: add memory controls here. -->` with:
 
-```html title="starter/templates/index.html"
+```html title="starter/templates/index.html" hl_lines="4 5 6 7 8 9 10"
 <section class="practice-step" aria-labelledby="image-title">
   <div class="step-title"><span class="step-number">02</span><h3 id="image-title">Give the word a picture.</h3></div>
   <label for="image-detail">A scene or style, in English</label>
+  <!-- ❶ -->
   <input id="image-detail" maxlength="360" placeholder="A tiny apple wearing a crown">
   <button id="generate-image" class="button secondary" type="button">Make a memory image</button>
+  <!-- ❷ -->
   <p id="image-status" class="status" role="status" aria-live="polite"></p>
+  <!-- ❸ -->
   <figure id="memory-figure" class="memory-figure" hidden>
     <div id="image-mount"></div>
     <figcaption>A generated visual cue, not a verified definition.</figcaption>
@@ -37,6 +56,11 @@ In `starter/templates/index.html`, replace
 ```
 
 ### 2. Your turn: write `/image`
+
+!!! question "Why decode the image in Flask?"
+
+    The gateway returns JSON with a base64 PNG. Decoding and checking it on the
+    server means the browser only ever receives a real 1024 × 1024 image.
 
 In `starter/app.py`, replace `# Lesson 5: add the /image route here.` with a
 route that follows this contract.
@@ -85,7 +109,8 @@ def image():
 
 ??? success "Reference solution"
 
-    ```python title="starter/app.py"
+    ```python title="starter/app.py" hl_lines="1 2 31 32"
+    # ❶
     @app.post("/image")
     def image():
         data = json_body()
@@ -115,27 +140,36 @@ def image():
         except (binascii.Error, ValueError):
             abort(502, "The image model returned invalid base64.")
         check_png(png)
+        # ❸
         return Response(png, mimetype="image/png")
     ```
 
 ### 3. Show and keep the pictures
 
+!!! question "Why keep pictures per word?"
+
+    Each picture costs a model request of 10–15 seconds. Keeping it for the page
+    makes switching words instant.
+
 In `starter/static/app.js`, replace `// Lesson 5: add memory images here.` with
 the code below. It keeps one picture per word for this page, so switching back
 shows it again without another request.
 
-```javascript title="starter/static/app.js"
+```javascript title="starter/static/app.js" hl_lines="5 6 10 11 14 15"
 const imageCache = new Map();
 
 function renderMemory() {
   const cached = imageCache.get(selectedId);
+  // ❸
   $("#image-mount").replaceChildren(...(cached ? [cached.picture] : []));
   $("#memory-figure").hidden = !cached;
   $("#image-detail").value = cached?.detail ?? "";
   $("#generate-image").textContent = cached ? "Generate a new image" : "Make a memory image";
+  // ❷
   $("#image-status").textContent = cached ? "Kept for this page only. A new image makes another model request." : "";
 }
 
+// ❶
 $("#generate-image").addEventListener("click", () => {
   const word = selectedWord();
   const detail = $("#image-detail").value.trim();

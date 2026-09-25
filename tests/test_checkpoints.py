@@ -35,6 +35,12 @@ def test_every_lesson_one_marker_is_consumed_once_and_named_in_its_lesson():
                 assert f"`{anchor}" in text, f"{page} must name the marker {anchor!r}"
 
 
+def test_replayed_code_never_contains_build_marks():
+    for page, _ in LESSONS.values():
+        for file, code in replayable_blocks(page):
+            assert not re.search(f"[{lesson_replay.BUILD_MARKS}]", code), f"{page}: {file} kept a build mark"
+
+
 def test_lessons_avoid_partial_line_edits():
     for page, _ in LESSONS.values():
         text = (ROOT / "docs" / page).read_text(encoding="utf-8").lower()

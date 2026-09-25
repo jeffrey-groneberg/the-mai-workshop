@@ -20,7 +20,7 @@ from playwright.sync_api import expect, sync_playwright
 from werkzeug.serving import make_server
 from app_loader import load_app as load_learner_app
 from lesson_replay import apply_lesson
-from workshop_media import RECORDED_MNEMONIC, checkpoint, example_image, walkthrough
+from workshop_media import RECORDED_MNEMONIC, build_map, checkpoint, example_image, walkthrough
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -179,7 +179,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             expect(page.locator("#starter-status")).to_contain_text("JavaScript is connected")
             assert page.locator("#word-form").count() == 0
             assert calls == []
-            checkpoint(page, "00-open-app", ".app-shell")
+            build_map(page, "00-build-map", ".starter-panel", [["h2.starter-word"], ["#starter-status"]])
 
             apply_lesson(app_dir, "01-word-list")
             module = load_app(python, "lesson_words", monkeypatch)
@@ -204,6 +204,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             expect(page.locator("#practice-word")).to_have_text("apple")
             assert calls == [] and errors == []
             checkpoint(page, "01-word-list", ".workspace")
+            build_map(page, "01-build-map", ".workspace", [["#target-locale"], [".practice-panel"], ["#word-list"]])
 
             apply_lesson(app_dir, "02-speech")
             module = load_app(python, "lesson_speech", monkeypatch)
@@ -228,6 +229,10 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             assert len(calls) == before_download
             assert errors == []
             checkpoint(page, "02-bilingual-speech", ".workspace")
+            build_map(page, "02-build-map", ".practice-panel", [
+                ["#speak-english", "#speak-target"], {"select": ["#download-sample"], "badge": "right"},
+                ["#speech-audio"],
+            ])
 
             apply_lesson(app_dir, "03-transcription")
             module = load_app(python, "lesson_transcribe", monkeypatch)
@@ -276,6 +281,10 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             expect(page.locator("#answer-result")).to_have_text("I heard: Pomme.")
             assert len(calls) == before_record + 1
             checkpoint(page, "03-transcription", ".practice-step")
+            build_map(page, "03-build-map", ".practice-step:has(#record-answer)", [
+                [".consent-label"], [".record-actions:has(#record-answer)"],
+                ["#audio-preview", "#recording-review"], ["#answer-result"],
+            ])
             assert json.loads(calls[-1][2]["data"]["definition"])["locales"] == ["fr"]
             storage = page.evaluate("JSON.parse(localStorage.getItem('mai-learner-words-v1'))")
             assert set(storage[0]) == {"id", "english", "target", "locale"}
@@ -321,6 +330,7 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             page.locator("#send-answer").click()
             expect(page.locator("#answer-result")).to_contain_text("That matches your saved translation.")
             checkpoint(page, "04-answer-match", "#answer-result")
+            build_map(page, "04-build-map", ".practice-step:has(#record-answer)", [["#answer-result"]])
             state["text"] = "rivière"
             page.locator("#send-answer").click()
             expect(page.locator("#answer-result")).to_contain_text("Not a match this time.")
@@ -360,6 +370,9 @@ def test_documented_sequence(tmp_path, monkeypatch, caplog):
             assert page.locator("#memory-image").evaluate("image => image.naturalWidth") == 1024
             assert calls[-1][2]["json"]["prompt"].endswith("soft watercolor")
             checkpoint(page, "05-memory-image", ".practice-step:has(#generate-image)")
+            build_map(page, "05-build-map", ".practice-step:has(#generate-image)", [
+                ["#image-detail", "#generate-image"], ["#image-status"], ["#memory-figure"],
+            ])
             page.locator("#english-word").fill("river")
             page.locator("#target-word").fill("rivière")
             page.locator("#target-locale").select_option("fr-FR")

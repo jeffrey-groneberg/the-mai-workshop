@@ -7,21 +7,38 @@ your translation to its meaning: button → Flask `/mnemonic` → chat completio
 
 ## Build
 
+**What you'll build.**
+
+![The mnemonic section with two numbered outlines: 1 the Suggest a mnemonic button, 2 the returned suggestion about a juicy pomme.](../assets/workshop/06-build-map.webp){ width="578" loading="lazy" }
+
+- ❶ **Suggest a mnemonic**: posts the word, translation, and language to `/mnemonic`.
+- ❷ **Suggestion**: the plain text MAI-Thinking-1 returned.
+
+The same numbers mark the highlighted lines in the code below. Keep or delete
+those `❶` comments; they only link code to the picture.
+
 ### 1. Add the controls
 
 In `starter/templates/index.html`, replace
 `<!-- Extension: add mnemonic controls here. -->` with:
 
-```html title="starter/templates/index.html"
+```html title="starter/templates/index.html" hl_lines="4 5 6 7"
 <details class="extension">
   <summary>Try a mnemonic <span class="eyebrow">AFTER CORE</span></summary>
   <p class="muted">Ask for a short memory aid that links your translation to its meaning. Check it yourself; it never grades an answer.</p>
+  <!-- ❶ -->
   <button id="generate-mnemonic" class="button secondary" type="button">Suggest a mnemonic</button>
+  <!-- ❷ -->
   <p id="mnemonic-result" class="status" role="status" aria-live="polite"></p>
 </details>
 ```
 
 ### 2. Your turn: write `/mnemonic`
+
+!!! question "Why send the translation too?"
+
+    A mnemonic helps only if it links the new word to its meaning. With the English
+    word alone, the model writes English spelling tricks.
 
 In `starter/app.py`, replace `# Extension: add the /mnemonic route here.` with
 a route that follows this contract. The prompt is yours to design: name the
@@ -59,7 +76,8 @@ def mnemonic():
 
 ??? success "Reference solution"
 
-    ```python title="starter/app.py"
+    ```python title="starter/app.py" hl_lines="1 2 31 32"
+    # ❶
     @app.post("/mnemonic")
     def mnemonic():
         data = json_body()
@@ -89,6 +107,7 @@ def mnemonic():
         text = message.get("content") if isinstance(message, dict) else None
         if not isinstance(text, str) or not text.strip():
             abort(502, "No text suggestion was returned. The model may have used its whole output budget.")
+        # ❷
         return jsonify(text=text.strip())
     ```
 
@@ -96,7 +115,8 @@ def mnemonic():
 
 In `starter/static/app.js`, replace `// Extension: add mnemonics here.` with:
 
-```javascript title="starter/static/app.js"
+```javascript title="starter/static/app.js" hl_lines="1 2 12 13"
+// ❶
 $("#generate-mnemonic").addEventListener("click", () => {
   const word = selectedWord();
   runAction("MAI Thinking is considering your word...", async () => {
@@ -107,6 +127,7 @@ $("#generate-mnemonic").addEventListener("click", () => {
     if (typeof result.text !== "string" || !result.text.trim()) {
       throw new Error("No text suggestion was returned.");
     }
+    // ❷
     $("#mnemonic-result").textContent = result.text;
   });
 });

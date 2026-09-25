@@ -25,6 +25,14 @@ FENCE = re.compile(
     re.M | re.S,
 )
 TITLE = re.compile(r'title="([^"]*)"')
+# A comment line such as `# ❶` or `<!-- ❷ -->` labels the line below it with the matching
+# numbered outline in the lesson's build map. It is for reading; replay drops the line.
+BUILD_MARKS = "❶❷❸❹❺❻❼❽❾"
+BUILD_MARK = re.compile(rf"^[ \t]*(?:<!--|#|//)(?:[ \t]*[{BUILD_MARKS}])+[ \t]*(?:-->)?[ \t]*\n", re.M)
+
+
+def strip_build_marks(code):
+    return BUILD_MARK.sub("", code)
 
 
 @dataclass(frozen=True)
@@ -85,7 +93,7 @@ def fenced_blocks(page):
 def replayable_blocks(page):
     """Return [(file, code)] for blocks titled exactly starter/<file>, in page order."""
     return [
-        (title.removeprefix("starter/"), code)
+        (title.removeprefix("starter/"), strip_build_marks(code))
         for _, title, code in fenced_blocks(page)
         if re.fullmatch(r"starter/[\w./-]+", title)
     ]

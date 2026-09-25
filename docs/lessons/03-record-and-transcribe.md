@@ -22,33 +22,60 @@ takes a language code such as `fr`, not `fr-FR`.
 
 ## Build
 
+**What you'll build.**
+
+![The answer section with four numbered outlines: 1 the consent checkbox, 2 Record answer and the WAV picker, 3 the local preview with Send for transcription, 4 the card I heard: Pomme.](../assets/workshop/03-build-map.webp){ width="578" loading="lazy" }
+
+- ❶ **Consent checkbox**: nothing is recorded or sent until it is ticked.
+- ❷ **Record answer / Or choose a synthetic WAV**: the provided recorder turns either into a 16 kHz WAV.
+- ❸ **Preview and Send**: you hear the WAV first; **Send** posts it to your `/transcribe` route.
+- ❹ **Transcript card**: shows the text that `/transcribe` returns.
+
+The same numbers mark the highlighted lines in the code below. Keep or delete
+those `❶` comments; they only link code to the picture.
+
 ### 1. Add the answer controls
+
+!!! question "Why a consent box and a local preview?"
+
+    Audio leaves the browser only when you choose, and you hear exactly what will
+    be sent.
 
 In `starter/templates/index.html`, replace
 `<!-- Lesson 3: add answer controls here. -->` with:
 
-```html title="starter/templates/index.html"
+```html title="starter/templates/index.html" hl_lines="4 5 6 7 13 14 15 19 20"
 <section class="practice-step" aria-labelledby="voice-title">
   <div class="step-title"><span class="step-number">01</span><h3 id="voice-title">Say it in your language.</h3></div>
   <p class="muted">Preview locally before sending through Flask and the workshop gateway to MAI. This app does not save recordings. Use synthetic audio unless the instructor has approved microphone guidance.</p>
+  <!-- ❶ -->
   <label class="consent-label"><input id="audio-consent" type="checkbox"> I choose to send sample audio under the instructor's approved guidance.</label>
+  <!-- ❷ -->
   <div class="record-actions">
     <button id="record-answer" class="button primary" type="button">Record answer</button>
     <button id="stop-recording" class="button secondary" type="button" hidden>Stop recording</button>
     <label class="file-label" for="audio-file">Or choose a synthetic WAV<input id="audio-file" type="file" accept=".wav,audio/wav"></label>
   </div>
   <p id="record-status" class="status" role="status" aria-live="polite"></p>
+  <!-- ❸ -->
   <audio id="audio-preview" controls hidden aria-label="Local audio, not yet sent"></audio>
   <div id="recording-review" class="record-actions" hidden>
     <button id="send-answer" class="button primary" type="button">Send for transcription</button>
     <button id="discard-recording" class="text-button" type="button">Discard recording</button>
   </div>
+  <!-- ❹ -->
   <div id="answer-result" class="answer-result" role="status" hidden></div>
   <p class="fine-print">Recognized text is not a pronunciation score.</p>
 </section>
 ```
 
 ### 2. Your turn: write `/transcribe`
+
+!!! question "Why multipart with a JSON definition?"
+
+    The API takes the audio as a file and its options as JSON: `enhancedMode`
+    picks MAI-Transcribe-2, and `locales` gives the language hint that short words
+    need.
 
 In `starter/app.py`, replace `# Lesson 3: add the /transcribe route here.`
 with a route that follows this contract.
@@ -99,7 +126,8 @@ def transcribe():
 
 ??? success "Reference solution"
 
-    ```python title="starter/app.py"
+    ```python title="starter/app.py" hl_lines="1 2 30 31"
+    # ❸
     @app.post("/transcribe")
     def transcribe():
         language = language_for(request.form.get("locale"))
@@ -128,16 +156,24 @@ def transcribe():
         text = " ".join(item["text"].strip() for item in phrases).strip()
         if not text:
             abort(422, "No words were recognized. Preview the sample or try again.")
+        # ❹
         return jsonify(text=text)
     ```
 
 ### 3. Wire recording and sending
 
+!!! question "Why convert to WAV in the browser?"
+
+    `MediaRecorder` records compressed audio, often WebM. The provided recorder
+    resamples it to the 16 kHz mono PCM your route checks, and nothing is uploaded
+    before **Send**.
+
 In `starter/static/app.js`, replace `// Lesson 3: add recording here.` with the
 code below. It pauses speech when a new answer starts, sends the WAV and locale,
 and ignores a late transcript if you discarded that recording meanwhile.
 
-```javascript title="starter/static/app.js"
+```javascript title="starter/static/app.js" hl_lines="1 2 13 14 20 21"
+// ❶ ❷ ❸
 const recorder = setupAnswerRecorder({
   onNewAudio: () => {
     stopAudio($("#speech-audio"));
@@ -149,12 +185,14 @@ const recorder = setupAnswerRecorder({
 function showTranscript(heard, word) {
   const result = $("#answer-result");
   result.className = "answer-result";
+  // ❹
   result.textContent = `I heard: ${heard}`;
   result.lang = word.locale;
   result.hidden = false;
 }
 // Lesson 4: replace to this line.
 
+// ❸
 $("#send-answer").addEventListener("click", () => {
   const audio = recorder.audio();
   if (!audio) { showError("Record or choose a WAV first."); return; }

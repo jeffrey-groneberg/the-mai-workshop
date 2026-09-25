@@ -36,16 +36,48 @@ python -m flask --app solution/app.py run --reload --host 0.0.0.0 --port 5051
 | `static/workshop.js` | Provided. Busy state, calls to Flask, audio playback, and the recorder with WAV conversion. |
 | `static/style.css` | Provided. Keep the supplied styles. |
 
+!!! question "Why two provided files?"
+
+    They hold what every web app needs but is not about MAI: request checks,
+    security headers, readable errors, and audio conversion. Keeping them apart
+    leaves your three files for the part you are here to learn.
+
 Read the provided files whenever you like; you will not edit them. The
 [reference](../reference.md#provided-helpers) lists their helpers.
 
-Flask passes the word into the template. The browser loads CSS for styling and
-JavaScript for interactions.
+### Where the page comes from
+
+![The starter page with two numbered outlines: 1 around the word apple, 2 around the line JavaScript is connected.](../assets/workshop/00-build-map.webp){ width="899" loading="lazy" }
+
+- ❶ **The word** comes from Flask: `app.py` passes `sample_word` into the template.
+- ❷ **The status line** comes from JavaScript: `app.js` writes it after the page loads.
+
+The same numbers mark the lines that produce them. Nothing to paste yet:
+
+```python title="starter/app.py (excerpt)" hl_lines="3 4"
+@app.get("/")
+def index():
+    # ❶
+    return render_template("index.html", sample_word="apple")
+```
+
+```html title="starter/templates/index.html (excerpt)" hl_lines="1 2 4 5"
+<!-- ❶ -->
+<h2 class="starter-word">{{ sample_word }}</h2>
+<p><strong>A word from Flask.</strong> Flask passed this sample word to the HTML template. CSS gives it its character; JavaScript can change what happens next.</p>
+<!-- ❷ -->
+<p id="starter-status" class="status" role="status"></p>
+```
+
+```javascript title="starter/static/app.js (excerpt)" hl_lines="1 2"
+// ❷
+document.querySelector("#starter-status").textContent =
+  "JavaScript is connected. Your starting page is ready.";
+```
 
 **Check:** reload and inspect Network: `GET /`, `/static/style.css`, and
-`/static/app.js`.
-
-![The running starter showing the word apple and the connected JavaScript status.](../assets/workshop/00-open-app.webp){ width="960" loading="lazy" }
+`/static/app.js`. The browser loads CSS for styling and JavaScript for
+interactions.
 
 ## How each lesson works
 
